@@ -7,8 +7,17 @@ import { Card } from '@/components/ui/card';
 import Image from 'next/image';
 import { Mail, CalendarDays } from 'lucide-react';
 import { format } from 'date-fns';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/lib/auth';
+import { redirect } from 'next/navigation';
 
 const ProfilePage = async () => {
+  const session = await getServerSession(authOptions);
+  
+  if (!session) {
+     redirect('/login');
+  }
+
   const user = await getUserProfile();
   const blogs = await getUserBlogs();
 
