@@ -56,23 +56,23 @@ const BlogDetailPage = async ({ params }: { params: Promise<{ slug: string }> })
           </h1>
 
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-             <Link href={`/user/${blog.author._id}`} className="flex items-center gap-3 group">
+             <Link href={`/user/${blog.author?._id}`} className="flex items-center gap-3 group">
                 <Image
-                  src={blog.author.image || '/default-avatar.png'}
-                  alt={blog.author.name}
+                  src={blog.author?.image || '/default-avatar.png'}
+                  alt={blog.author?.name || 'Author'}
                   width={48}
                   height={48}
                   className="rounded-full ring-2 ring-gray-50 dark:ring-white/10 object-cover"
                 />
                 <div>
-                  <p className="font-bold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors text-[15px]">{blog.author.name}</p>
+                  <p className="font-bold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors text-[15px]">{blog.author?.name || 'Deleted User'}</p>
                   <p className="text-[13px] text-gray-500 dark:text-gray-400 transition-colors">{format(new Date(blog.createdAt), 'MMM dd, yyyy')}</p>
                 </div>
              </Link>
             
-            {session && (session.user as any).id !== blog.author._id && (
+            {session && (session.user as any).id !== blog.author?._id && (
                <div>
-                  <FollowButton targetUserId={blog.author._id} initialFollowing={blog.isFollowingAuthor} />
+                  <FollowButton targetUserId={blog.author?._id} initialFollowing={blog.isFollowingAuthor} />
                </div>
             )}
           </div>

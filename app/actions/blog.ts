@@ -106,6 +106,10 @@ export async function getBlogBySlug(slug: string) {
   await connectDB();
   const blog = await Blog.findOne({ slug }).populate('author', 'name image bio socials').lean();
   if (!blog) return null;
+
+  // Guard: if the author user was deleted, treat the blog as not found
+  // to prevent crashes when accessing blog.author.name / blog.author._id
+  if (!blog.author || !(blog.author as any)._id) return null;
   
   const session = await getServerSession(authOptions);
   if (session) {
@@ -113,7 +117,7 @@ export async function getBlogBySlug(slug: string) {
       blog.isBookmarkedByMe = (user?.bookmarks || []).map((b: any) => b.toString()).includes(blog._id.toString());
       blog.likesCount = blog.likes?.length || 0;
       blog.isLikedByMe = (blog.likes || []).map((id: any) => id.toString()).includes((session.user as any).id);
-      blog.isFollowingAuthor = (user?.following || []).map((b: any) => b.toString()).includes(blog.author._id.toString());
+      blog.isFollowingAuthor = (user?.following || []).map((b: any) => b.toString()).includes((blog.author as any)._id.toString());
   } else {
       blog.likesCount = blog.likes?.length || 0;
   }

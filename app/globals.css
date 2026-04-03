@@ -84,3 +84,27 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: 700;
   letter-spacing: -0.02em;
 }
+
+/* ── TipTap editor dark-mode fix ─────────────────────────────── */
+.dark .ProseMirror {
+  color: #e2e8f0;                /* slate-200 – clearly visible text */
+}
+.dark .ProseMirror h1,
+.dark .ProseMirror h2,
+.dark .ProseMirror h3 {
+  color: #f1f5f9;                /* slate-100 */
+}
+.dark .ProseMirror p { color: #cbd5e1; }    /* slate-300 */
+.dark .ProseMirror strong { color: #f8fafc; }
+.dark .ProseMirror code {
+  background: #1e293b;
+  color: #7dd3fc;                /* sky-300 */
+}
+.dark .ProseMirror blockquote {
+  border-left-color: #475569;
+  color: #94a3b8;
+}
+.dark .ProseMirror a { color: #60a5fa; }
+.dark .ProseMirror p.is-editor-empty:first-child::before {
+  color: #64748b;                /* placeholder */
+}

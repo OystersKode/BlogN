@@ -103,14 +103,27 @@ const EditorPage = () => {
           <div className="bg-white dark:bg-slate-900 rounded-none sm:rounded-[2.5rem] shadow-[0_8px_30px_rgb(0,0,0,0.02)] dark:shadow-none border-x-0 sm:border border-slate-100 dark:border-white/10 p-6 sm:p-16 min-h-[800px] relative transition-colors">
             
             <div className="group relative mb-10">
-              {/* Cover Image Uploader */}
+              {/* Cover Image Uploader — shown inline above title on mobile, floating on the left on sm+ */}
                {!coverImage && (
-                   <div className="absolute -left-2 sm:-left-12 top-2 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-all">
-                       <label className="cursor-pointer w-10 h-10 rounded-full border border-slate-200 dark:border-white/10 bg-white dark:bg-slate-800 flex items-center justify-center text-slate-400 dark:text-gray-500 hover:border-blue-500 dark:hover:border-blue-400 hover:text-blue-600 dark:hover:text-blue-400 shadow-md transition-all active:scale-95" title="Add Cover Image">
-                           <Plus size={20} />
-                           <input type="file" className="hidden" accept="image/*" onChange={handleImageUpload} disabled={uploading} />
+                   <>
+                     {/* Mobile: inline button above title */}
+                     <div className="flex sm:hidden mb-3">
+                       <label className="cursor-pointer flex items-center gap-2 text-xs font-semibold text-slate-400 dark:text-gray-500 hover:text-blue-600 dark:hover:text-blue-400 transition-colors" title="Add Cover Image">
+                         <span className="w-8 h-8 rounded-full border border-slate-200 dark:border-white/10 bg-white dark:bg-slate-800 flex items-center justify-center shadow-sm hover:border-blue-500 dark:hover:border-blue-400 transition-all active:scale-95">
+                           <Plus size={16} />
+                         </span>
+                         Add cover photo
+                         <input type="file" className="hidden" accept="image/*" onChange={handleImageUpload} disabled={uploading} />
                        </label>
-                   </div>
+                     </div>
+                     {/* sm+: absolute floating button on the left, shown on hover */}
+                     <div className="hidden sm:block absolute -left-12 top-2 opacity-0 group-hover:opacity-100 transition-all">
+                         <label className="cursor-pointer w-10 h-10 rounded-full border border-slate-200 dark:border-white/10 bg-white dark:bg-slate-800 flex items-center justify-center text-slate-400 dark:text-gray-500 hover:border-blue-500 dark:hover:border-blue-400 hover:text-blue-600 dark:hover:text-blue-400 shadow-md transition-all active:scale-95" title="Add Cover Image">
+                             <Plus size={20} />
+                             <input type="file" className="hidden" accept="image/*" onChange={handleImageUpload} disabled={uploading} />
+                         </label>
+                     </div>
+                   </>
                )}
               
               <textarea

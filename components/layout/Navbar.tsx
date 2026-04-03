@@ -165,9 +165,41 @@ const Navbar = () => {
                  <MediumSidebar isOverlay={true} />
               </div>
 
-              {!session && (
-                 <div className="mt-8 pt-8 border-t border-gray-100">
-                    <Button onClick={() => signIn('google')} className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl py-6 tracking-wide shadow-md">
+              {session ? (
+                 <div className="mt-8 pt-8 border-t border-gray-100 dark:border-white/10 space-y-1">
+                    <Link
+                      href="/profile"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className="flex items-center gap-3 px-3 py-3 rounded-xl text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-slate-900 transition-colors"
+                    >
+                      <User className="h-5 w-5 text-gray-400 dark:text-gray-500" /> <span className="font-semibold text-sm">My Profile</span>
+                    </Link>
+                    <Link
+                      href="/dashboard"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className="flex items-center gap-3 px-3 py-3 rounded-xl text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-slate-900 transition-colors"
+                    >
+                      <LayoutDashboard className="h-5 w-5 text-gray-400 dark:text-gray-500" /> <span className="font-semibold text-sm">Analytics</span>
+                    </Link>
+                    {(session.user as any)?.role === 'ADMIN' && (
+                      <Link
+                        href="/admin"
+                        onClick={() => setIsMobileMenuOpen(false)}
+                        className="flex items-center gap-3 px-3 py-3 rounded-xl text-purple-600 dark:text-purple-400 font-bold hover:bg-purple-50 dark:hover:bg-purple-900/20 transition-colors"
+                      >
+                        <Shield className="h-5 w-5" /> <span className="text-sm">Admin Console</span>
+                      </Link>
+                    )}
+                    <button
+                      onClick={() => { signOut(); setIsMobileMenuOpen(false); }}
+                      className="flex w-full items-center gap-3 px-3 py-3 rounded-xl text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
+                    >
+                      <LogOut className="h-5 w-5" /> <span className="font-semibold text-sm">Sign Out</span>
+                    </button>
+                 </div>
+              ) : (
+                 <div className="mt-8 pt-8 border-t border-gray-100 dark:border-white/10">
+                    <Button onClick={() => { signIn('google'); setIsMobileMenuOpen(false); }} className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl py-6 tracking-wide shadow-md">
                        Get Started
                     </Button>
                  </div>
