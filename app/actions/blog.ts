@@ -145,7 +145,7 @@ export async function toggleBookmark(blogId: string) {
   const isBookmarked = (user.bookmarks || []).map((id: any) => id.toString()).includes(blogIdStr);
   
   if (isBookmarked) {
-    user.bookmarks.pull(blogIdStr);
+    user.bookmarks = (user.bookmarks || []).filter((id: any) => id.toString() !== blogIdStr);
   } else {
     user.bookmarks.push(blogIdStr as any);
   }
