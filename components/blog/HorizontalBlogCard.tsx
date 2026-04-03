@@ -7,7 +7,14 @@ import { Bookmark, MoreHorizontal, ThumbsUp, MessageSquare } from 'lucide-react'
 import { useState, useTransition } from 'react';
 import { toggleBookmark, toggleLike } from '@/app/actions/blog';
 
+import { useSession } from 'next-auth/react';
+import LoginPromptModal from '@/components/auth/LoginPromptModal';
+
 const HorizontalBlogCard = ({ blog }: { blog: any }) => {
+  const { data: session } = useSession();
+  const [showLoginPrompt, setShowLoginPrompt] = useState(false);
+  const [promptAction, setPromptAction] = useState('interact');
+
   // Extract a brief text snippet from TipTap JSON structure if possible
   const getExcerpt = (contentObj: any) => {
     try {
@@ -32,6 +39,12 @@ const HorizontalBlogCard = ({ blog }: { blog: any }) => {
   const [likesCount, setLikesCount] = useState(blog.likesCount || 0);
 
   const handleBookmark = () => {
+     if (!session) {
+        setPromptAction('bookmark');
+        setShowLoginPrompt(true);
+        return;
+     }
+
      setBookmarked(!bookmarked);
      startTransition(async () => {
         try {
@@ -43,6 +56,12 @@ const HorizontalBlogCard = ({ blog }: { blog: any }) => {
   };
 
   const handleLike = () => {
+     if (!session) {
+        setPromptAction('like');
+        setShowLoginPrompt(true);
+        return;
+     }
+
      setLiked(!liked);
      setLikesCount(liked ? likesCount - 1 : likesCount + 1);
      startTransition(async () => {
@@ -61,6 +80,12 @@ const HorizontalBlogCard = ({ blog }: { blog: any }) => {
     <article className="border-b border-gray-100 dark:border-white/10 py-8 group transition-colors">
       <div className="flex gap-4 sm:gap-8 items-start justify-between">
         
+        <LoginPromptModal 
+           isOpen={showLoginPrompt} 
+           onClose={() => setShowLoginPrompt(false)} 
+           action={promptAction}
+        />
+
         {/* Left Side: Content */}
         <div className="flex-1 min-w-0 pr-4">
           <div className="flex items-center gap-2 mb-3">
@@ -103,10 +128,24 @@ const HorizontalBlogCard = ({ blog }: { blog: any }) => {
                    <ThumbsUp size={18} strokeWidth={liked ? 2 : 1.5} className={liked ? 'fill-current' : ''} />
                    <span className="text-[13px]">{likesCount}</span>
                 </button>
-                <Link href={`/blog/${blog.slug}#comments`} className="hover:text-gray-900 dark:hover:text-white transition-colors flex items-center gap-1">
-                   <MessageSquare size={18} strokeWidth={1.5} />
-                   <span className="text-[13px]">{blog.commentsCount !== undefined ? blog.commentsCount : '--'}</span>
-                </Link>
+                <div 
+                   onClick={(e) => {
+                      if (!session) {
+                         e.preventDefault();
+                         e.stopPropagation();
+                         setPromptAction('comment');
+                         setShowLoginPrompt(true);
+                      }
+                   }}
+                >
+                   <Link 
+                      href={session ? `/blog/${blog.slug}#comments` : '#'} 
+                      className="hover:text-gray-900 dark:hover:text-white transition-colors flex items-center gap-1"
+                   >
+                      <MessageSquare size={18} strokeWidth={1.5} />
+                      <span className="text-[13px]">{blog.commentsCount !== undefined ? blog.commentsCount : '--'}</span>
+                   </Link>
+                </div>
                 <button onClick={handleBookmark} className={`transition-colors ml-2 ${bookmarked ? 'text-blue-600 dark:text-blue-400' : 'hover:text-gray-900 dark:hover:text-white'}`}>
                    <Bookmark size={20} strokeWidth={bookmarked ? 2 : 1.5} className={bookmarked ? 'fill-current' : ''} />
                 </button>

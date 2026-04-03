@@ -2,6 +2,7 @@
 
 import connectDB from '@/lib/db';
 import User from '@/models/User';
+import Notification from '@/models/Notification';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { revalidatePath } from 'next/cache';
@@ -79,6 +80,20 @@ export async function toggleFollow(targetUserId: string) {
   } else {
     activeUser.following.push(targetIdStr as any);
     targetUser.followers.push(activeIdStr as any);
+
+    // Notification engine hook: alert target user of new follower
+    try {
+        if (targetUserId.toString() !== activeUserId.toString()) {
+            const newNotif = new Notification({
+                recipient: targetUserId,
+                sender: activeUserId,
+                type: 'FOLLOW'
+            });
+            await newNotif.save();
+        }
+    } catch (err) {
+        console.error('Failed to dispatch follow notification', err);
+    }
   }
 
   await Promise.all([activeUser.save(), targetUser.save()]);

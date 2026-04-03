@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Home, Library, User, FileText, BarChart2, Users } from 'lucide-react';
+import { Home, Library, User, FileText, BarChart2, Users, MessageSquare } from 'lucide-react';
 
 const MediumSidebar = ({ isOverlay = false }: { isOverlay?: boolean }) => {
   return (
@@ -21,10 +21,21 @@ const MediumSidebar = ({ isOverlay = false }: { isOverlay?: boolean }) => {
           <FileText size={22} className="text-gray-400 dark:text-gray-500 group-hover:text-gray-900 dark:group-hover:text-white transition-colors" />
           <span className="font-medium text-[15px]">Stories</span>
         </Link>
-        <Link href="/dashboard" className="flex items-center gap-4 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white group transition-colors">
-          <BarChart2 size={22} className="text-gray-400 dark:text-gray-500 group-hover:text-gray-900 dark:group-hover:text-white transition-colors" />
-          <span className="font-medium text-[15px]">Stats</span>
+        
+        <div className="flex flex-col gap-6 mt-6 pt-6 border-t border-gray-100 dark:border-white/10 transition-colors">
+        <Link href="/feedback" className="flex items-center gap-4 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors group">
+          <div className="p-2 rounded-lg bg-transparent group-hover:bg-gray-50 dark:group-hover:bg-slate-800 transition-colors">
+            <MessageSquare size={20} strokeWidth={1.5} />
+          </div>
+          <span className="text-[14px]">Performance Feedback</span>
         </Link>
+        <Link href="/dashboard" className="flex items-center gap-4 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors group">
+          <div className="p-2 rounded-lg bg-transparent group-hover:bg-gray-50 dark:group-hover:bg-slate-800 transition-colors">
+            <BarChart2 size={20} strokeWidth={1.5} />
+          </div>
+          <span className="text-[14px]">Stats</span>
+        </Link>
+      </div>
         
         <div className="pt-8 mt-8 border-t border-gray-100 dark:border-white/10 transition-colors">
            <Link href="/following" className="flex items-center gap-4 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white group transition-colors">
