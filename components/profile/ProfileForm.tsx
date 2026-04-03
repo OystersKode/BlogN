@@ -4,10 +4,12 @@ import { useState } from 'react';
 import { updateUserProfile } from '@/app/actions/profile';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Loader2, Save } from 'lucide-react';
+import { Loader2, Save, Edit3, X } from 'lucide-react';
 
 const ProfileForm = ({ user }: { user: any }) => {
+  const [isEditing, setIsEditing] = useState(false);
   const [bio, setBio] = useState(user.bio || '');
+  const [prn, setPrn] = useState(user.prn || '');
   const [twitter, setTwitter] = useState(user.socials?.twitter || '');
   const [github, setGithub] = useState(user.socials?.github || '');
   const [website, setWebsite] = useState(user.socials?.website || '');
@@ -20,9 +22,10 @@ const ProfileForm = ({ user }: { user: any }) => {
     setMessage('');
     
     try {
-      await updateUserProfile({ bio, twitter, github, website });
+      await updateUserProfile({ bio, prn, twitter, github, website });
       setMessage('Profile updated successfully!');
       setTimeout(() => setMessage(''), 3000);
+      setIsEditing(false); // Seamlessly return to read-only view
     } catch (error) {
       console.error(error);
       setMessage('Failed to update profile.');
@@ -31,8 +34,46 @@ const ProfileForm = ({ user }: { user: any }) => {
     }
   };
 
+  if (!isEditing) {
+    return (
+      <div className="space-y-6">
+         <div className="space-y-4">
+            <div>
+               <label className="block text-sm font-bold text-gray-700 mb-1">Bio</label>
+               <p className="text-gray-800 text-[15px] max-w-full font-serif leading-relaxed whitespace-pre-wrap">{bio || 'No bio provided.'}</p>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4">
+                <div className="md:col-span-2">
+                  <label className="block text-[13px] font-bold text-gray-500 uppercase tracking-wider mb-1">PRN (Roll Number)</label>
+                  <p className="text-gray-900 font-mono font-medium text-[15px]">{prn || 'Not provided'}</p>
+                </div>
+                <div>
+                  <label className="block text-[13px] font-bold text-gray-500 uppercase tracking-wider mb-1">Twitter</label>
+                  <p className="text-blue-600 font-medium text-[15px] hover:underline cursor-pointer truncate">{twitter || 'Not provided'}</p>
+                </div>
+                <div>
+                  <label className="block text-[13px] font-bold text-gray-500 uppercase tracking-wider mb-1">GitHub</label>
+                  <p className="text-gray-900 font-medium text-[15px] hover:underline cursor-pointer truncate">{github || 'Not provided'}</p>
+                </div>
+                <div className="md:col-span-2">
+                  <label className="block text-[13px] font-bold text-gray-500 uppercase tracking-wider mb-1">Personal Website</label>
+                  <p className="text-green-600 font-medium text-[15px] hover:underline cursor-pointer truncate">{website || 'Not provided'}</p>
+                </div>
+            </div>
+         </div>
+         
+         <div className="pt-6 mt-6 border-t border-gray-50 flex justify-end">
+            <Button onClick={() => setIsEditing(true)} className="bg-gray-100 text-gray-900 hover:bg-gray-200 rounded-full px-6 transition-colors shadow-sm font-bold">
+               <Edit3 className="mr-2 h-4 w-4" /> Edit Profile
+            </Button>
+         </div>
+      </div>
+    );
+  }
+
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <form onSubmit={handleSubmit} className="space-y-6 animate-in fade-in duration-300">
       <div className="space-y-4">
         <div>
           <label className="block text-sm font-bold text-gray-700 mb-1">Bio</label>
@@ -45,6 +86,15 @@ const ProfileForm = ({ user }: { user: any }) => {
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="md:col-span-2">
+              <label className="block text-sm font-bold text-gray-700 mb-1">PRN (Roll Number)</label>
+              <Input 
+                 value={prn} 
+                 onChange={(e) => setPrn(e.target.value)} 
+                 placeholder="Enter your PRN" 
+                 className="rounded-xl font-mono"
+              />
+            </div>
             <div>
               <label className="block text-sm font-bold text-gray-700 mb-1">Twitter URL</label>
               <Input 
@@ -79,14 +129,24 @@ const ProfileForm = ({ user }: { user: any }) => {
          <span className={`text-sm font-medium ${message.includes('Failed') ? 'text-red-500' : 'text-green-600'}`}>
             {message}
          </span>
-         <Button 
-            type="submit" 
-            disabled={loading}
-            className="bg-gray-900 text-white hover:bg-blue-600 rounded-full px-8 shadow-md transition-all font-bold"
-         >
-           {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Save className="mr-2 h-4 w-4" />}
-           Save Profile
-         </Button>
+         <div className="flex gap-2">
+            <Button 
+               type="button" 
+               variant="ghost"
+               onClick={() => setIsEditing(false)}
+               className="rounded-full px-6 transition-all font-bold hover:bg-gray-100"
+            >
+              Cancel
+            </Button>
+            <Button 
+               type="submit" 
+               disabled={loading}
+               className="bg-blue-600 text-white hover:bg-blue-700 rounded-full px-8 shadow-sm transition-all font-bold"
+            >
+              {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Save className="mr-2 h-4 w-4" />}
+              Save Changes
+            </Button>
+         </div>
       </div>
     </form>
   );

@@ -37,13 +37,13 @@ const BlogCard = ({ blog }: { blog: any }) => {
           
           <div className="flex items-center gap-3 pt-4 border-t border-gray-50 mt-auto">
              <Image
-               src={blog.author.image || '/default-avatar.png'}
-               alt={blog.author.name}
+               src={blog.author?.image || '/default-avatar.png'}
+               alt={blog.author?.name || 'Author'}
                width={32}
                height={32}
                className="rounded-full ring-2 ring-blue-50"
              />
-             <span className="text-xs font-semibold text-gray-700">{blog.author.name}</span>
+             <span className="text-xs font-semibold text-gray-700">{blog.author?.name || 'Unknown Author'}</span>
           </div>
         </div>
       </Card>

@@ -1,7 +1,11 @@
+'use client';
+
 import Link from 'next/link';
 import Image from 'next/image';
 import { format } from 'date-fns';
 import { Bookmark, MoreHorizontal, ThumbsUp, MessageSquare } from 'lucide-react';
+import { useState, useTransition } from 'react';
+import { toggleBookmark, toggleLike } from '@/app/actions/blog';
 
 const HorizontalBlogCard = ({ blog }: { blog: any }) => {
   // Extract a brief text snippet from TipTap JSON structure if possible
@@ -22,6 +26,37 @@ const HorizontalBlogCard = ({ blog }: { blog: any }) => {
 
   const excerpt = getExcerpt(blog.content);
 
+  const [isPending, startTransition] = useTransition();
+  const [bookmarked, setBookmarked] = useState(blog.isBookmarkedByMe || false);
+  const [liked, setLiked] = useState(blog.isLikedByMe || false);
+  const [likesCount, setLikesCount] = useState(blog.likesCount || 0);
+
+  const handleBookmark = () => {
+     setBookmarked(!bookmarked);
+     startTransition(async () => {
+        try {
+           await toggleBookmark(blog._id);
+        } catch {
+           setBookmarked(bookmarked);
+        }
+     });
+  };
+
+  const handleLike = () => {
+     setLiked(!liked);
+     setLikesCount(liked ? likesCount - 1 : likesCount + 1);
+     startTransition(async () => {
+        try {
+           const res = await toggleLike(blog._id);
+           setLikesCount(res.likesCount);
+           setLiked(res.isLiked);
+        } catch {
+           setLiked(liked);
+           setLikesCount(likesCount);
+        }
+     });
+  };
+
   return (
     <article className="border-b border-gray-100 py-8 group">
       <div className="flex gap-8 items-start justify-between">
@@ -29,14 +64,16 @@ const HorizontalBlogCard = ({ blog }: { blog: any }) => {
         {/* Left Side: Content */}
         <div className="flex-1 min-w-0 pr-4">
           <div className="flex items-center gap-2 mb-3">
-             <Image 
-                src={blog.author?.image || '/default-avatar.png'} 
-                alt={blog.author?.name || 'Author'} 
-                width={20} 
-                height={20} 
-                className="rounded-full"
-             />
-             <span className="text-[13px] font-medium text-gray-900">{blog.author?.name}</span>
+             <Link href={`/user/${blog.author?._id}`} className="flex items-center gap-2 group">
+                <Image 
+                   src={blog.author?.image || '/default-avatar.png'} 
+                   alt={blog.author?.name || 'Author'} 
+                   width={20} 
+                   height={20} 
+                   className="rounded-full"
+                />
+                <span className="text-[13px] font-medium text-gray-900 group-hover:text-blue-600 transition-colors">{blog.author?.name}</span>
+             </Link>
              <span className="text-gray-400 text-sm hidden sm:inline">in</span>
              <span className="text-[13px] font-bold text-gray-900 hidden sm:inline">TY CSE Insights</span>
           </div>
@@ -59,16 +96,19 @@ const HorizontalBlogCard = ({ blog }: { blog: any }) => {
              </div>
              
              <div className="flex items-center gap-6 text-gray-400">
-                <button className="hover:text-gray-900 transition-colors flex items-center gap-1">
-                   <ThumbsUp size={18} strokeWidth={1.5} />
-                   <span className="text-[13px]">{Math.floor(Math.random() * 50) + 10}</span>
+                <button 
+                   onClick={handleLike} 
+                   className={`transition-colors flex items-center gap-1 ${liked ? 'text-blue-600 font-bold' : 'hover:text-gray-900'}`}
+                >
+                   <ThumbsUp size={18} strokeWidth={liked ? 2 : 1.5} className={liked ? 'fill-current' : ''} />
+                   <span className="text-[13px]">{likesCount}</span>
                 </button>
-                <button className="hover:text-gray-900 transition-colors flex items-center gap-1">
+                <Link href={`/blog/${blog.slug}#comments`} className="hover:text-gray-900 transition-colors flex items-center gap-1">
                    <MessageSquare size={18} strokeWidth={1.5} />
-                   <span className="text-[13px]">{Math.floor(Math.random() * 10) + 2}</span>
-                </button>
-                <button className="hover:text-gray-900 transition-colors ml-2">
-                   <Bookmark size={20} strokeWidth={1.5} />
+                   <span className="text-[13px]">--</span>
+                </Link>
+                <button onClick={handleBookmark} className={`transition-colors ml-2 ${bookmarked ? 'text-blue-600' : 'hover:text-gray-900'}`}>
+                   <Bookmark size={20} strokeWidth={bookmarked ? 2 : 1.5} className={bookmarked ? 'fill-current' : ''} />
                 </button>
                 <button className="hover:text-gray-900 transition-colors">
                    <MoreHorizontal size={20} strokeWidth={1.5} />

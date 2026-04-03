@@ -1,9 +1,16 @@
 import { getBlogBySlug } from '@/app/actions/blog';
+import { getComments } from '@/app/actions/comment';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import Navbar from '@/components/layout/Navbar';
 import { format } from 'date-fns';
 import BlogContent from '@/components/blog/BlogContent';
+import Comments from '@/components/blog/Comments';
+import Footer from '@/components/layout/Footer';
+import Link from 'next/link';
+import FollowButton from '@/components/profile/FollowButton';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/lib/auth';
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const resolvedParams = await params;
@@ -22,10 +29,13 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 const BlogDetailPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
   const resolvedParams = await params;
   const blog = await getBlogBySlug(resolvedParams.slug);
+  const session = await getServerSession(authOptions);
 
   if (!blog) {
     notFound();
   }
+
+  const comments = await getComments(blog._id.toString());
 
   return (
     <main className="min-h-screen bg-white">
@@ -45,17 +55,25 @@ const BlogDetailPage = async ({ params }: { params: Promise<{ slug: string }> })
           </h1>
 
           <div className="flex items-center gap-4 pt-4 border-t border-gray-100">
-            <Image
-              src={blog.author.image || '/default-avatar.png'}
-              alt={blog.author.name}
-              width={48}
-              height={48}
-              className="rounded-full ring-2 ring-blue-50"
-            />
-            <div>
-              <p className="font-bold text-gray-900">{blog.author.name}</p>
-              <p className="text-sm text-gray-500">{format(new Date(blog.createdAt), 'MMM dd, yyyy')}</p>
-            </div>
+            <Link href={`/user/${blog.author._id}`} className="flex items-center gap-4 group">
+               <Image
+                 src={blog.author.image || '/default-avatar.png'}
+                 alt={blog.author.name}
+                 width={48}
+                 height={48}
+                 className="rounded-full ring-2 ring-blue-50"
+               />
+               <div>
+                 <p className="font-bold text-gray-900 group-hover:text-blue-600 transition-colors">{blog.author.name}</p>
+                 <p className="text-sm text-gray-500">{format(new Date(blog.createdAt), 'MMM dd, yyyy')}</p>
+               </div>
+            </Link>
+            
+            {session && (session.user as any).id !== blog.author._id && (
+               <div className="ml-auto">
+                  <FollowButton targetUserId={blog.author._id} initialFollowing={blog.isFollowingAuthor} />
+               </div>
+            )}
           </div>
         </header>
 
@@ -75,7 +93,10 @@ const BlogDetailPage = async ({ params }: { params: Promise<{ slug: string }> })
         <div className="prose prose-lg md:prose-xl max-w-none prose-slate prose-headings:text-[#1a1a1a] prose-p:text-[#333333] prose-a:text-blue-600 prose-strong:text-[#111111] prose-blockquote:text-gray-500 prose-blockquote:border-gray-300 font-serif leading-loose">
           <BlogContent content={blog.content} />
         </div>
+
+        <Comments blogId={blog._id.toString()} slug={blog.slug} initialComments={comments} />
       </article>
+      <Footer />
     </main>
   );
 };

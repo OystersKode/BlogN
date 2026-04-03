@@ -11,8 +11,14 @@ const BlogSchema = new Schema({
   readingTime: { type: String },
   seoTitle: { type: String },
   seoDescription: { type: String },
+  likes: [{ type: Schema.Types.ObjectId, ref: 'User' }],
+  isStaffPick: { type: Boolean, default: false },
 }, { timestamps: true });
 
-const Blog = models.Blog || model('Blog', BlogSchema);
+
+if (mongoose.models.Blog) {
+  delete mongoose.models.Blog;
+}
+const Blog = model('Blog', BlogSchema);
 
 export default Blog;

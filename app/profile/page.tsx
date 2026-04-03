@@ -58,8 +58,8 @@ const ProfilePage = async () => {
 
            <Card className="p-8 border-none shadow-sm bg-white rounded-[2rem] lg:col-span-2">
               <div className="mb-6">
-                 <h3 className="text-xl font-black text-gray-900 tracking-tight">Edit Profile</h3>
-                 <p className="text-sm text-gray-500 font-medium">Customize how you appear to others on the platform.</p>
+                 <h3 className="text-xl font-black text-gray-900 tracking-tight">About You</h3>
+                 <p className="text-sm text-gray-500 font-medium">Manage your public information and persona.</p>
               </div>
               <ProfileForm user={user} />
            </Card>

@@ -1,13 +1,13 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { getAllUsers, getAllBlogs, deleteUser, updateUserRole } from '@/app/actions/admin';
+import { getAllUsers, getAllBlogs, deleteUser, updateUserRole, toggleStaffPick } from '@/app/actions/admin';
 import Navbar from '@/components/layout/Navbar';
 import { Button } from '@/components/ui/button';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { Loader2, Trash2, UserCog, BookOpen, Users } from 'lucide-react';
+import { Loader2, Trash2, UserCog, BookOpen, Users, Star } from 'lucide-react';
 import Image from 'next/image';
 
 const AdminDashboard = () => {
@@ -107,8 +107,19 @@ const AdminDashboard = () => {
                     <Button 
                         variant="ghost" 
                         size="icon" 
+                        className={`${b.isStaffPick ? 'text-yellow-500 hover:bg-yellow-50 bg-yellow-50' : 'text-gray-400 hover:text-yellow-500 hover:bg-gray-100'}`}
+                        onClick={async () => {
+                            await toggleStaffPick(b._id.toString());
+                            fetchData();
+                        }}
+                        title={b.isStaffPick ? "Remove Staff Pick" : "Mark as Staff Pick"}
+                    >
+                      <Star size={16} className={b.isStaffPick ? 'fill-current' : ''} />
+                    </Button>
+                    <Button 
+                        variant="ghost" 
+                        size="icon" 
                         className="text-red-500 hover:bg-red-50"
-                        // Add delete blog action here if needed
                     >
                       <Trash2 size={16} />
                     </Button>

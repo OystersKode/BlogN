@@ -42,3 +42,17 @@ export async function deleteUser(userId: string) {
     await User.findByIdAndDelete(userId);
     revalidatePath('/admin');
 }
+
+export async function toggleStaffPick(blogId: string) {
+    const session = await getServerSession(authOptions);
+    if (!session || (session.user as any).role !== 'ADMIN') throw new Error('Unauthorized');
+  
+    await connectDB();
+    const blog = await Blog.findById(blogId);
+    if (!blog) throw new Error('Blog not found');
+    
+    blog.isStaffPick = !blog.isStaffPick;
+    await blog.save();
+    revalidatePath('/');
+    revalidatePath('/admin');
+}

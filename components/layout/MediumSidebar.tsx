@@ -1,17 +1,17 @@
 import Link from 'next/link';
 import { Home, Library, User, FileText, BarChart2, Users } from 'lucide-react';
 
-const MediumSidebar = () => {
+const MediumSidebar = ({ isOverlay = false }: { isOverlay?: boolean }) => {
   return (
-    <aside className="w-64 flex-shrink-0 hidden lg:block sticky top-[80px] h-[calc(100vh-80px)] overflow-y-auto pr-8 py-8 border-r border-gray-100">
+    <aside className={`flex-shrink-0 overflow-y-auto pr-8 py-8 border-gray-100 ${isOverlay ? 'w-full block border-none py-0 pr-4' : 'w-64 hidden lg:block sticky top-[80px] h-[calc(100vh-80px)] border-r'}`}>
       <nav className="space-y-6">
         <Link href="/" className="flex items-center gap-4 text-gray-900 group">
           <Home size={22} className="text-gray-400 group-hover:text-gray-900 transition-colors" />
           <span className="font-medium text-[15px]">Home</span>
         </Link>
-        <Link href="/library" className="flex items-center gap-4 text-gray-500 hover:text-gray-900 group transition-colors">
+        <Link href="/bookmarks" className="flex items-center gap-4 text-gray-500 hover:text-gray-900 group transition-colors">
           <Library size={22} className="text-gray-400 group-hover:text-gray-900 transition-colors" />
-          <span className="font-medium text-[15px]">Library</span>
+          <span className="font-medium text-[15px]">Bookmarks</span>
         </Link>
         <Link href="/profile" className="flex items-center gap-4 text-gray-500 hover:text-gray-900 group transition-colors">
           <User size={22} className="text-gray-400 group-hover:text-gray-900 transition-colors" />
