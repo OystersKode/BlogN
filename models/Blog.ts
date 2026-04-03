@@ -16,9 +16,5 @@ const BlogSchema = new Schema({
 }, { timestamps: true });
 
 
-if (mongoose.models.Blog) {
-  delete mongoose.models.Blog;
-}
-const Blog = model('Blog', BlogSchema);
-
+const Blog = mongoose.models.Blog || model('Blog', BlogSchema);
 export default Blog;

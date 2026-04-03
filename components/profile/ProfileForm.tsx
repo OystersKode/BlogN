@@ -40,7 +40,7 @@ const ProfileForm = ({ user }: { user: any }) => {
           <div className="space-y-4 transition-colors">
              <div>
                 <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-1 transition-colors">Bio</label>
-                <p className="text-gray-800 dark:text-gray-200 text-[15px] max-w-full font-serif leading-relaxed whitespace-pre-wrap transition-colors">{bio || 'No bio provided.'}</p>
+                <p className="text-gray-800 dark:text-gray-200 text-[15px] max-w-full leading-relaxed whitespace-pre-wrap transition-colors">{bio || 'No bio provided.'}</p>
              </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 transition-colors">
                  <div className="md:col-span-2">

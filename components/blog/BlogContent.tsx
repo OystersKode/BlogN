@@ -1,16 +1,36 @@
 'use client';
 
-import { useEditor, EditorContent } from '@tiptap/react';
+import { useEditor, EditorContent, mergeAttributes } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
-import Underline from '@tiptap/extension-underline';
-import Link from '@tiptap/extension-link';
+import { useEffect } from 'react';
 import Image from '@tiptap/extension-image';
+
+const ResizableImage = Image.extend({
+  name: 'image',
+  addAttributes() {
+    return {
+      src: {
+        default: null,
+      },
+      alt: {
+        default: null,
+      },
+      title: {
+        default: null,
+      },
+      width: {
+        default: '100%',
+        renderHTML: (attributes) => ({
+          style: `width: ${attributes.width}; height: auto;`,
+        }),
+      },
+    };
+  },
+});
 
 const extensions = [
   StarterKit,
-  Underline,
-  Link.configure({ openOnClick: true }),
-  Image,
+  ResizableImage,
 ];
 
 const BlogContent = ({ content }: { content: any }) => {
@@ -18,18 +38,27 @@ const BlogContent = ({ content }: { content: any }) => {
     immediatelyRender: false,
     extensions,
     content,
-    editable: false, // Make it read-only
+    editable: false, 
     editorProps: {
         attributes: {
-            class: 'prose prose-lg md:prose-xl max-w-none focus:outline-none focus:ring-0 text-slate-900 dark:text-gray-100 dark:prose-invert font-serif leading-relaxed transition-colors',
+            class: 'prose prose-lg md:prose-xl max-w-none focus:outline-none focus:ring-0 text-slate-900 dark:text-gray-100 dark:prose-invert font-serif leading-[1.8] transition-colors',
         },
     },
   });
 
+  useEffect(() => {
+    if (editor && content) {
+      console.log('Rendering Blog Content:', JSON.stringify(content, null, 2));
+      editor.commands.setContent(content);
+    }
+  }, [editor, content]);
+
   if (!editor) return null;
 
   return (
-    <EditorContent editor={editor} />
+    <div className="blog-content-tiptap">
+      <EditorContent editor={editor} />
+    </div>
   );
 };
 

@@ -82,7 +82,7 @@ const HorizontalBlogCard = ({ blog }: { blog: any }) => {
              <h2 className="text-xl sm:text-2xl font-black text-gray-900 dark:text-white tracking-tight leading-tight mb-2 line-clamp-3 transition-colors">
                 {blog.title}
              </h2>
-             <p className="text-[15px] text-gray-500 dark:text-gray-400 leading-snug line-clamp-2 hidden sm:block font-serif transition-colors">
+             <p className="text-[15px] text-gray-500 dark:text-gray-400 leading-snug line-clamp-2 hidden sm:block transition-colors">
                 {excerpt}
              </p>
           </Link>

@@ -19,40 +19,42 @@ export async function createBlog(formData: any) {
 
   await connectDB();
 
-  const { title, content, coverImage, status } = formData;
+  // De-proxy the input data from React 19's client reference system
+  const data = JSON.parse(JSON.stringify(formData));
+  const { title, content, coverImage, status } = data;
   const slug = `${slugify(title)}-${Math.random().toString(36).substr(2, 5)}`;
   const readingTime = estimateReadingTime(content);
 
-  const newBlog = new Blog({
+  const newBlog = await Blog.create({
     title,
     slug,
     content,
     coverImage,
-    author: (session.user as any).id,
+    author: String((session.user as any).id),
     status,
     readingTime,
   });
 
-  await newBlog.save();
-
   // Notification engine hook: alert followers of new post
   try {
-     const authorUserData = await User.findById(newBlog.author).select('followers');
-     if (authorUserData && authorUserData.followers && authorUserData.followers.length > 0) {
-        const notifications = authorUserData.followers.map((followerId: string) => ({
-           recipient: followerId,
-           sender: newBlog.author,
-           type: 'NEW_POST',
-           blog: newBlog._id,
-        }));
-        await Notification.insertMany(notifications);
-     }
+      const authorUserData = await User.findById(newBlog.author).select('followers');
+      if (authorUserData && authorUserData.followers && authorUserData.followers.length > 0) {
+         const authorIdStr = String(newBlog.author);
+         const blogIdStr = String(newBlog._id);
+         const notifications = authorUserData.followers.map((followerId: any) => ({
+            recipient: String(followerId),
+            sender: authorIdStr,
+            type: 'NEW_POST',
+            blog: blogIdStr,
+         }));
+         await Notification.insertMany(notifications);
+      }
   } catch (err) {
-     console.error('Failed to dispatch notifications', err);
+      console.error('Failed to dispatch notifications', err);
   }
 
   revalidatePath('/');
-  return { slug: newBlog.slug };
+  return { slug: String(newBlog.slug) };
 }
 
 export async function getBlogs(feedType = 'all') {
@@ -137,12 +139,15 @@ export async function toggleBookmark(blogId: string) {
   
   await connectDB();
   const user = await User.findById((session.user as any).id);
-  const isBookmarked = user.bookmarks.includes(blogId);
+  if (!user) throw new Error("User not found");
+  
+  const blogIdStr = blogId.toString();
+  const isBookmarked = (user.bookmarks || []).map((id: any) => id.toString()).includes(blogIdStr);
   
   if (isBookmarked) {
-    user.bookmarks.pull(blogId);
+    user.bookmarks.pull(blogIdStr);
   } else {
-    user.bookmarks.push(blogId);
+    user.bookmarks.push(blogIdStr as any);
   }
   
   await user.save();
@@ -208,7 +213,7 @@ export async function toggleLike(blogId: string) {
   await blog.save();
   revalidatePath('/');
   revalidatePath(`/blog/${blog.slug}`);
-  return { isLiked: !isLiked, likesCount: blog.likes.length };
+  return { isLiked: !isLiked, likesCount: Number(blog.likes.length) };
 }
 
 export async function getStaffPicks() {

@@ -8,10 +8,5 @@ const NotificationSchema = new Schema({
   isRead: { type: Boolean, default: false },
 }, { timestamps: true });
 
-if (mongoose.models.Notification) {
-  delete mongoose.models.Notification;
-}
-
-const Notification = model('Notification', NotificationSchema);
-
+const Notification = mongoose.models.Notification || model('Notification', NotificationSchema);
 export default Notification;

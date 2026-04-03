@@ -39,7 +39,7 @@ const BlogDetailPage = async ({ params }: { params: Promise<{ slug: string }> })
   const comments = await getComments(blog._id.toString());
 
   return (
-    <main className="min-h-screen bg-white dark:bg-slate-950 transition-colors">
+    <main className="min-h-screen bg-white dark:bg-background transition-colors">
       <Navbar />
       <article className="max-w-3xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
         <header className="mb-8">
@@ -51,7 +51,7 @@ const BlogDetailPage = async ({ params }: { params: Promise<{ slug: string }> })
              <span className="text-gray-500 dark:text-gray-400 text-sm font-medium transition-colors">{blog.readingTime}</span>
           </div>
 
-          <h1 className="text-4xl sm:text-[42px] lg:text-[46px] font-black text-gray-900 dark:text-white leading-[1.1] tracking-tight mb-8 transition-colors">
+          <h1 className="text-4xl sm:text-[42px] lg:text-[46px] font-bold text-gray-900 dark:text-foreground leading-[1.1] tracking-tight mb-8 transition-colors">
             {blog.title}
           </h1>
 
@@ -93,7 +93,7 @@ const BlogDetailPage = async ({ params }: { params: Promise<{ slug: string }> })
           </div>
         )}
 
-        <div className="prose prose-lg md:prose-xl max-w-none dark:prose-invert prose-slate prose-headings:text-[#1a1a1a] dark:prose-headings:text-white prose-p:text-[#333333] dark:prose-p:text-gray-300 prose-a:text-blue-600 prose-strong:text-[#111111] dark:prose-strong:text-white prose-blockquote:text-gray-500 prose-blockquote:border-gray-300 font-serif leading-loose transition-colors">
+        <div className="mb-12">
           <BlogContent content={blog.content} />
         </div>
 

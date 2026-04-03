@@ -67,20 +67,24 @@ export async function toggleFollow(targetUserId: string) {
     User.findById(targetUserId)
   ]);
 
-  const isFollowing = activeUser.following.includes(targetUserId);
+  if (!activeUser || !targetUser) throw new Error("User not found");
+
+  const targetIdStr = targetUserId.toString();
+  const activeIdStr = activeUserId.toString();
+  const isFollowing = (activeUser.following || []).map((id: any) => id.toString()).includes(targetIdStr);
 
   if (isFollowing) {
-    activeUser.following.pull(targetUserId);
-    targetUser.followers.pull(activeUserId);
+    (activeUser.following as any).pull(targetIdStr);
+    (targetUser.followers as any).pull(activeIdStr);
   } else {
-    activeUser.following.push(targetUserId);
-    targetUser.followers.push(activeUserId);
+    activeUser.following.push(targetIdStr as any);
+    targetUser.followers.push(activeIdStr as any);
   }
 
   await Promise.all([activeUser.save(), targetUser.save()]);
   revalidatePath(`/user/${targetUserId}`);
   revalidatePath('/profile');
-  return { isFollowing: !isFollowing, followersCount: targetUser.followers.length };
+  return { isFollowing: !isFollowing, followersCount: Number(targetUser.followers?.length || 0) };
 }
 
 export async function getPublicUserNetwork(id: string) {

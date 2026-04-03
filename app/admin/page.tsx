@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { getAllUsers, getAllBlogs, deleteUser, updateUserRole, toggleStaffPick } from '@/app/actions/admin';
+import { deleteBlog } from '@/app/actions/blog';
 import Navbar from '@/components/layout/Navbar';
 import { Button } from '@/components/ui/button';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
@@ -121,6 +122,12 @@ const AdminDashboard = () => {
                          variant="ghost" 
                          size="icon" 
                          className="text-red-500 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
+                         onClick={async () => {
+                             if(confirm('Delete blog permanently?')) {
+                                 await deleteBlog(b._id.toString());
+                                 fetchData();
+                             }
+                         }}
                      >
                        <Trash2 size={16} />
                      </Button>

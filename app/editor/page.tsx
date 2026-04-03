@@ -55,7 +55,9 @@ const EditorPage = () => {
     
     setLoading(true);
     try {
-      const res = await createBlog({ title, content, coverImage, status });
+      // Deep clone content to break React 19's client-side proxies/transitions ($T error fix)
+      const plainContent = JSON.parse(JSON.stringify(content));
+      const res = await createBlog({ title, content: plainContent, coverImage, status });
       router.push(`/blog/${res.slug}`);
     } catch (error) {
       console.error(error);

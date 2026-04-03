@@ -69,7 +69,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ f
               <h1 className="text-[60px] md:text-[85px] font-normal leading-[0.95] tracking-tight text-slate-900 dark:text-white font-serif transition-colors">
                  The Central Hub for <br className="hidden md:block"/> Engineering Insights
               </h1>
-              <p className="text-xl md:text-2xl text-slate-700 dark:text-slate-300 font-serif leading-relaxed transition-colors">
+              <p className="text-xl md:text-2xl text-slate-700 dark:text-slate-300 font-sans leading-relaxed transition-colors">
                  A dedicated platform built by and for Third Year Computer Science students. Document your technical journeys and build a collective academic archive.
               </p>
               <div className="flex gap-4 pt-4">
@@ -95,7 +95,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ f
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
            <div className="max-w-3xl mb-16">
               <h2 className="text-4xl md:text-5xl font-normal text-slate-900 dark:text-white font-serif tracking-tight mb-4 transition-colors">Why we built this platform.</h2>
-              <p className="text-xl text-slate-600 dark:text-slate-400 font-serif transition-colors">Solving the fragmentation of student knowledge.</p>
+              <p className="text-xl text-slate-600 dark:text-slate-400 font-sans transition-colors">Solving the fragmentation of student knowledge.</p>
            </div>
 
            <div className="grid grid-cols-1 md:grid-cols-3 gap-x-12 gap-y-12">

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEditor, EditorContent } from '@tiptap/react';
+import { useEditor, EditorContent, mergeAttributes } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Underline from '@tiptap/extension-underline';
 import Link from '@tiptap/extension-link';
@@ -34,6 +34,8 @@ const Toolbar = ({ editor }: { editor: any }) => {
           const data = await res.json();
           if (data.url) {
             editor.chain().focus().setImage({ src: data.url }).run();
+          } else {
+            alert("Upload failed: " + (data.error || "Unknown error"));
           }
         };
       }
@@ -104,17 +106,61 @@ const Toolbar = ({ editor }: { editor: any }) => {
         onClick={addImage}
         className="p-1.5 rounded hover:text-gray-900 hover:bg-gray-50 transition-colors"
       >
-        <ImageIcon size={18} />
+      <ImageIcon size={18} />
       </button>
+
+      {editor.isActive('image') && (
+        <div className="flex items-center gap-1 bg-gray-50 dark:bg-slate-800 rounded-md px-2 ml-2 transition-colors">
+          <button
+            onClick={() => editor.chain().focus().updateAttributes('image', { width: '25%' }).run()}
+            className="text-[10px] font-bold px-1.5 hover:text-blue-500 transition-colors"
+          >
+            S
+          </button>
+          <button
+            onClick={() => editor.chain().focus().updateAttributes('image', { width: '50%' }).run()}
+            className="text-[10px] font-bold px-1.5 hover:text-blue-500 transition-colors"
+          >
+            M
+          </button>
+          <button
+            onClick={() => editor.chain().focus().updateAttributes('image', { width: '100%' }).run()}
+            className="text-[10px] font-bold px-1.5 hover:text-blue-500 transition-colors"
+          >
+            L
+          </button>
+        </div>
+      )}
     </div>
   );
 };
 
+const ResizableImage = Image.extend({
+  name: 'image', // Keep the canonical name for command compatibility
+  addAttributes() {
+    return {
+      src: {
+        default: null,
+      },
+      alt: {
+        default: null,
+      },
+      title: {
+        default: null,
+      },
+      width: {
+        default: '100%',
+        renderHTML: (attributes) => ({
+          style: `width: ${attributes.width}; height: auto; cursor: pointer; transition: width 0.2s ease-in-out;`,
+        }),
+      },
+    };
+  },
+});
+
 const extensions = [
   StarterKit,
-  Underline,
-  Link.configure({ openOnClick: false }),
-  Image,
+  ResizableImage,
   Placeholder.configure({ placeholder: 'Tell your story...' }),
 ];
 
@@ -124,12 +170,14 @@ const TiptapEditor = ({ content, onChange }: { content: any, onChange: (val: any
     extensions,
     content,
     onUpdate: ({ editor }) => {
-      onChange(editor.getJSON());
+      const json = editor.getJSON();
+      console.log('Editor JSON updated:', json);
+      onChange(json);
     },
     editorProps: {
-      attributes: {
-        class: 'prose prose-lg md:prose-xl font-serif max-w-none focus:outline-none min-h-[50vh] text-gray-800 leading-relaxed',
-      },
+        attributes: {
+            class: 'prose prose-lg md:prose-xl font-serif max-w-none focus:outline-none min-h-[50vh] text-gray-800 leading-relaxed',
+        },
     },
   });
 
