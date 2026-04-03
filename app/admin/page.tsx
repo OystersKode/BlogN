@@ -238,13 +238,20 @@ const AdminDashboard = () => {
            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 transition-colors">
                {feedback.length > 0 ? feedback.map((f: any) => (
                  <Card key={f._id} className="border-none shadow-sm dark:shadow-none bg-white dark:bg-slate-900 hover:shadow-md transition-all">
-                   <CardHeader className="p-4 flex flex-row items-center gap-3 border-b border-gray-50 dark:border-white/5">
-                       <Image src={f.user?.image || '/default-avatar.png'} alt={f.user?.name} width={32} height={32} className="rounded-full" />
-                       <div className="min-w-0">
-                          <p className="font-bold text-[13px] text-gray-900 dark:text-white truncate transition-colors">{f.user?.name}</p>
-                          <p className="text-[10px] text-gray-500 dark:text-gray-400 font-bold uppercase tracking-tight transition-colors">PRN: {f.user?.prn || 'N/A'}</p>
-                       </div>
-                   </CardHeader>
+                    <CardHeader className="p-4 flex flex-row items-center gap-4 border-b border-gray-50 dark:border-white/5 transition-colors">
+                        <div className="relative h-10 w-10 flex-shrink-0">
+                           <Image 
+                             src={f.user?.image || '/default-avatar.png'} 
+                             alt={f.user?.name || 'User'} 
+                             fill 
+                             className="rounded-full object-cover border-2 border-gray-100 dark:border-white/10" 
+                           />
+                        </div>
+                        <div className="min-w-0 flex-1">
+                           <p className="font-bold text-[14px] text-gray-900 dark:text-white truncate transition-colors">{f.user?.name}</p>
+                           <p className="text-[11px] text-gray-500 dark:text-gray-400 font-bold uppercase tracking-tight transition-colors">PRN: {f.user?.prn || 'N/A'}</p>
+                        </div>
+                    </CardHeader>
                    <CardContent className="p-4 space-y-4 transition-colors">
                        <div className="grid grid-cols-2 gap-2 transition-colors">
                           {Object.entries(f.ratings).map(([key, val]: [any, any]) => (

@@ -31,7 +31,7 @@ export async function getAllFeedback() {
 
   await connectDB();
   const feedbacks = await Feedback.find({})
-    .populate('user', 'name email prn')
+    .populate('user', 'name email prn image')
     .sort({ createdAt: -1 })
     .lean();
     

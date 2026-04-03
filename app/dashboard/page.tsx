@@ -91,7 +91,7 @@ const DashboardPage = () => {
                 </div>
                 <div className="mt-4">
                   <div className="text-2xl font-black text-gray-900 dark:text-white transition-colors group-hover:text-blue-600 dark:group-hover:text-blue-400">
-                     Class of 2026
+                     Class of 2027
                   </div>
                   <div className="h-1.5 w-12 bg-green-500 rounded-full mt-2 transition-all group-hover:w-full" />
                 </div>
