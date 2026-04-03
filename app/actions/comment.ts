@@ -2,6 +2,8 @@
 
 import connectDB from '@/lib/db';
 import Comment from '@/models/Comment';
+import Blog from '@/models/Blog';
+import Notification from '@/models/Notification';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { revalidatePath } from 'next/cache';
@@ -18,6 +20,22 @@ export async function addComment(blogId: string, content: string, slug: string) 
    });
    
    await newComment.save();
+   
+   try {
+      const blog = await Blog.findById(blogId).select('author');
+      if (blog && blog.author.toString() !== (session.user as any).id.toString()) {
+         const newNotif = new Notification({
+            recipient: blog.author,
+            sender: (session.user as any).id,
+            type: 'COMMENT',
+            blog: blog._id
+         });
+         await newNotif.save();
+      }
+   } catch (err) {
+      console.error('Failed to dispatch comment notification', err);
+   }
+
    revalidatePath(`/blog/${slug}`);
    return JSON.parse(JSON.stringify(newComment));
 }

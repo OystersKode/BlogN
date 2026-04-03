@@ -29,6 +29,10 @@ const EditorPage = () => {
   const handleImageUpload = async (e: any) => {
     const file = e.target.files[0];
     if (file) {
+      if (file.size > 300 * 1024) {
+          alert("Cover image must be smaller than 300KB to save database space.");
+          return;
+      }
       setUploading(true);
       const reader = new FileReader();
       reader.readAsDataURL(file);

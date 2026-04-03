@@ -5,8 +5,9 @@ import { useSession, signIn, signOut } from 'next-auth/react';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
-import { Search, Edit, Bell, LayoutDashboard, User, Shield, Menu, X, LogOut } from 'lucide-react';
+import { Search, Edit, LayoutDashboard, User, Shield, Menu, X, LogOut } from 'lucide-react';
 import MediumSidebar from './MediumSidebar';
+import NotificationsDropdown from './NotificationsDropdown';
 
 const Navbar = () => {
   const { data: session } = useSession();
@@ -50,12 +51,10 @@ const Navbar = () => {
               <>
                 <Link href="/editor" className="hidden sm:flex items-center gap-2 text-gray-500 hover:text-gray-900 transition-colors">
                   <Edit size={22} strokeWidth={1.5} />
-                  <span className="text-[15px] font-medium">Write</span>
+                  <span className="text-[15px] font-medium border-r border-gray-100 pr-4 mr-2">Write</span>
                 </Link>
                 
-                <button className="text-gray-400 hover:text-gray-900 transition-colors hidden sm:block">
-                   <Bell size={24} strokeWidth={1.5} />
-                </button>
+                <NotificationsDropdown />
 
                 <div className="relative hidden sm:block">
                   <button

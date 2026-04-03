@@ -18,6 +18,10 @@ const Toolbar = ({ editor }: { editor: any }) => {
     input.onchange = async (e: any) => {
       const file = e.target.files[0];
       if (file) {
+        if (file.size > 300 * 1024) {
+            alert("Image must be smaller than 300KB to save database space.");
+            return;
+        }
         const reader = new FileReader();
         reader.readAsDataURL(file);
         reader.onload = async () => {

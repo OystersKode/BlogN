@@ -9,6 +9,7 @@ import Comments from '@/components/blog/Comments';
 import Footer from '@/components/layout/Footer';
 import Link from 'next/link';
 import FollowButton from '@/components/profile/FollowButton';
+import ReaderInteractionBar from '@/components/blog/ReaderInteractionBar';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 
@@ -40,9 +41,9 @@ const BlogDetailPage = async ({ params }: { params: Promise<{ slug: string }> })
   return (
     <main className="min-h-screen bg-white">
       <Navbar />
-      <article className="max-w-4xl mx-auto py-16 px-4 sm:px-6 lg:px-8">
-        <header className="mb-12 space-y-6">
-          <div className="flex items-center gap-3">
+      <article className="max-w-3xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+        <header className="mb-8">
+          <div className="flex items-center gap-3 mb-6">
              <span className="px-3 py-1 bg-blue-50 text-blue-600 text-xs font-bold uppercase tracking-wider rounded-full">
                {blog.category}
              </span>
@@ -50,40 +51,42 @@ const BlogDetailPage = async ({ params }: { params: Promise<{ slug: string }> })
              <span className="text-gray-500 text-sm font-medium">{blog.readingTime}</span>
           </div>
 
-          <h1 className="text-5xl font-black text-gray-900 leading-tight">
+          <h1 className="text-4xl sm:text-[42px] lg:text-[46px] font-black text-gray-900 leading-[1.1] tracking-tight mb-8">
             {blog.title}
           </h1>
 
-          <div className="flex items-center gap-4 pt-4 border-t border-gray-100">
-            <Link href={`/user/${blog.author._id}`} className="flex items-center gap-4 group">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <Link href={`/user/${blog.author._id}`} className="flex items-center gap-3 group">
                <Image
                  src={blog.author.image || '/default-avatar.png'}
                  alt={blog.author.name}
                  width={48}
                  height={48}
-                 className="rounded-full ring-2 ring-blue-50"
+                 className="rounded-full ring-2 ring-gray-50 object-cover"
                />
                <div>
-                 <p className="font-bold text-gray-900 group-hover:text-blue-600 transition-colors">{blog.author.name}</p>
-                 <p className="text-sm text-gray-500">{format(new Date(blog.createdAt), 'MMM dd, yyyy')}</p>
+                 <p className="font-bold text-gray-900 group-hover:text-blue-600 transition-colors text-[15px]">{blog.author.name}</p>
+                 <p className="text-[13px] text-gray-500">{format(new Date(blog.createdAt), 'MMM dd, yyyy')}</p>
                </div>
             </Link>
             
             {session && (session.user as any).id !== blog.author._id && (
-               <div className="ml-auto">
+               <div>
                   <FollowButton targetUserId={blog.author._id} initialFollowing={blog.isFollowingAuthor} />
                </div>
             )}
           </div>
         </header>
 
+        <ReaderInteractionBar blog={blog} />
+
         {blog.coverImage && (
-          <div className="relative w-full h-[450px] mb-12 rounded-3xl overflow-hidden shadow-2xl border border-gray-100">
+          <div className="relative w-full aspect-[21/9] mb-12 rounded-xl overflow-hidden shadow-sm border border-gray-100 bg-gray-50">
             <Image
               src={blog.coverImage}
               alt={blog.title}
               fill
-              sizes="100vw"
+              sizes="(max-width: 1024px) 100vw, 800px"
               className="object-cover"
               priority
             />

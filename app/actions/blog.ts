@@ -3,6 +3,7 @@
 import connectDB from '@/lib/db';
 import Blog from '@/models/Blog';
 import User from '@/models/User';
+import Notification from '@/models/Notification';
 import { slugify, estimateReadingTime } from '@/lib/utils';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
@@ -32,6 +33,23 @@ export async function createBlog(formData: any) {
   });
 
   await newBlog.save();
+
+  // Notification engine hook: alert followers of new post
+  try {
+     const authorUserData = await User.findById(newBlog.author).select('followers');
+     if (authorUserData && authorUserData.followers && authorUserData.followers.length > 0) {
+        const notifications = authorUserData.followers.map((followerId: string) => ({
+           recipient: followerId,
+           sender: newBlog.author,
+           type: 'NEW_POST',
+           blog: newBlog._id,
+        }));
+        await Notification.insertMany(notifications);
+     }
+  } catch (err) {
+     console.error('Failed to dispatch notifications', err);
+  }
+
   revalidatePath('/');
   return { slug: newBlog.slug };
 }
@@ -144,6 +162,21 @@ export async function toggleLike(blogId: string) {
     blog.likes.pull(userId);
   } else {
     blog.likes.push(userId);
+    
+    // Notification engine hook: alert author of like
+    try {
+       if (blog.author.toString() !== userId.toString()) {
+          const newNotif = new Notification({
+             recipient: blog.author,
+             sender: userId,
+             type: 'LIKE',
+             blog: blog._id
+          });
+          await newNotif.save();
+       }
+    } catch (err) {
+       console.error('Failed to dispatch like notification', err);
+    }
   }
   
   await blog.save();
