@@ -3,37 +3,37 @@ import { Home, Library, User, FileText, BarChart2, Users } from 'lucide-react';
 
 const MediumSidebar = ({ isOverlay = false }: { isOverlay?: boolean }) => {
   return (
-    <aside className={`flex-shrink-0 overflow-y-auto pr-8 py-8 border-gray-100 ${isOverlay ? 'w-full block border-none py-0 pr-4' : 'w-64 hidden lg:block sticky top-[80px] h-[calc(100vh-80px)] border-r'}`}>
+    <aside className={`flex-shrink-0 overflow-y-auto pr-8 py-8 border-gray-100 dark:border-white/10 transition-colors ${isOverlay ? 'w-full block border-none py-0 pr-4' : 'w-64 hidden lg:block sticky top-[80px] h-[calc(100vh-80px)] border-r'}`}>
       <nav className="space-y-6">
-        <Link href="/" className="flex items-center gap-4 text-gray-900 group">
-          <Home size={22} className="text-gray-400 group-hover:text-gray-900 transition-colors" />
+        <Link href="/" className="flex items-center gap-4 text-gray-900 dark:text-white group transition-colors">
+          <Home size={22} className="text-gray-400 dark:text-gray-500 group-hover:text-gray-900 dark:group-hover:text-white transition-colors" />
           <span className="font-medium text-[15px]">Home</span>
         </Link>
-        <Link href="/bookmarks" className="flex items-center gap-4 text-gray-500 hover:text-gray-900 group transition-colors">
-          <Library size={22} className="text-gray-400 group-hover:text-gray-900 transition-colors" />
+        <Link href="/bookmarks" className="flex items-center gap-4 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white group transition-colors">
+          <Library size={22} className="text-gray-400 dark:text-gray-500 group-hover:text-gray-900 dark:group-hover:text-white transition-colors" />
           <span className="font-medium text-[15px]">Bookmarks</span>
         </Link>
-        <Link href="/profile" className="flex items-center gap-4 text-gray-500 hover:text-gray-900 group transition-colors">
-          <User size={22} className="text-gray-400 group-hover:text-gray-900 transition-colors" />
+        <Link href="/profile" className="flex items-center gap-4 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white group transition-colors">
+          <User size={22} className="text-gray-400 dark:text-gray-500 group-hover:text-gray-900 dark:group-hover:text-white transition-colors" />
           <span className="font-medium text-[15px]">Profile</span>
         </Link>
-        <Link href="/explore" className="flex items-center gap-4 text-gray-500 hover:text-gray-900 group transition-colors">
-          <FileText size={22} className="text-gray-400 group-hover:text-gray-900 transition-colors" />
+        <Link href="/explore" className="flex items-center gap-4 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white group transition-colors">
+          <FileText size={22} className="text-gray-400 dark:text-gray-500 group-hover:text-gray-900 dark:group-hover:text-white transition-colors" />
           <span className="font-medium text-[15px]">Stories</span>
         </Link>
-        <div className="flex items-center gap-4 text-gray-500 hover:text-gray-900 group transition-colors cursor-not-allowed opacity-70">
-          <BarChart2 size={22} className="text-gray-400" />
+        <div className="flex items-center gap-4 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white group transition-colors cursor-not-allowed opacity-70">
+          <BarChart2 size={22} className="text-gray-400 dark:text-gray-500" />
           <span className="font-medium text-[15px]">Stats</span>
         </div>
         
-        <div className="pt-8 mt-8 border-t border-gray-100">
-           <Link href="/following" className="flex items-center gap-4 text-gray-500 hover:text-gray-900 group transition-colors">
-              <Users size={22} className="text-gray-400 group-hover:text-gray-900 transition-colors" />
+        <div className="pt-8 mt-8 border-t border-gray-100 dark:border-white/10 transition-colors">
+           <Link href="/following" className="flex items-center gap-4 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white group transition-colors">
+              <Users size={22} className="text-gray-400 dark:text-gray-500 group-hover:text-gray-900 dark:group-hover:text-white transition-colors" />
               <span className="font-medium text-[15px]">Following</span>
            </Link>
            <div className="mt-8">
-              <p className="text-gray-500 text-[13px] font-medium leading-relaxed">Find writers and publications to follow.</p>
-              <button className="text-blue-600 text-[13px] font-medium hover:text-blue-700 mt-2">See suggestions</button>
+              <p className="text-gray-500 dark:text-gray-400 text-[13px] font-medium leading-relaxed transition-colors">Find writers and publications to follow.</p>
+              <button className="text-blue-600 dark:text-blue-400 text-[13px] font-medium hover:text-blue-700 dark:hover:text-blue-300 mt-2 transition-colors">See suggestions</button>
            </div>
         </div>
       </nav>

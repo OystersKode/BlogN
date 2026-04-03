@@ -58,8 +58,8 @@ const HorizontalBlogCard = ({ blog }: { blog: any }) => {
   };
 
   return (
-    <article className="border-b border-gray-100 py-8 group">
-      <div className="flex gap-8 items-start justify-between">
+    <article className="border-b border-gray-100 dark:border-white/10 py-8 group transition-colors">
+      <div className="flex gap-4 sm:gap-8 items-start justify-between">
         
         {/* Left Side: Content */}
         <div className="flex-1 min-w-0 pr-4">
@@ -72,45 +72,45 @@ const HorizontalBlogCard = ({ blog }: { blog: any }) => {
                    height={20} 
                    className="rounded-full"
                 />
-                <span className="text-[13px] font-medium text-gray-900 group-hover:text-blue-600 transition-colors">{blog.author?.name}</span>
+                <span className="text-[13px] font-medium text-gray-900 dark:text-gray-200 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">{blog.author?.name}</span>
              </Link>
-             <span className="text-gray-400 text-sm hidden sm:inline">in</span>
-             <span className="text-[13px] font-bold text-gray-900 hidden sm:inline">TY CSE Insights</span>
+             <span className="text-gray-400 dark:text-gray-500 text-sm hidden sm:inline">in</span>
+             <span className="text-[13px] font-bold text-gray-900 dark:text-white hidden sm:inline transition-colors">TY CSE Insights</span>
           </div>
 
           <Link href={`/blog/${blog.slug}`} className="block block group-hover:opacity-90">
-             <h2 className="text-xl sm:text-2xl font-black text-gray-900 tracking-tight leading-tight mb-2 line-clamp-3">
+             <h2 className="text-xl sm:text-2xl font-black text-gray-900 dark:text-white tracking-tight leading-tight mb-2 line-clamp-3 transition-colors">
                 {blog.title}
              </h2>
-             <p className="text-[15px] text-gray-500 leading-snug line-clamp-2 hidden sm:block font-serif">
+             <p className="text-[15px] text-gray-500 dark:text-gray-400 leading-snug line-clamp-2 hidden sm:block font-serif transition-colors">
                 {excerpt}
              </p>
           </Link>
 
-          <div className="flex items-center justify-between mt-6">
-             <div className="flex items-center gap-4 text-[13px] text-gray-500">
-                <span className="text-gray-400">✨</span>
-                <span>{format(new Date(blog.createdAt), 'MMM d, yyyy')}</span>
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mt-6 gap-4 sm:gap-0">
+             <div className="flex items-center gap-2 sm:gap-4 text-[13px] text-gray-500 dark:text-gray-400 transition-colors">
+                <span className="text-gray-400 dark:text-gray-500">✨</span>
+                <span className="whitespace-nowrap">{format(new Date(blog.createdAt), 'MMM d, yyyy')}</span>
                 <span>•</span>
-                <span>{blog.readingTime}</span>
+                <span className="whitespace-nowrap">{blog.readingTime}</span>
              </div>
              
-             <div className="flex items-center gap-6 text-gray-400">
+             <div className="flex items-center gap-4 sm:gap-6 text-gray-400 dark:text-gray-500 transition-colors">
                 <button 
                    onClick={handleLike} 
-                   className={`transition-colors flex items-center gap-1 ${liked ? 'text-blue-600 font-bold' : 'hover:text-gray-900'}`}
+                   className={`transition-colors flex items-center gap-1 ${liked ? 'text-blue-600 dark:text-blue-400 font-bold' : 'hover:text-gray-900 dark:hover:text-white'}`}
                 >
                    <ThumbsUp size={18} strokeWidth={liked ? 2 : 1.5} className={liked ? 'fill-current' : ''} />
                    <span className="text-[13px]">{likesCount}</span>
                 </button>
-                <Link href={`/blog/${blog.slug}#comments`} className="hover:text-gray-900 transition-colors flex items-center gap-1">
+                <Link href={`/blog/${blog.slug}#comments`} className="hover:text-gray-900 dark:hover:text-white transition-colors flex items-center gap-1">
                    <MessageSquare size={18} strokeWidth={1.5} />
-                   <span className="text-[13px]">--</span>
+                   <span className="text-[13px]">{blog.commentsCount !== undefined ? blog.commentsCount : '--'}</span>
                 </Link>
-                <button onClick={handleBookmark} className={`transition-colors ml-2 ${bookmarked ? 'text-blue-600' : 'hover:text-gray-900'}`}>
+                <button onClick={handleBookmark} className={`transition-colors ml-2 ${bookmarked ? 'text-blue-600 dark:text-blue-400' : 'hover:text-gray-900 dark:hover:text-white'}`}>
                    <Bookmark size={20} strokeWidth={bookmarked ? 2 : 1.5} className={bookmarked ? 'fill-current' : ''} />
                 </button>
-                <button className="hover:text-gray-900 transition-colors">
+                <button className="hover:text-gray-900 dark:hover:text-white transition-colors">
                    <MoreHorizontal size={20} strokeWidth={1.5} />
                 </button>
              </div>
@@ -120,12 +120,12 @@ const HorizontalBlogCard = ({ blog }: { blog: any }) => {
         {/* Right Side: Image */}
         {blog.coverImage && (
            <Link href={`/blog/${blog.slug}`} className="block flex-shrink-0">
-             <div className="relative w-[120px] h-[120px] sm:w-[160px] sm:h-[110px] bg-gray-50 overflow-hidden">
+             <div className="relative w-[80px] h-[80px] sm:w-[160px] sm:h-[110px] bg-gray-50 dark:bg-slate-900 overflow-hidden transition-colors">
                 <Image 
                    src={blog.coverImage} 
                    alt={blog.title} 
                    fill
-                   sizes="(max-width: 768px) 120px, 160px"
+                   sizes="(max-width: 768px) 80px, 160px"
                    className="object-cover group-hover:scale-105 transition-transform duration-500"
                 />
              </div>

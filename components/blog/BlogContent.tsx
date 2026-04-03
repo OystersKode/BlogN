@@ -21,7 +21,7 @@ const BlogContent = ({ content }: { content: any }) => {
     editable: false, // Make it read-only
     editorProps: {
         attributes: {
-            class: 'prose prose-lg md:prose-xl max-w-none focus:outline-none focus:ring-0 text-slate-900 font-serif leading-relaxed',
+            class: 'prose prose-lg md:prose-xl max-w-none focus:outline-none focus:ring-0 text-slate-900 dark:text-gray-100 dark:prose-invert font-serif leading-relaxed transition-colors',
         },
     },
   });

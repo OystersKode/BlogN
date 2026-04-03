@@ -4,6 +4,7 @@ import connectDB from '@/lib/db';
 import Blog from '@/models/Blog';
 import User from '@/models/User';
 import Notification from '@/models/Notification';
+import Comment from '@/models/Comment';
 import { slugify, estimateReadingTime } from '@/lib/utils';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
@@ -54,11 +55,30 @@ export async function createBlog(formData: any) {
   return { slug: newBlog.slug };
 }
 
-export async function getBlogs() {
+export async function getBlogs(feedType = 'all') {
   await connectDB();
-  const blogs = await Blog.find({ status: 'PUBLISHED' }).populate('author', 'name image').sort({ createdAt: -1 }).lean();
-  
   const session = await getServerSession(authOptions);
+  
+  let matchQuery: any = { status: 'PUBLISHED' };
+
+  if (session && feedType === 'following') {
+     const userObj = await User.findById((session.user as any).id).select('following').lean();
+     matchQuery.author = { $in: userObj?.following || [] };
+  } else if (feedType === 'staff') {
+     matchQuery.isStaffPick = true;
+  }
+
+  const blogs = await Blog.find(matchQuery).populate('author', 'name image').sort({ createdAt: -1 }).lean();
+  
+  // Aggregate comment counts for the fetched blogs globally
+  const blogIds = blogs.map((b: any) => b._id);
+  const commentCounts = await Comment.aggregate([
+     { $match: { blog: { $in: blogIds } } },
+     { $group: { _id: '$blog', count: { $sum: 1 } } }
+  ]);
+  const commentMap: Record<string, number> = {};
+  commentCounts.forEach(c => { commentMap[c._id.toString()] = c.count; });
+  
   if (session) {
       const user = await User.findById((session.user as any).id).select('bookmarks').lean();
       const bookmarks = (user?.bookmarks || []).map((b: any) => b.toString());
@@ -68,6 +88,12 @@ export async function getBlogs() {
          b.isBookmarkedByMe = bookmarks.includes(b._id.toString());
          b.likesCount = b.likes?.length || 0;
          b.isLikedByMe = (b.likes || []).map((id: any) => id.toString()).includes(userId);
+         b.commentsCount = commentMap[b._id.toString()] || 0;
+      });
+  } else {
+      blogs.forEach((b: any) => {
+         b.likesCount = b.likes?.length || 0;
+         b.commentsCount = commentMap[b._id.toString()] || 0;
       });
   }
   

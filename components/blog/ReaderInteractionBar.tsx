@@ -42,31 +42,31 @@ export default function ReaderInteractionBar({ blog }: { blog: any }) {
    };
 
    return (
-       <div className="flex items-center justify-between py-3 border-y border-gray-100 my-8 text-gray-500">
-          <div className="flex items-center gap-6">
+       <div className="flex items-center justify-between py-3 border-y border-gray-100 dark:border-white/10 my-8 text-gray-500 dark:text-gray-400 transition-colors">
+          <div className="flex items-center gap-6 transition-colors">
              <button 
                 onClick={handleLike} 
-                className={`flex items-center gap-2 transition-colors ${liked ? 'text-blue-600' : 'hover:text-gray-900'}`}
+                className={`flex items-center gap-2 transition-colors ${liked ? 'text-blue-600 dark:text-blue-400' : 'hover:text-gray-900 dark:hover:text-white'}`}
              >
                 <ThumbsUp size={22} className={liked ? 'fill-current' : ''} strokeWidth={liked ? 2 : 1.5} />
                 <span className="text-[15px] font-medium">{likesCount}</span>
              </button>
              <button 
                 onClick={() => document.getElementById('comments')?.scrollIntoView({ behavior: 'smooth', block: 'start' })} 
-                className="flex items-center gap-2 hover:text-gray-900 transition-colors"
+                className="flex items-center gap-2 hover:text-gray-900 dark:hover:text-white transition-colors"
              >
                 <MessageSquare size={22} strokeWidth={1.5} />
                 <span className="text-[15px] font-medium">Respond</span>
              </button>
           </div>
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-6 transition-colors">
              <button 
                 onClick={handleBookmark} 
-                className={`transition-colors ${bookmarked ? 'text-blue-600' : 'hover:text-gray-900'}`}
+                className={`transition-colors ${bookmarked ? 'text-blue-600 dark:text-blue-400' : 'hover:text-gray-900 dark:hover:text-white'}`}
              >
                 <Bookmark size={22} className={bookmarked ? 'fill-current' : ''} strokeWidth={bookmarked ? 2 : 1.5} />
              </button>
-             <button onClick={handleShare} className="hover:text-gray-900 transition-colors">
+             <button onClick={handleShare} className="hover:text-gray-900 dark:hover:text-white transition-colors">
                 <Share size={22} strokeWidth={1.5} />
              </button>
           </div>

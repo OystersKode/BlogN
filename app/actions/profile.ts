@@ -97,3 +97,26 @@ export async function getPublicUserNetwork(id: string) {
     following: JSON.parse(JSON.stringify(user.following || []))
   };
 }
+
+export async function getSuggestedUsers() {
+  const session = await getServerSession(authOptions);
+  if (!session) return [];
+  
+  await connectDB();
+  const userId = (session.user as any).id;
+  
+  const currentUser = await User.findById(userId).select('following').lean();
+  let exclusions = [userId];
+  if (currentUser && currentUser.following) {
+     exclusions = exclusions.concat(currentUser.following);
+  }
+  
+  // Use MongoDB aggregation to randomly sample users.
+  const suggested = await User.aggregate([
+     { $match: { _id: { $nin: exclusions } } },
+     { $sample: { size: 3 } },
+     { $project: { name: 1, image: 1, prn: 1, bio: 1 } }
+  ]);
+  
+  return JSON.parse(JSON.stringify(suggested));
+}

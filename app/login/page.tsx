@@ -16,29 +16,29 @@ const LoginPage = () => {
   }, [status, router]);
 
   return (
-    <div className="min-h-screen bg-[#f8fafc] flex flex-col justify-center items-center py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden selection:bg-blue-100 selection:text-slate-900">
+    <div className="min-h-screen bg-[#f8fafc] dark:bg-slate-950 flex flex-col justify-center items-center py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden selection:bg-blue-100 selection:text-slate-900 transition-colors">
       
       {/* Decorative Background Elements */}
-      <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-blue-100/50 rounded-full blur-3xl pointer-events-none mix-blend-multiply" />
-      <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-indigo-100/50 rounded-full blur-3xl pointer-events-none mix-blend-multiply" />
+      <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-blue-900/20 dark:bg-blue-100/50 rounded-full blur-3xl pointer-events-none mix-blend-soft-light dark:mix-blend-multiply transition-colors" />
+      <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-indigo-900/20 dark:bg-indigo-100/50 rounded-full blur-3xl pointer-events-none mix-blend-soft-light dark:mix-blend-multiply transition-colors" />
 
       {/* Main Login Card */}
-      <div className="max-w-[420px] w-full bg-white rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100 p-10 relative z-10 flex flex-col items-center">
+      <div className="max-w-[420px] w-full bg-slate-900 dark:bg-white rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-white/10 dark:border-slate-100 p-10 relative z-10 flex flex-col items-center transition-colors">
          
          <Link href="/" className="mb-8 block">
-            <h1 className="text-4xl text-slate-900 font-bold font-serif tracking-tight text-center hover:opacity-80 transition-opacity">
+            <h1 className="text-4xl text-white dark:text-slate-900 font-bold font-serif tracking-tight text-center hover:opacity-80 transition-all">
               BlogN
             </h1>
          </Link>
 
-         <div className="text-center space-y-2 mb-10 w-full">
-            <h2 className="text-xl font-semibold text-slate-900 tracking-tight">Welcome back</h2>
-            <p className="text-[15px] text-slate-500 font-medium">Log in to your account to continue</p>
+         <div className="text-center space-y-2 mb-10 w-full transition-colors">
+            <h2 className="text-xl font-semibold text-white dark:text-slate-900 tracking-tight">Welcome back</h2>
+            <p className="text-[15px] text-gray-400 dark:text-slate-500 font-medium">Log in to your account to continue</p>
          </div>
           
          <button 
             onClick={() => signIn('google')} 
-            className="w-full flex items-center justify-center gap-3 bg-white border border-slate-300 text-slate-700 hover:bg-slate-50 hover:border-slate-400 hover:shadow-sm rounded-xl h-12 text-[15px] font-bold transition-all"
+            className="w-full flex items-center justify-center gap-3 bg-slate-800 dark:bg-white border border-white/20 dark:border-slate-300 text-white dark:text-slate-700 hover:bg-slate-700 dark:hover:bg-slate-50 hover:border-white/40 dark:hover:border-slate-400 hover:shadow-sm rounded-xl h-12 text-[15px] font-bold transition-all"
          >
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
@@ -49,8 +49,8 @@ const LoginPage = () => {
             Continue with Google
          </button>
 
-         <div className="mt-8 border-t border-slate-100 pt-6 text-center w-full">
-            <p className="text-[13px] text-slate-400">
+         <div className="mt-8 border-t border-white/10 dark:border-slate-100 pt-6 text-center w-full transition-colors">
+            <p className="text-[13px] text-gray-500 dark:text-slate-400">
                By continuing, you agree to the <br/> Terms of Service and Privacy Policy.
             </p>
          </div>

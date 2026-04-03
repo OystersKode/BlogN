@@ -39,36 +39,36 @@ const BlogDetailPage = async ({ params }: { params: Promise<{ slug: string }> })
   const comments = await getComments(blog._id.toString());
 
   return (
-    <main className="min-h-screen bg-white">
+    <main className="min-h-screen bg-white dark:bg-slate-950 transition-colors">
       <Navbar />
       <article className="max-w-3xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
         <header className="mb-8">
           <div className="flex items-center gap-3 mb-6">
-             <span className="px-3 py-1 bg-blue-50 text-blue-600 text-xs font-bold uppercase tracking-wider rounded-full">
+             <span className="px-3 py-1 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 text-xs font-bold uppercase tracking-wider rounded-full transition-colors">
                {blog.category}
              </span>
-             <span className="text-gray-400 text-sm">•</span>
-             <span className="text-gray-500 text-sm font-medium">{blog.readingTime}</span>
+             <span className="text-gray-400 dark:text-gray-500 text-sm transition-colors">•</span>
+             <span className="text-gray-500 dark:text-gray-400 text-sm font-medium transition-colors">{blog.readingTime}</span>
           </div>
 
-          <h1 className="text-4xl sm:text-[42px] lg:text-[46px] font-black text-gray-900 leading-[1.1] tracking-tight mb-8">
+          <h1 className="text-4xl sm:text-[42px] lg:text-[46px] font-black text-gray-900 dark:text-white leading-[1.1] tracking-tight mb-8 transition-colors">
             {blog.title}
           </h1>
 
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <Link href={`/user/${blog.author._id}`} className="flex items-center gap-3 group">
-               <Image
-                 src={blog.author.image || '/default-avatar.png'}
-                 alt={blog.author.name}
-                 width={48}
-                 height={48}
-                 className="rounded-full ring-2 ring-gray-50 object-cover"
-               />
-               <div>
-                 <p className="font-bold text-gray-900 group-hover:text-blue-600 transition-colors text-[15px]">{blog.author.name}</p>
-                 <p className="text-[13px] text-gray-500">{format(new Date(blog.createdAt), 'MMM dd, yyyy')}</p>
-               </div>
-            </Link>
+             <Link href={`/user/${blog.author._id}`} className="flex items-center gap-3 group">
+                <Image
+                  src={blog.author.image || '/default-avatar.png'}
+                  alt={blog.author.name}
+                  width={48}
+                  height={48}
+                  className="rounded-full ring-2 ring-gray-50 dark:ring-white/10 object-cover"
+                />
+                <div>
+                  <p className="font-bold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors text-[15px]">{blog.author.name}</p>
+                  <p className="text-[13px] text-gray-500 dark:text-gray-400 transition-colors">{format(new Date(blog.createdAt), 'MMM dd, yyyy')}</p>
+                </div>
+             </Link>
             
             {session && (session.user as any).id !== blog.author._id && (
                <div>
@@ -81,7 +81,7 @@ const BlogDetailPage = async ({ params }: { params: Promise<{ slug: string }> })
         <ReaderInteractionBar blog={blog} />
 
         {blog.coverImage && (
-          <div className="relative w-full aspect-[21/9] mb-12 rounded-xl overflow-hidden shadow-sm border border-gray-100 bg-gray-50">
+          <div className="relative w-full aspect-[21/9] mb-12 rounded-xl overflow-hidden shadow-sm border border-gray-100 dark:border-white/10 bg-gray-50 dark:bg-slate-900 transition-colors">
             <Image
               src={blog.coverImage}
               alt={blog.title}
@@ -93,7 +93,7 @@ const BlogDetailPage = async ({ params }: { params: Promise<{ slug: string }> })
           </div>
         )}
 
-        <div className="prose prose-lg md:prose-xl max-w-none prose-slate prose-headings:text-[#1a1a1a] prose-p:text-[#333333] prose-a:text-blue-600 prose-strong:text-[#111111] prose-blockquote:text-gray-500 prose-blockquote:border-gray-300 font-serif leading-loose">
+        <div className="prose prose-lg md:prose-xl max-w-none dark:prose-invert prose-slate prose-headings:text-[#1a1a1a] dark:prose-headings:text-white prose-p:text-[#333333] dark:prose-p:text-gray-300 prose-a:text-blue-600 prose-strong:text-[#111111] dark:prose-strong:text-white prose-blockquote:text-gray-500 prose-blockquote:border-gray-300 font-serif leading-loose transition-colors">
           <BlogContent content={blog.content} />
         </div>
 

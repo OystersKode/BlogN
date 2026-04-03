@@ -18,19 +18,19 @@ export default async function BookmarksPage() {
   const blogs = await getBookmarks();
 
   return (
-    <main className="min-h-screen bg-white">
+    <main className="min-h-screen bg-white dark:bg-slate-950 transition-colors">
       <Navbar />
       <div className="max-w-[1336px] mx-auto flex justify-center px-4 sm:px-6">
         <MediumSidebar />
         
-        <section className="flex-1 max-w-[700px] min-w-0 w-full lg:px-12 py-8 lg:py-12 border-x border-gray-100 min-h-screen">
+        <section className="flex-1 max-w-[700px] min-w-0 w-full lg:px-12 py-8 lg:py-12 border-x border-gray-100 dark:border-white/10 min-h-screen transition-colors">
           <div className="mb-8">
-             <h1 className="text-[40px] font-black text-gray-900 tracking-tight leading-tight">Your library</h1>
+             <h1 className="text-[40px] font-black text-gray-900 dark:text-white tracking-tight leading-tight transition-colors">Your library</h1>
           </div>
 
-          <div className="flex gap-8 border-b border-gray-100 mb-8 overflow-x-auto hide-scrollbar">
-             <button className="pb-4 border-b border-gray-900 text-[14px] text-gray-900 font-medium whitespace-nowrap">Saved stories</button>
-             <button className="pb-4 text-[14px] text-gray-500 hover:text-gray-900 transition-colors whitespace-nowrap">Highlights</button>
+          <div className="flex gap-8 border-b border-gray-100 dark:border-white/10 mb-8 overflow-x-auto hide-scrollbar transition-colors">
+             <button className="pb-4 border-b border-gray-900 dark:border-white text-[14px] text-gray-900 dark:text-white font-medium whitespace-nowrap transition-colors">Saved stories</button>
+             <button className="pb-4 text-[14px] text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors whitespace-nowrap">Highlights</button>
           </div>
 
           {blogs.length > 0 ? (
@@ -42,8 +42,8 @@ export default async function BookmarksPage() {
           ) : (
              <div className="text-center py-24 space-y-4">
                 <span className="text-4xl block mb-4">📚</span>
-                <h3 className="text-xl font-bold text-gray-900">Your library is empty.</h3>
-                <p className="text-gray-500 text-sm">Save stories to read them later or easily reference them.</p>
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white transition-colors">Your library is empty.</h3>
+                <p className="text-gray-500 dark:text-gray-400 text-sm transition-colors">Save stories to read them later or easily reference them.</p>
              </div>
           )}
         </section>
