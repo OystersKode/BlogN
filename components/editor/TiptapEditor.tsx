@@ -44,67 +44,67 @@ const Toolbar = ({ editor }: { editor: any }) => {
   };
 
   return (
-    <div className="flex flex-wrap gap-1 p-1 mb-8 sticky top-[64px] z-40 bg-white/95 backdrop-blur-sm border-b border-gray-100 text-gray-400">
+    <div className="flex flex-wrap gap-1 p-1 mb-8 sticky top-[120px] z-40 bg-white/95 dark:bg-slate-900/95 backdrop-blur-sm border-b border-gray-100 dark:border-white/10 text-gray-400">
       <button
         onClick={() => editor.chain().focus().toggleBold().run()}
-        className={`p-1.5 rounded transition-colors ${editor.isActive('bold') ? 'text-gray-900 bg-gray-100' : 'hover:text-gray-900 hover:bg-gray-50'}`}
+        className={`p-2 rounded transition-colors ${editor.isActive('bold') ? 'text-gray-900 dark:text-white bg-gray-100 dark:bg-slate-800' : 'hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-slate-800'}`}
       >
         <Bold size={18} />
       </button>
       <button
         onClick={() => editor.chain().focus().toggleItalic().run()}
-        className={`p-1.5 rounded transition-colors ${editor.isActive('italic') ? 'text-gray-900 bg-gray-100' : 'hover:text-gray-900 hover:bg-gray-50'}`}
+        className={`p-2 rounded transition-colors ${editor.isActive('italic') ? 'text-gray-900 dark:text-white bg-gray-100 dark:bg-slate-800' : 'hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-slate-800'}`}
       >
         <Italic size={18} />
       </button>
       <button
         onClick={() => editor.chain().focus().toggleUnderline().run()}
-        className={`p-1.5 rounded transition-colors ${editor.isActive('underline') ? 'text-gray-900 bg-gray-100' : 'hover:text-gray-900 hover:bg-gray-50'}`}
+        className={`p-2 rounded transition-colors ${editor.isActive('underline') ? 'text-gray-900 dark:text-white bg-gray-100 dark:bg-slate-800' : 'hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-slate-800'}`}
       >
         <UnderlineIcon size={18} />
       </button>
-      <div className="w-[1px] h-6 bg-gray-200 mx-2 self-center" />
+      <div className="w-[1px] h-6 bg-gray-200 dark:bg-white/10 mx-2 self-center" />
       <button
         onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
-        className={`p-1.5 rounded transition-colors ${editor.isActive('heading', { level: 1 }) ? 'text-gray-900 bg-gray-100' : 'hover:text-gray-900 hover:bg-gray-50'}`}
+        className={`p-2 rounded transition-colors ${editor.isActive('heading', { level: 1 }) ? 'text-gray-900 dark:text-white bg-gray-100 dark:bg-slate-800' : 'hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-slate-800'}`}
       >
         <Heading1 size={18} />
       </button>
       <button
         onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
-        className={`p-1.5 rounded transition-colors ${editor.isActive('heading', { level: 2 }) ? 'text-gray-900 bg-gray-100' : 'hover:text-gray-900 hover:bg-gray-50'}`}
+        className={`p-2 rounded transition-colors ${editor.isActive('heading', { level: 2 }) ? 'text-gray-900 dark:text-white bg-gray-100 dark:bg-slate-800' : 'hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-slate-800'}`}
       >
         <Heading2 size={18} />
       </button>
-      <div className="w-[1px] h-6 bg-gray-200 mx-2 self-center" />
+      <div className="w-[1px] h-6 bg-gray-200 dark:bg-white/10 mx-2 self-center" />
       <button
         onClick={() => editor.chain().focus().toggleBulletList().run()}
-        className={`p-1.5 rounded transition-colors ${editor.isActive('bulletList') ? 'text-gray-900 bg-gray-100' : 'hover:text-gray-900 hover:bg-gray-50'}`}
+        className={`p-2 rounded transition-colors ${editor.isActive('bulletList') ? 'text-gray-900 dark:text-white bg-gray-100 dark:bg-slate-800' : 'hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-slate-800'}`}
       >
         <List size={18} />
       </button>
       <button
         onClick={() => editor.chain().focus().toggleOrderedList().run()}
-        className={`p-1.5 rounded transition-colors ${editor.isActive('orderedList') ? 'text-gray-900 bg-gray-100' : 'hover:text-gray-900 hover:bg-gray-50'}`}
+        className={`p-2 rounded transition-colors ${editor.isActive('orderedList') ? 'text-gray-900 dark:text-white bg-gray-100 dark:bg-slate-800' : 'hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-slate-800'}`}
       >
         <ListOrdered size={18} />
       </button>
       <button
         onClick={() => editor.chain().focus().toggleBlockquote().run()}
-        className={`p-1.5 rounded transition-colors ${editor.isActive('blockquote') ? 'text-gray-900 bg-gray-100' : 'hover:text-gray-900 hover:bg-gray-50'}`}
+        className={`p-2 rounded transition-colors ${editor.isActive('blockquote') ? 'text-gray-900 dark:text-white bg-gray-100 dark:bg-slate-800' : 'hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-slate-800'}`}
       >
         <Quote size={18} />
       </button>
       <button
         onClick={() => editor.chain().focus().toggleCodeBlock().run()}
-        className={`p-1.5 rounded transition-colors ${editor.isActive('codeBlock') ? 'text-gray-900 bg-gray-100' : 'hover:text-gray-900 hover:bg-gray-50'}`}
+        className={`p-2 rounded transition-colors ${editor.isActive('codeBlock') ? 'text-gray-900 dark:text-white bg-gray-100 dark:bg-slate-800' : 'hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-slate-800'}`}
       >
         <Code size={18} />
       </button>
-      <div className="w-[1px] h-6 bg-gray-200 mx-2 self-center" />
+      <div className="w-[1px] h-6 bg-gray-200 dark:bg-white/10 mx-2 self-center" />
       <button
         onClick={addImage}
-        className="p-1.5 rounded hover:text-gray-900 hover:bg-gray-50 transition-colors"
+        className="p-2 rounded hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors"
       >
       <ImageIcon size={18} />
       </button>
@@ -113,19 +113,19 @@ const Toolbar = ({ editor }: { editor: any }) => {
         <div className="flex items-center gap-1 bg-gray-50 dark:bg-slate-800 rounded-md px-2 ml-2 transition-colors">
           <button
             onClick={() => editor.chain().focus().updateAttributes('image', { width: '25%' }).run()}
-            className="text-[10px] font-bold px-1.5 hover:text-blue-500 transition-colors"
+            className="text-[12px] font-black px-3 py-1 hover:text-blue-500 transition-colors"
           >
             S
           </button>
           <button
             onClick={() => editor.chain().focus().updateAttributes('image', { width: '50%' }).run()}
-            className="text-[10px] font-bold px-1.5 hover:text-blue-500 transition-colors"
+            className="text-[12px] font-black px-3 py-1 hover:text-blue-500 transition-colors"
           >
             M
           </button>
           <button
             onClick={() => editor.chain().focus().updateAttributes('image', { width: '100%' }).run()}
-            className="text-[10px] font-bold px-1.5 hover:text-blue-500 transition-colors"
+            className="text-[12px] font-black px-3 py-1 hover:text-blue-500 transition-colors"
           >
             L
           </button>
@@ -171,12 +171,11 @@ const TiptapEditor = ({ content, onChange }: { content: any, onChange: (val: any
     content,
     onUpdate: ({ editor }) => {
       const json = editor.getJSON();
-      console.log('Editor JSON updated:', json);
       onChange(json);
     },
     editorProps: {
         attributes: {
-            class: 'prose prose-lg md:prose-xl font-serif max-w-none focus:outline-none min-h-[50vh] text-gray-800 leading-relaxed',
+            class: 'prose prose-base sm:prose-lg md:prose-xl font-serif max-w-none focus:outline-none min-h-[50vh] text-gray-800 dark:text-gray-200 leading-[1.8] tracking-normal',
         },
     },
   });

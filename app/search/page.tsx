@@ -38,9 +38,9 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
                                <p className="text-sm text-gray-500 dark:text-gray-400 line-clamp-1 transition-colors">{u.bio || 'No bio available'}</p>
                             </div>
                          </div>
-                         <button className="hidden sm:block border border-gray-300 dark:border-white/20 text-gray-900 dark:text-white text-sm font-medium rounded-full px-4 py-1.5 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors">
+                         <div className="hidden sm:block border border-gray-300 dark:border-white/20 text-gray-900 dark:text-white text-sm font-bold rounded-full px-4 py-1.5 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors">
                             View Profile
-                         </button>
+                         </div>
                       </Link>
                    ))}
                 </div>

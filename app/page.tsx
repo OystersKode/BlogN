@@ -31,7 +31,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ f
             <div className="flex gap-8 border-b border-gray-100 dark:border-white/10 mb-8 overflow-x-auto hide-scrollbar transition-colors">
                <Link href="/" className={`pb-4 text-[14px] font-medium whitespace-nowrap transition-colors ${feedType === 'all' ? 'border-b border-gray-900 dark:border-white text-gray-900 dark:text-white' : 'text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white'}`}>For you</Link>
                <Link href="/?feed=following" className={`pb-4 text-[14px] font-medium whitespace-nowrap transition-colors ${feedType === 'following' ? 'border-b border-gray-900 dark:border-white text-gray-900 dark:text-white' : 'text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white'}`}>Following</Link>
-               <Link href="/?feed=staff" className={`pb-4 text-[14px] font-medium whitespace-nowrap transition-colors ${feedType === 'staff' ? 'border-b border-gray-900 dark:border-white text-gray-900 dark:text-white' : 'text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white'}`}>TY CSE Selected</Link>
+
             </div>
 
             {blogs.length > 0 ? (

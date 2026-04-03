@@ -35,28 +35,7 @@ const MediumRightbar = async () => {
          <Link href="/?feed=staff" className="text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white text-[13px] mt-6 transition-colors font-medium inline-block">See the full list</Link>
       </div>
 
-      {/* Who to follow */}
-      {suggestions.length > 0 && (
-         <div className="mb-10">
-            <h4 className="font-bold text-[15px] text-gray-900 dark:text-white mb-6 transition-colors">Who to follow</h4>
-            <div className="space-y-6">
-               {suggestions.map((u: any) => (
-                  <div key={u._id} className="flex items-start justify-between gap-3">
-                     <Link href={`/user/${u._id}`} className="flex items-start gap-3 group min-w-0">
-                        <Image src={u.image || '/default-avatar.png'} width={32} height={32} className="rounded-full flex-shrink-0 dark:border-slate-800" alt={u.name} />
-                        <div className="min-w-0">
-                           <h5 className="font-bold text-[14px] text-gray-900 dark:text-white leading-snug group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors line-clamp-1">{u.name}</h5>
-                           <p className="text-[12px] text-gray-500 dark:text-gray-400 line-clamp-1 transition-colors">{u.bio || 'TY CSE Student'}</p>
-                        </div>
-                     </Link>
-                     <div className="flex-shrink-0 pt-1 text-[13px]">
-                        <FollowButton targetUserId={u._id} initialFollowing={false} />
-                     </div>
-                  </div>
-               ))}
-            </div>
-         </div>
-      )}
+      {/* Who to follow - Removed as per user request (Now only visible in Expand suggestions) */}
       
       {/* Recommended Topics */}
       <div className="mb-10">

@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "BlogN | Modern Blogging Platform",
+  title: "B(logN) | Modern Blogging Platform",
   description: "A premium full-stack blogging platform built with Next.js, MongoDB, and TipTap.",
 };
 

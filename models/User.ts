@@ -8,7 +8,7 @@ const UserSchema = new Schema({
   prn: { type: String, default: "" },
   role: { type: String, enum: ["USER", "ADMIN"], default: "USER" },
   socials: {
-    twitter: { type: String, default: "" },
+    linkedin: { type: String, default: "" },
     github: { type: String, default: "" },
     website: { type: String, default: "" },
   },

@@ -110,9 +110,19 @@ const HorizontalBlogCard = ({ blog }: { blog: any }) => {
                 <button onClick={handleBookmark} className={`transition-colors ml-2 ${bookmarked ? 'text-blue-600 dark:text-blue-400' : 'hover:text-gray-900 dark:hover:text-white'}`}>
                    <Bookmark size={20} strokeWidth={bookmarked ? 2 : 1.5} className={bookmarked ? 'fill-current' : ''} />
                 </button>
-                <button className="hover:text-gray-900 dark:hover:text-white transition-colors">
-                   <MoreHorizontal size={20} strokeWidth={1.5} />
-                </button>
+                 <button 
+                   onClick={(e) => {
+                     e.preventDefault();
+                     e.stopPropagation();
+                     const url = `${window.location.origin}/blog/${blog.slug}`;
+                     navigator.clipboard.writeText(url);
+                     alert('Link copied to clipboard!');
+                   }}
+                   className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors p-1 rounded-full hover:bg-blue-50 dark:hover:bg-blue-900/20"
+                   title="Copy link to story"
+                 >
+                    <MoreHorizontal size={20} strokeWidth={1.5} />
+                 </button>
              </div>
           </div>
         </div>

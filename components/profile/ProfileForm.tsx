@@ -10,7 +10,7 @@ const ProfileForm = ({ user }: { user: any }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [bio, setBio] = useState(user.bio || '');
   const [prn, setPrn] = useState(user.prn || '');
-  const [twitter, setTwitter] = useState(user.socials?.twitter || '');
+  const [linkedin, setLinkedin] = useState(user.socials?.linkedin || '');
   const [github, setGithub] = useState(user.socials?.github || '');
   const [website, setWebsite] = useState(user.socials?.website || '');
   const [loading, setLoading] = useState(false);
@@ -22,7 +22,7 @@ const ProfileForm = ({ user }: { user: any }) => {
     setMessage('');
     
     try {
-      await updateUserProfile({ bio, prn, twitter, github, website });
+      await updateUserProfile({ bio, prn, linkedin, github, website });
       setMessage('Profile updated successfully!');
       setTimeout(() => setMessage(''), 3000);
       setIsEditing(false); // Seamlessly return to read-only view
@@ -48,16 +48,49 @@ const ProfileForm = ({ user }: { user: any }) => {
                    <p className="text-gray-900 dark:text-white font-mono font-medium text-[15px] transition-colors">{prn || 'Not provided'}</p>
                  </div>
                  <div>
-                   <label className="block text-[13px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1 transition-colors">Twitter</label>
-                   <p className="text-blue-600 dark:text-blue-400 font-medium text-[15px] hover:underline cursor-pointer truncate transition-colors">{twitter || 'Not provided'}</p>
+                    <label className="block text-[13px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1 transition-colors">LinkedIn</label>
+                    {linkedin ? (
+                      <a 
+                        href={linkedin.startsWith('http') ? linkedin : `https://linkedin.com/in/${linkedin}`} 
+                        target="_blank" 
+                        rel="noopener noreferrer" 
+                        className="text-blue-600 dark:text-blue-400 font-medium text-[15px] hover:underline cursor-pointer truncate block transition-colors"
+                      >
+                         {linkedin.split('/').filter(Boolean).pop()}
+                      </a>
+                    ) : (
+                      <p className="text-gray-400 dark:text-gray-500 text-[15px] transition-colors italic">Not provided</p>
+                    )}
                  </div>
                  <div>
-                   <label className="block text-[13px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1 transition-colors">GitHub</label>
-                   <p className="text-gray-900 dark:text-white font-medium text-[15px] hover:underline cursor-pointer truncate transition-colors">{github || 'Not provided'}</p>
+                    <label className="block text-[13px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1 transition-colors">GitHub</label>
+                    {github ? (
+                      <a 
+                        href={github.startsWith('http') ? github : `https://github.com/${github}`} 
+                        target="_blank" 
+                        rel="noopener noreferrer" 
+                        className="text-gray-900 dark:text-white font-medium text-[15px] hover:underline cursor-pointer truncate block transition-colors"
+                      >
+                         {github.split('/').filter(Boolean).pop()}
+                      </a>
+                    ) : (
+                      <p className="text-gray-400 dark:text-gray-500 text-[15px] transition-colors italic">Not provided</p>
+                    )}
                  </div>
                  <div className="md:col-span-2">
-                   <label className="block text-[13px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1 transition-colors">Personal Website</label>
-                   <p className="text-green-600 dark:text-green-400 font-medium text-[15px] hover:underline cursor-pointer truncate transition-colors">{website || 'Not provided'}</p>
+                    <label className="block text-[13px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1 transition-colors">Personal Website</label>
+                    {website ? (
+                      <a 
+                        href={website.startsWith('http') ? website : `https://${website}`} 
+                        target="_blank" 
+                        rel="noopener noreferrer" 
+                        className="text-green-600 dark:text-green-400 font-medium text-[15px] hover:underline cursor-pointer truncate block transition-colors"
+                      >
+                         {website.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '')}
+                      </a>
+                    ) : (
+                      <p className="text-gray-400 dark:text-gray-500 text-[15px] transition-colors italic">Not provided</p>
+                    )}
                  </div>
             </div>
          </div>
@@ -92,15 +125,15 @@ const ProfileForm = ({ user }: { user: any }) => {
                   className="rounded-xl font-mono bg-white dark:bg-slate-800 border-gray-200 dark:border-white/10 text-gray-900 dark:text-white transition-colors"
                />
              </div>
-             <div>
-               <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-1 transition-colors">Twitter URL</label>
-               <Input 
-                  value={twitter} 
-                  onChange={(e) => setTwitter(e.target.value)} 
-                  placeholder="https://twitter.com/..." 
-                  className="rounded-xl bg-white dark:bg-slate-800 border-gray-200 dark:border-white/10 text-gray-900 dark:text-white transition-colors"
-               />
-             </div>
+              <div>
+                <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-1 transition-colors">LinkedIn URL</label>
+                <Input 
+                   value={linkedin} 
+                   onChange={(e) => setLinkedin(e.target.value)} 
+                   placeholder="https://linkedin.com/in/..." 
+                   className="rounded-xl bg-white dark:bg-slate-800 border-gray-200 dark:border-white/10 text-gray-900 dark:text-white transition-colors"
+                />
+              </div>
              <div>
                <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-1 transition-colors">GitHub URL</label>
                <Input 

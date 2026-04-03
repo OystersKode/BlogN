@@ -65,24 +65,42 @@ const DashboardPage = () => {
 
         {/* Stats Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 mb-16 transition-colors">
-           <Card className="p-8 border-none bg-blue-600 dark:bg-blue-900/40 text-white shadow-xl shadow-blue-100 dark:shadow-none rounded-3xl transition-colors">
-              <BookOpen className="h-8 w-8 mb-4 opacity-50" />
-              <div className="text-4xl font-black">{blogs.filter(b => b.status === 'PUBLISHED').length}</div>
-              <div className="text-sm font-bold uppercase tracking-widest opacity-70">Published Articles</div>
-           </Card>
-           <Card className="p-8 border-none bg-white dark:bg-slate-900 text-gray-900 dark:text-white shadow-xl shadow-gray-100 dark:shadow-none rounded-3xl transition-colors">
-              <Layers className="h-8 w-8 mb-4 text-blue-600 dark:text-blue-400" />
-              <div className="text-4xl font-black">{blogs.filter(b => b.status === 'DRAFT').length}</div>
-              <div className="text-sm font-bold uppercase tracking-widest text-gray-400 dark:text-gray-500">Total Drafts</div>
-           </Card>
-           <Card className="p-8 border-none bg-white dark:bg-slate-900 text-gray-900 dark:text-white shadow-xl shadow-gray-100 dark:shadow-none rounded-3xl group transition-colors">
-              <div className="text-6xl mb-2 group-hover:scale-110 transition-transform">🚀</div>
-              <div className="text-sm font-bold uppercase tracking-widest text-gray-400 dark:text-gray-500 mt-4 transition-colors">Keep Writing!</div>
-           </Card>
+           <Link href="#activity" className="block group transition-all hover:scale-[1.02]">
+             <Card className="p-8 border-none bg-blue-600 dark:bg-blue-900/40 text-white shadow-xl shadow-blue-100 dark:shadow-none rounded-3xl transition-colors h-full">
+                <BookOpen className="h-8 w-8 mb-4 opacity-50 group-hover:scale-110 transition-transform" />
+                <div className="text-4xl font-black transition-colors">{blogs.filter(b => b.status === 'PUBLISHED').length}</div>
+                <div className="text-[13px] font-bold uppercase tracking-widest opacity-70 transition-colors">Published Articles</div>
+             </Card>
+           </Link>
+
+           <div className="block group transition-all hover:scale-[1.02] cursor-default">
+             <Card className="p-8 border-none bg-white dark:bg-slate-900 text-gray-900 dark:text-white shadow-xl shadow-gray-100 dark:shadow-none rounded-3xl transition-colors h-full border border-gray-50 dark:border-white/5">
+                <Layers className="h-8 w-8 mb-4 text-blue-600 dark:text-blue-400 group-hover:rotate-12 transition-transform" />
+                <div className="text-4xl font-black transition-colors">
+                  {blogs.reduce((acc, curr) => acc + (curr.likes?.length || 0), 0)}
+                </div>
+                <div className="text-[13px] font-bold uppercase tracking-widest text-gray-400 dark:text-gray-500 transition-colors">Total Likes Received</div>
+             </Card>
+           </div>
+
+           <Link href="/profile" className="block group transition-all hover:scale-[1.02]">
+             <Card className="p-8 border-none bg-white dark:bg-slate-900 text-gray-900 dark:text-white shadow-xl shadow-gray-100 dark:shadow-none rounded-3xl transition-colors h-full border border-gray-50 dark:border-white/5 flex flex-col justify-between">
+                <div className="text-sm font-bold uppercase tracking-widest text-gray-400 dark:text-gray-400 transition-colors flex items-center justify-between">
+                  Profile Info
+                  <span className="text-xs font-mono opacity-50 tracking-normal capitalize">{new Date((session?.user as any)?.createdAt || Date.now()).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}</span>
+                </div>
+                <div className="mt-4">
+                  <div className="text-2xl font-black text-gray-900 dark:text-white transition-colors group-hover:text-blue-600 dark:group-hover:text-blue-400">
+                     Class of 2026
+                  </div>
+                  <div className="h-1.5 w-12 bg-green-500 rounded-full mt-2 transition-all group-hover:w-full" />
+                </div>
+             </Card>
+           </Link>
         </div>
 
         {/* Blogs List */}
-        <div className="space-y-8 transition-colors">
+        <div className="space-y-8 transition-colors" id="activity">
           <h2 className="text-2xl font-black text-gray-900 dark:text-white tracking-tight flex items-center gap-2 transition-colors">
             Recent Activity
             <div className="h-1.5 w-12 bg-blue-600 dark:bg-blue-400 rounded-full" />

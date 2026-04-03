@@ -30,7 +30,7 @@ export default async function BookmarksPage() {
 
           <div className="flex gap-8 border-b border-gray-100 dark:border-white/10 mb-8 overflow-x-auto hide-scrollbar transition-colors">
              <button className="pb-4 border-b border-gray-900 dark:border-white text-[14px] text-gray-900 dark:text-white font-medium whitespace-nowrap transition-colors">Saved stories</button>
-             <button className="pb-4 text-[14px] text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors whitespace-nowrap">Highlights</button>
+
           </div>
 
           {blogs.length > 0 ? (

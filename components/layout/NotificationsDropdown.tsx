@@ -9,15 +9,25 @@ import { formatDistanceToNow } from 'date-fns';
 
 const NotificationItem = ({ notif, closeMenu }: { notif: any, closeMenu: () => void }) => {
   let title = '';
+  let href = '#';
+
+  if (notif.blog) {
+    href = `/blog/${notif.blog.slug}`;
+  } else if (notif.sender) {
+    href = `/user/${notif.sender._id}`;
+  }
+
   switch (notif.type) {
      case 'LIKE': title = 'liked your story'; break;
      case 'COMMENT': title = 'commented on your story'; break;
      case 'NEW_POST': title = 'published a new story'; break;
+     case 'FOLLOW': title = 'started following you'; break;
+     default: title = 'interacted with you'; break;
   }
 
   return (
       <Link 
-        href={`/blog/${notif.blog.slug}`} 
+        href={href} 
         onClick={closeMenu}
         className={`flex items-start gap-3 p-4 hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors ${!notif.isRead ? 'bg-blue-50/50 dark:bg-blue-900/10' : ''}`}
       >
@@ -26,11 +36,13 @@ const NotificationItem = ({ notif, closeMenu }: { notif: any, closeMenu: () => v
              alt="Avatar" 
              width={36} 
              height={36} 
-             className="rounded-full mt-1" 
+             className="rounded-full mt-1 object-cover aspect-square" 
           />
           <div className="flex-1 min-w-0 transition-colors">
               <p className="text-[14px] text-gray-800 dark:text-gray-200 leading-snug">
-                 <span className="font-bold">{notif.sender?.name}</span> {title} <span className="font-medium text-gray-900 dark:text-white border-b border-gray-200 dark:border-white/10">"{notif.blog.title}"</span>
+                 <span className="font-bold">{notif.sender?.name}</span> {title} {notif.blog && (
+                   <span className="font-medium text-gray-900 dark:text-white border-b border-gray-200 dark:border-white/10">"{notif.blog.title}"</span>
+                 )}
               </p>
               <p className="text-[12px] text-gray-400 dark:text-gray-500 mt-1">{formatDistanceToNow(new Date(notif.createdAt), { addSuffix: true })}</p>
           </div>

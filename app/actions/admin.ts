@@ -42,7 +42,6 @@ export async function deleteUser(userId: string) {
     await User.findByIdAndDelete(userId);
     revalidatePath('/admin');
 }
-
 export async function toggleStaffPick(blogId: string) {
     const session = await getServerSession(authOptions);
     if (!session || (session.user as any).role !== 'ADMIN') throw new Error('Unauthorized');
@@ -55,4 +54,25 @@ export async function toggleStaffPick(blogId: string) {
     await blog.save();
     revalidatePath('/');
     revalidatePath('/admin');
+}
+
+export async function getExportableBlogs() {
+    const session = await getServerSession(authOptions);
+    if (!session || (session.user as any).role !== 'ADMIN') throw new Error('Unauthorized');
+  
+    await connectDB();
+    const blogs = await Blog.find({ status: 'PUBLISHED' })
+        .populate('author', 'name prn email')
+        .sort({ createdAt: -1 })
+        .lean();
+
+    const baseUrl = process.env.NEXTAUTH_URL || 'http://localhost:3000';
+    
+    return JSON.parse(JSON.stringify(blogs.map((b: any) => ({
+        prn: b.author?.prn || 'N/A',
+        name: b.author?.name || 'Unknown',
+        title: b.title,
+        link: `${baseUrl}/blog/${b.slug}`,
+        submittedAt: b.createdAt
+    }))));
 }

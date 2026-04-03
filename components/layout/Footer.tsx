@@ -4,7 +4,12 @@ const Footer = () => {
          <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
             
             <div className="flex flex-col gap-2">
-               <span className="text-gray-900 dark:text-white font-bold font-serif text-2xl mb-2 transition-colors">BlogN</span>
+               <span className="flex items-center font-serif text-2xl mb-2 transition-colors">
+                  <span className="font-black text-gray-900 dark:text-white transition-colors">B</span>
+                  <span className="font-medium bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent italic px-0.5">
+                    (logN)
+                  </span>
+               </span>
                <div className="flex flex-wrap gap-4">
                   <span className="cursor-pointer hover:text-gray-900 dark:hover:text-white transition-colors">CSE Department</span>
                   <span className="cursor-pointer hover:text-gray-900 dark:hover:text-white transition-colors">Subject: Design and Analysis of Algorithm</span>

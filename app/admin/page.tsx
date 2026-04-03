@@ -8,8 +8,9 @@ import { Button } from '@/components/ui/button';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { Loader2, Trash2, UserCog, BookOpen, Users, Star } from 'lucide-react';
+import { Loader2, Trash2, UserCog, BookOpen, Users, Star, FileDown } from 'lucide-react';
 import Image from 'next/image';
+import { getExportableBlogs } from '@/app/actions/admin';
 
 const AdminDashboard = () => {
   const { data: session, status } = useSession();
@@ -17,6 +18,44 @@ const AdminDashboard = () => {
   const [users, setUsers] = useState<any[]>([]);
   const [blogs, setBlogs] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [exporting, setExporting] = useState(false);
+
+  const handleExport = async () => {
+    setExporting(true);
+    try {
+      const data = await getExportableBlogs();
+      
+      // Basic CSV Generation
+      const headers = ['PRN', 'Author Name', 'Blog Title', 'Blog Link', 'Submitted At'];
+      const csvRows = [headers.join(',')];
+      
+      data.forEach((row: any) => {
+        const values = [
+          `"${row.prn}"`,
+          `"${row.name.replace(/"/g, '""')}"`,
+          `"${row.title.replace(/"/g, '""')}"`,
+          `"${row.link}"`,
+          `"${new Date(row.submittedAt).toLocaleString()}"`
+        ];
+        csvRows.push(values.join(','));
+      });
+      
+      const csvString = csvRows.join('\n');
+      const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.setAttribute('href', url);
+      link.setAttribute('download', `blogn_export_${new Date().toISOString().split('T')[0]}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch (error) {
+      console.error('Export failed:', error);
+      alert('Export failed. Please try again.');
+    } finally {
+      setExporting(false);
+    }
+  };
 
   useEffect(() => {
     if (status === 'unauthenticated' || (session && (session.user as any).role !== 'ADMIN')) {
@@ -44,9 +83,19 @@ const AdminDashboard = () => {
     <div className="min-h-screen bg-[#fafbfc] dark:bg-slate-950 transition-colors">
       <Navbar />
       <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
-         <div className="mb-12">
-            <h1 className="text-4xl font-black text-gray-900 dark:text-white tracking-tight transition-colors">Admin Console</h1>
-            <p className="text-gray-500 dark:text-gray-400 font-medium">Platform management and user moderation.</p>
+         <div className="mb-12 flex flex-col md:flex-row md:items-end md:justify-between gap-6">
+            <div>
+               <h1 className="text-4xl font-black text-gray-900 dark:text-white tracking-tight transition-colors">Admin Console</h1>
+               <p className="text-gray-500 dark:text-gray-400 font-medium">Platform management and user moderation.</p>
+            </div>
+            <Button 
+               onClick={handleExport}
+               disabled={exporting}
+               className="bg-green-600 hover:bg-green-700 text-white font-bold rounded-xl px-6 h-12 shadow-lg shadow-green-100 dark:shadow-none transition-all flex items-center gap-2"
+            >
+               {exporting ? <Loader2 className="animate-spin h-5 w-5" /> : <FileDown size={20} />}
+               {exporting ? 'Generating...' : 'Download Report (Excel)'}
+            </Button>
          </div>
 
          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
@@ -67,6 +116,21 @@ const AdminDashboard = () => {
                      </div>
                    </div>
                    <div className="flex items-center gap-2">
+                     <Button
+                        variant="ghost"
+                        size="icon"
+                        title="Toggle User Role"
+                        className="text-gray-400 dark:text-gray-500 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors"
+                        onClick={async () => {
+                            const newRole = u.role === 'ADMIN' ? 'USER' : 'ADMIN';
+                            if(confirm(`Change ${u.name}'s role to ${newRole}?`)) {
+                                await updateUserRole(u._id, newRole);
+                                fetchData();
+                            }
+                        }}
+                     >
+                       <UserCog size={16} />
+                     </Button>
                      <span className={`px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-tight transition-colors ${u.role === 'ADMIN' ? 'bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400' : 'bg-gray-100 dark:bg-slate-800 text-gray-600 dark:text-gray-400'}`}>
                        {u.role}
                      </span>

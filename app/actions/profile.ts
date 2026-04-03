@@ -15,7 +15,7 @@ export async function getUserProfile() {
   return JSON.parse(JSON.stringify(user));
 }
 
-export async function updateUserProfile(data: { bio: string; prn: string; twitter: string; github: string; website: string }) {
+export async function updateUserProfile(data: { bio: string; prn: string; linkedin: string; github: string; website: string }) {
   const session = await getServerSession(authOptions);
   if (!session) throw new Error('Unauthorized');
 
@@ -25,7 +25,7 @@ export async function updateUserProfile(data: { bio: string; prn: string; twitte
     bio: data.bio,
     prn: data.prn,
     socials: {
-      twitter: data.twitter,
+      linkedin: data.linkedin,
       github: data.github,
       website: data.website
     }

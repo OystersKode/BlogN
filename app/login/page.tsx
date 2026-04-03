@@ -26,9 +26,12 @@ const LoginPage = () => {
       <div className="max-w-[420px] w-full bg-slate-900 dark:bg-white rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-white/10 dark:border-slate-100 p-10 relative z-10 flex flex-col items-center transition-colors">
          
          <Link href="/" className="mb-8 block">
-            <h1 className="text-4xl text-white dark:text-slate-900 font-bold font-serif tracking-tight text-center hover:opacity-80 transition-all">
-              BlogN
-            </h1>
+             <div className="text-4xl font-serif text-center hover:opacity-80 transition-all flex items-center justify-center">
+                <span className="font-black text-white dark:text-slate-900 transition-colors">B</span>
+                <span className="font-medium bg-gradient-to-r from-blue-300 to-indigo-200 dark:from-blue-600 dark:to-indigo-600 bg-clip-text text-transparent italic px-1">
+                  (logN)
+                </span>
+             </div>
          </Link>
 
          <div className="text-center space-y-2 mb-10 w-full transition-colors">
