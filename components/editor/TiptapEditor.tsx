@@ -1,6 +1,6 @@
 'use client';
 
-import { useEditor, EditorContent, mergeAttributes } from '@tiptap/react';
+import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Underline from '@tiptap/extension-underline';
 import Link from '@tiptap/extension-link';
@@ -43,92 +43,73 @@ const Toolbar = ({ editor }: { editor: any }) => {
     input.click();
   };
 
+  const Button = ({ onClick, isActive, children, title }: { onClick: () => void, isActive?: boolean, children: React.ReactNode, title?: string }) => (
+    <button
+      onClick={onClick}
+      title={title}
+      className={`p-2 border-[2px] transition-all flex items-center justify-center ${
+        isActive 
+          ? 'bg-secondary text-black shadow-none translate-x-[2px] translate-y-[2px] border-black' 
+          : 'bg-white dark:bg-zinc-800 text-zinc-500 hover:text-black dark:hover:text-white border-black dark:border-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] dark:shadow-[2px_2px_0px_0px_rgba(255,255,255,1)] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px]'
+      }`}
+    >
+      {children}
+    </button>
+  );
+
   return (
-    <div className="flex flex-wrap gap-1 p-1 mb-8 sticky top-[120px] z-40 bg-white/95 dark:bg-slate-900/95 backdrop-blur-sm border-b border-gray-100 dark:border-white/10 text-gray-400">
-      <button
-        onClick={() => editor.chain().focus().toggleBold().run()}
-        className={`p-2 rounded transition-colors ${editor.isActive('bold') ? 'text-gray-900 dark:text-white bg-gray-100 dark:bg-slate-800' : 'hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-slate-800'}`}
-      >
-        <Bold size={18} />
-      </button>
-      <button
-        onClick={() => editor.chain().focus().toggleItalic().run()}
-        className={`p-2 rounded transition-colors ${editor.isActive('italic') ? 'text-gray-900 dark:text-white bg-gray-100 dark:bg-slate-800' : 'hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-slate-800'}`}
-      >
-        <Italic size={18} />
-      </button>
-      <button
-        onClick={() => editor.chain().focus().toggleUnderline().run()}
-        className={`p-2 rounded transition-colors ${editor.isActive('underline') ? 'text-gray-900 dark:text-white bg-gray-100 dark:bg-slate-800' : 'hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-slate-800'}`}
-      >
-        <UnderlineIcon size={18} />
-      </button>
-      <div className="w-[1px] h-6 bg-gray-200 dark:bg-white/10 mx-2 self-center" />
-      <button
-        onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
-        className={`p-2 rounded transition-colors ${editor.isActive('heading', { level: 1 }) ? 'text-gray-900 dark:text-white bg-gray-100 dark:bg-slate-800' : 'hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-slate-800'}`}
-      >
-        <Heading1 size={18} />
-      </button>
-      <button
-        onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
-        className={`p-2 rounded transition-colors ${editor.isActive('heading', { level: 2 }) ? 'text-gray-900 dark:text-white bg-gray-100 dark:bg-slate-800' : 'hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-slate-800'}`}
-      >
-        <Heading2 size={18} />
-      </button>
-      <div className="w-[1px] h-6 bg-gray-200 dark:bg-white/10 mx-2 self-center" />
-      <button
-        onClick={() => editor.chain().focus().toggleBulletList().run()}
-        className={`p-2 rounded transition-colors ${editor.isActive('bulletList') ? 'text-gray-900 dark:text-white bg-gray-100 dark:bg-slate-800' : 'hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-slate-800'}`}
-      >
-        <List size={18} />
-      </button>
-      <button
-        onClick={() => editor.chain().focus().toggleOrderedList().run()}
-        className={`p-2 rounded transition-colors ${editor.isActive('orderedList') ? 'text-gray-900 dark:text-white bg-gray-100 dark:bg-slate-800' : 'hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-slate-800'}`}
-      >
-        <ListOrdered size={18} />
-      </button>
-      <button
-        onClick={() => editor.chain().focus().toggleBlockquote().run()}
-        className={`p-2 rounded transition-colors ${editor.isActive('blockquote') ? 'text-gray-900 dark:text-white bg-gray-100 dark:bg-slate-800' : 'hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-slate-800'}`}
-      >
-        <Quote size={18} />
-      </button>
-      <button
-        onClick={() => editor.chain().focus().toggleCodeBlock().run()}
-        className={`p-2 rounded transition-colors ${editor.isActive('codeBlock') ? 'text-gray-900 dark:text-white bg-gray-100 dark:bg-slate-800' : 'hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-slate-800'}`}
-      >
-        <Code size={18} />
-      </button>
-      <div className="w-[1px] h-6 bg-gray-200 dark:bg-white/10 mx-2 self-center" />
-      <button
-        onClick={addImage}
-        className="p-2 rounded hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors"
-      >
-      <ImageIcon size={18} />
-      </button>
+    <div className="flex flex-wrap gap-2 mb-10 sticky top-[137px] z-40 bg-[#F4F4F1]/95 dark:bg-zinc-950/95 backdrop-blur-sm py-4 transition-all">
+      <Button onClick={() => editor.chain().focus().toggleBold().run()} isActive={editor.isActive('bold')}>
+        <Bold size={18} strokeWidth={3} />
+      </Button>
+      <Button onClick={() => editor.chain().focus().toggleItalic().run()} isActive={editor.isActive('italic')}>
+        <Italic size={18} strokeWidth={3} />
+      </Button>
+      <Button onClick={() => editor.chain().focus().toggleUnderline().run()} isActive={editor.isActive('underline')}>
+        <UnderlineIcon size={18} strokeWidth={3} />
+      </Button>
+      
+      <div className="w-[3px] h-8 bg-black dark:bg-white mx-1 self-center"></div>
+
+      <Button onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()} isActive={editor.isActive('heading', { level: 1 })}>
+        <Heading1 size={18} strokeWidth={3} />
+      </Button>
+      <Button onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()} isActive={editor.isActive('heading', { level: 2 })}>
+        <Heading2 size={18} strokeWidth={3} />
+      </Button>
+
+      <div className="w-[3px] h-8 bg-black dark:bg-white mx-1 self-center"></div>
+
+      <Button onClick={() => editor.chain().focus().toggleBulletList().run()} isActive={editor.isActive('bulletList')}>
+        <List size={18} strokeWidth={3} />
+      </Button>
+      <Button onClick={() => editor.chain().focus().toggleOrderedList().run()} isActive={editor.isActive('orderedList')}>
+        <ListOrdered size={18} strokeWidth={3} />
+      </Button>
+      <Button onClick={() => editor.chain().focus().toggleBlockquote().run()} isActive={editor.isActive('blockquote')}>
+        <Quote size={18} strokeWidth={3} />
+      </Button>
+      <Button onClick={() => editor.chain().focus().toggleCodeBlock().run()} isActive={editor.isActive('codeBlock')}>
+        <Code size={18} strokeWidth={3} />
+      </Button>
+
+      <div className="w-[3px] h-8 bg-black dark:bg-white mx-1 self-center"></div>
+
+      <Button onClick={addImage} title="Add Image">
+        <ImageIcon size={18} strokeWidth={3} />
+      </Button>
 
       {editor.isActive('image') && (
-        <div className="flex items-center gap-1 bg-gray-50 dark:bg-slate-800 rounded-md px-2 ml-2 transition-colors">
-          <button
-            onClick={() => editor.chain().focus().updateAttributes('image', { width: '25%' }).run()}
-            className="text-[12px] font-black px-3 py-1 hover:text-blue-500 transition-colors"
-          >
-            S
-          </button>
-          <button
-            onClick={() => editor.chain().focus().updateAttributes('image', { width: '50%' }).run()}
-            className="text-[12px] font-black px-3 py-1 hover:text-blue-500 transition-colors"
-          >
-            M
-          </button>
-          <button
-            onClick={() => editor.chain().focus().updateAttributes('image', { width: '100%' }).run()}
-            className="text-[12px] font-black px-3 py-1 hover:text-blue-500 transition-colors"
-          >
-            L
-          </button>
+        <div className="flex items-center gap-1 bg-white dark:bg-zinc-800 border-[2px] border-black p-1 shadow-neo-sm ml-2">
+          {['25%', '50%', '100%'].map(size => (
+              <button
+                key={size}
+                onClick={() => editor.chain().focus().updateAttributes('image', { width: size }).run()}
+                className="text-[10px] font-black px-3 py-1 hover:bg-primary transition-all border-[1px] border-transparent hover:border-black"
+              >
+                {size === '25%' ? 'S' : size === '50%' ? 'M' : 'L'}
+              </button>
+          ))}
         </div>
       )}
     </div>
@@ -136,22 +117,16 @@ const Toolbar = ({ editor }: { editor: any }) => {
 };
 
 const ResizableImage = Image.extend({
-  name: 'image', // Keep the canonical name for command compatibility
+  name: 'image',
   addAttributes() {
     return {
-      src: {
-        default: null,
-      },
-      alt: {
-        default: null,
-      },
-      title: {
-        default: null,
-      },
+      src: { default: null },
+      alt: { default: null },
+      title: { default: null },
       width: {
         default: '100%',
         renderHTML: (attributes) => ({
-          style: `width: ${attributes.width}; height: auto; cursor: pointer; transition: width 0.2s ease-in-out;`,
+          style: `width: ${attributes.width}; height: auto; cursor: pointer; border: 4px solid black; transition: width 0.2s ease-in-out; margin: 2rem 0;`,
         }),
       },
     };
@@ -161,7 +136,8 @@ const ResizableImage = Image.extend({
 const extensions = [
   StarterKit,
   ResizableImage,
-  Placeholder.configure({ placeholder: 'Tell your story...' }),
+  Underline,
+  Placeholder.configure({ placeholder: 'COMMENCE ANALYTICAL LOGGING...' }),
 ];
 
 const TiptapEditor = ({ content, onChange }: { content: any, onChange: (val: any) => void }) => {
@@ -175,7 +151,7 @@ const TiptapEditor = ({ content, onChange }: { content: any, onChange: (val: any
     },
     editorProps: {
         attributes: {
-            class: 'prose prose-base sm:prose-lg md:prose-xl font-serif max-w-none focus:outline-none min-h-[50vh] text-gray-800 dark:text-gray-200 leading-[1.8] tracking-normal',
+            class: 'prose-neo-writing font-bold max-w-none focus:outline-none min-h-[50vh] text-black dark:text-white leading-tight tracking-tight uppercase',
         },
     },
   });

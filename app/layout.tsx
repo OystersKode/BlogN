@@ -1,22 +1,24 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Space_Grotesk, Syne } from "next/font/google";
 import "./globals.css";
 import { Providers } from "@/components/Providers";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const spaceGrotesk = Space_Grotesk({
+  variable: "--font-space-grotesk",
   subsets: ["latin"],
+  display: 'swap',
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const syne = Syne({
+  variable: "--font-syne",
   subsets: ["latin"],
+  display: 'swap',
 });
 
 export const metadata: Metadata = {
-  title: "B(logN) | Modern Blogging Platform",
-  description: "A premium full-stack blogging platform built with Next.js, MongoDB, and TipTap.",
+  title: "B(logN) | Neo-Brutalist Blogging",
+  description: "A bold, neo-brutalist blogging platform built with Next.js, MongoDB, and TipTap.",
 };
 
 export default function RootLayout({
@@ -27,20 +29,16 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${spaceGrotesk.variable} ${syne.variable} h-full antialiased`}
       suppressHydrationWarning
     >
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet" />
-      </head>
-      <body className="min-h-screen bg-white text-gray-900 dark:bg-slate-950 dark:text-gray-100 selection:bg-blue-100 selection:text-blue-900">
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-          <Providers>
-            {children}
-          </Providers>
-        </ThemeProvider>
+      <body 
+        className="min-h-screen bg-[#F4F4F1] text-black dark:bg-[#121212] dark:text-[#F4F4F1] selection:bg-[#FFD700] selection:text-black"
+        suppressHydrationWarning
+      >
+        <Providers>
+          {children}
+        </Providers>
       </body>
     </html>
   );

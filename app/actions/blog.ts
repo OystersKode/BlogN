@@ -9,6 +9,9 @@ import { slugify, estimateReadingTime } from '@/lib/utils';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { revalidatePath } from 'next/cache';
+import { MOCK_BLOGS } from '@/lib/mock-data';
+
+const MOCK_MODE = process.env.MOCK_MODE === 'true';
 
 export async function createBlog(formData: any) {
   const session = await getServerSession(authOptions);
@@ -58,6 +61,11 @@ export async function createBlog(formData: any) {
 }
 
 export async function getBlogs(feedType = 'all') {
+  if (MOCK_MODE) {
+    if (feedType === 'staff') return MOCK_BLOGS.filter(b => b.isStaffPick);
+    return MOCK_BLOGS;
+  }
+
   await connectDB();
   const session = await getServerSession(authOptions);
   
@@ -103,13 +111,16 @@ export async function getBlogs(feedType = 'all') {
 }
 
 export async function getBlogBySlug(slug: string) {
+  if (MOCK_MODE) {
+    return MOCK_BLOGS.find(b => b.slug === slug) || null;
+  }
+
   await connectDB();
-  const blog = await Blog.findOne({ slug }).populate('author', 'name image bio socials').lean();
-  if (!blog) return null;
+  const blog = await Blog.findOne({ slug }).populate('author', 'name image bio socials').lean() as any;
 
   // Guard: if the author user was deleted, treat the blog as not found
   // to prevent crashes when accessing blog.author.name / blog.author._id
-  if (!blog.author || !(blog.author as any)._id) return null;
+  if (!blog || !blog.author || !(blog.author as any)._id) return null;
   
   const session = await getServerSession(authOptions);
   if (session) {
@@ -221,6 +232,8 @@ export async function toggleLike(blogId: string) {
 }
 
 export async function getStaffPicks() {
+  if (MOCK_MODE) return MOCK_BLOGS.filter(b => b.isStaffPick);
+
   await connectDB();
   const blogs = await Blog.find({ isStaffPick: true, status: 'PUBLISHED' })
     .populate('author', 'name image')

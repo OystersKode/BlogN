@@ -4,47 +4,48 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #F4F4F1;
+  --foreground: #000000;
   --card: #ffffff;
-  --card-foreground: #171717;
+  --card-foreground: #000000;
   --popover: #ffffff;
-  --popover-foreground: #171717;
-  --primary: #2563eb;
-  --primary-foreground: #ffffff;
-  --secondary: #f1f5f9;
-  --secondary-foreground: #0f172a;
-  --muted: #f1f5f9;
-  --muted-foreground: #64748b;
-  --accent: #f1f5f9;
-  --accent-foreground: #0f172a;
-  --destructive: #ef4444;
+  --popover-foreground: #000000;
+  --primary: #FFD700;
+  --primary-foreground: #000000;
+  --secondary: #00D1FF;
+  --secondary-foreground: #000000;
+  --muted: #e2e2e2;
+  --muted-foreground: #666666;
+  --accent: #FF006E;
+  --accent-foreground: #ffffff;
+  --destructive: #ff4d4d;
   --destructive-foreground: #ffffff;
-  --border: #e2e8f0;
-  --input: #e2e8f0;
-  --ring: #2563eb;
+  --border: #000000;
+  --input: #000000;
+  --ring: #FFD700;
+  --radius: 0px;
 }
 
 .dark {
-  --background: #1e1e1e;
-  --foreground: #ecd1b6;
-  --card: #252525;
-  --card-foreground: #ecd1b6;
-  --popover: #252525;
-  --popover-foreground: #ecd1b6;
-  --primary: #ecd1b6;
-  --primary-foreground: #1e1e1e;
-  --secondary: #2d2d2d;
-  --secondary-foreground: #ecd1b6;
-  --muted: #a89a8e;
-  --muted-foreground: #7c7269;
-  --accent: #2d2d2d;
-  --accent-foreground: #ecd1b6;
+  --background: #121212;
+  --foreground: #F4F4F1;
+  --card: #1e1e1e;
+  --card-foreground: #F4F4F1;
+  --popover: #1e1e1e;
+  --popover-foreground: #F4F4F1;
+  --primary: #FFD700;
+  --primary-foreground: #000000;
+  --secondary: #00D1FF;
+  --secondary-foreground: #000000;
+  --muted: #2a2a2a;
+  --muted-foreground: #a0a0a0;
+  --accent: #FF006E;
+  --accent-foreground: #ffffff;
   --destructive: #7f1d1d;
   --destructive-foreground: #ffffff;
-  --border: #333333;
-  --input: #333333;
-  --ring: #ecd1b6;
+  --border: #F4F4F1;
+  --input: #F4F4F1;
+  --ring: #FFD700;
 }
 
 @theme inline {
@@ -67,44 +68,76 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
-  --font-sans: "Source Sans 3", sans-serif;
-  --font-serif: "Playfair Display", serif;
+  --font-sans: "Space Grotesk", sans-serif;
+  --font-serif: "Syne", sans-serif;
   --font-mono: var(--font-geist-mono);
+  
+  --shadow-neo: 4px 4px 0px 0px rgba(0, 0, 0, 1);
+  --shadow-neo-lg: 8px 8px 0px 0px rgba(0, 0, 0, 1);
+  --shadow-neo-xl: 12px 12px 0px 0px rgba(0, 0, 0, 1);
+}
+
+.dark {
+  --shadow-neo: 4px 4px 0px 0px rgba(255, 255, 255, 0.4);
+  --shadow-neo-lg: 8px 8px 0px 0px rgba(255, 255, 255, 0.4);
+  --shadow-neo-xl: 12px 12px 0px 0px rgba(255, 255, 255, 0.4);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans);
-  line-height: 1.6;
+  line-height: 1.5;
 }
 
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-serif);
-  font-weight: 700;
-  letter-spacing: -0.02em;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
 }
 
-/* ── TipTap editor dark-mode fix ─────────────────────────────── */
+.neo-box {
+  @apply border-[3px] border-black shadow-neo bg-white dark:bg-zinc-900 dark:border-white;
+}
+
+.neo-interactive {
+  @apply transition-all active:translate-x-[2px] active:translate-y-[2px] active:shadow-none;
+}
+
+/* ── Prose Neo Styling ─────────────────────────────── */
+.prose-neo {
+  @apply font-sans font-bold text-black dark:text-zinc-300;
+}
+
+.prose-neo p {
+  @apply mb-8 text-lg leading-relaxed;
+}
+
+.prose-neo h1, .prose-neo h2, .prose-neo h3 {
+  @apply mt-16 mb-8 text-black dark:text-white uppercase tracking-tighter leading-none;
+}
+
+.prose-neo h2 { @apply text-4xl border-l-[6px] border-primary pl-4; }
+.prose-neo h3 { @apply text-2xl border-l-[4px] border-secondary pl-3; }
+
+.prose-neo blockquote {
+  @apply border-l-[8px] border-black dark:border-white bg-zinc-100 dark:bg-zinc-800 p-8 my-12 italic text-2xl font-black shadow-neo;
+}
+
+.prose-neo pre {
+  @apply bg-black text-white p-8 border-[4px] border-black my-12 shadow-neo overflow-x-auto font-mono text-sm;
+}
+
+.prose-neo img {
+  @apply border-[5px] border-black dark:border-white shadow-neo-lg my-12;
+}
+
+/* ── TipTap editor neo-brutalist fix ─────────────────────────────── */
+.ProseMirror {
+  @apply min-h-[500px] outline-none text-xl font-bold;
+}
+
 .dark .ProseMirror {
-  color: #e2e8f0;                /* slate-200 – clearly visible text */
-}
-.dark .ProseMirror h1,
-.dark .ProseMirror h2,
-.dark .ProseMirror h3 {
-  color: #f1f5f9;                /* slate-100 */
-}
-.dark .ProseMirror p { color: #cbd5e1; }    /* slate-300 */
-.dark .ProseMirror strong { color: #f8fafc; }
-.dark .ProseMirror code {
-  background: #1e293b;
-  color: #7dd3fc;                /* sky-300 */
-}
-.dark .ProseMirror blockquote {
-  border-left-color: #475569;
-  color: #94a3b8;
-}
-.dark .ProseMirror a { color: #60a5fa; }
-.dark .ProseMirror p.is-editor-empty:first-child::before {
-  color: #64748b;                /* placeholder */
+  color: #F4F4F1;
 }

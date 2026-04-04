@@ -25,7 +25,7 @@ const ProfileForm = ({ user }: { user: any }) => {
       await updateUserProfile({ bio, prn, linkedin, github, website });
       setMessage('Profile updated successfully!');
       setTimeout(() => setMessage(''), 3000);
-      setIsEditing(false); // Seamlessly return to read-only view
+      setIsEditing(false);
     } catch (error) {
       console.error(error);
       setMessage('Failed to update profile.');
@@ -36,67 +36,63 @@ const ProfileForm = ({ user }: { user: any }) => {
 
   if (!isEditing) {
     return (
-      <div className="space-y-6">
-          <div className="space-y-4 transition-colors">
+      <div className="space-y-8">
+          <div className="space-y-6">
              <div>
-                <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-1 transition-colors">Bio</label>
-                <p className="text-gray-800 dark:text-gray-200 text-[15px] max-w-full leading-relaxed whitespace-pre-wrap transition-colors">{bio || 'No bio provided.'}</p>
+                <label className="block text-xs font-black text-zinc-500 uppercase tracking-widest mb-2 transition-colors">Biography</label>
+                <div className="bg-white dark:bg-zinc-800 p-4 border-[3px] border-black dark:border-white shadow-neo">
+                   <p className="text-black dark:text-white text-[15px] font-bold leading-tight whitespace-pre-wrap transition-colors">
+                      {bio || 'Technical background not provided yet.'}
+                   </p>
+                </div>
              </div>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 transition-colors">
-                 <div className="md:col-span-2">
-                   <label className="block text-[13px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1 transition-colors">PRN (Roll Number)</label>
-                   <p className="text-gray-900 dark:text-white font-mono font-medium text-[15px] transition-colors">{prn || 'Not provided'}</p>
-                 </div>
-                 <div>
-                    <label className="block text-[13px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1 transition-colors">LinkedIn</label>
-                    {linkedin ? (
-                      <a 
-                        href={linkedin.startsWith('http') ? linkedin : `https://linkedin.com/in/${linkedin}`} 
-                        target="_blank" 
-                        rel="noopener noreferrer" 
-                        className="text-blue-600 dark:text-blue-400 font-medium text-[15px] hover:underline cursor-pointer truncate block transition-colors"
-                      >
-                         {linkedin.split('/').filter(Boolean).pop()}
-                      </a>
-                    ) : (
-                      <p className="text-gray-400 dark:text-gray-500 text-[15px] transition-colors italic">Not provided</p>
-                    )}
-                 </div>
-                 <div>
-                    <label className="block text-[13px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1 transition-colors">GitHub</label>
-                    {github ? (
-                      <a 
-                        href={github.startsWith('http') ? github : `https://github.com/${github}`} 
-                        target="_blank" 
-                        rel="noopener noreferrer" 
-                        className="text-gray-900 dark:text-white font-medium text-[15px] hover:underline cursor-pointer truncate block transition-colors"
-                      >
-                         {github.split('/').filter(Boolean).pop()}
-                      </a>
-                    ) : (
-                      <p className="text-gray-400 dark:text-gray-500 text-[15px] transition-colors italic">Not provided</p>
-                    )}
-                 </div>
-                 <div className="md:col-span-2">
-                    <label className="block text-[13px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1 transition-colors">Personal Website</label>
-                    {website ? (
-                      <a 
-                        href={website.startsWith('http') ? website : `https://${website}`} 
-                        target="_blank" 
-                        rel="noopener noreferrer" 
-                        className="text-green-600 dark:text-green-400 font-medium text-[15px] hover:underline cursor-pointer truncate block transition-colors"
-                      >
-                         {website.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '')}
-                      </a>
-                    ) : (
-                      <p className="text-gray-400 dark:text-gray-500 text-[15px] transition-colors italic">Not provided</p>
-                    )}
-                 </div>
-            </div>
-         </div>
-                  <div className="pt-6 mt-6 border-t border-gray-50 dark:border-white/10 flex justify-end transition-colors">
-             <Button onClick={() => setIsEditing(true)} className="bg-gray-100 dark:bg-slate-800 text-gray-900 dark:text-white hover:bg-gray-200 dark:hover:bg-slate-700 rounded-full px-6 transition-colors shadow-sm font-bold">
-                <Edit3 className="mr-2 h-4 w-4" /> Edit Profile
+             
+             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-4 transition-colors">
+                  <div className="md:col-span-2">
+                    <label className="block text-[11px] font-black text-zinc-500 uppercase tracking-wider mb-2 transition-colors">PRN (Student ID)</label>
+                    <p className="inline-block bg-primary text-black px-3 py-1 border-[2px] border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] font-mono font-black text-[14px]">
+                       {prn || 'NONE'}
+                    </p>
+                  </div>
+                  <div>
+                     <label className="block text-[11px] font-black text-zinc-500 uppercase tracking-wider mb-2 transition-colors">LinkedIn Profile</label>
+                     {linkedin ? (
+                       <a 
+                         href={linkedin.startsWith('http') ? linkedin : `https://linkedin.com/in/${linkedin}`} 
+                         target="_blank" 
+                         rel="noopener noreferrer" 
+                         className="inline-block bg-white dark:bg-zinc-800 text-black dark:text-white px-3 py-1 border-[2px] border-black dark:border-white shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] font-black text-[12px] uppercase hover:bg-secondary transition-all truncate max-w-full"
+                       >
+                          {linkedin.split('/').filter(Boolean).pop()}
+                       </a>
+                     ) : (
+                       <p className="text-zinc-400 font-bold uppercase text-xs italic">Not linked</p>
+                     )}
+                  </div>
+                  <div>
+                     <label className="block text-[11px] font-black text-zinc-500 uppercase tracking-wider mb-2 transition-colors">GitHub Repository</label>
+                     {github ? (
+                       <a 
+                         href={github.startsWith('http') ? github : `https://github.com/${github}`} 
+                         target="_blank" 
+                         rel="noopener noreferrer" 
+                         className="inline-block bg-black text-white px-3 py-1 border-[2px] border-black dark:border-white shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] font-black text-[12px] uppercase hover:bg-primary hover:text-black transition-all truncate max-w-full"
+                       >
+                          {github.split('/').filter(Boolean).pop()}
+                       </a>
+                     ) : (
+                       <p className="text-zinc-400 font-bold uppercase text-xs italic">Not linked</p>
+                     )}
+                  </div>
+             </div>
+          </div>
+          
+          <div className="pt-8 border-t-[4px] border-black dark:border-white flex justify-end">
+             <Button 
+                onClick={() => setIsEditing(true)} 
+                className="bg-black text-white font-black uppercase tracking-widest px-8 py-6 border-[3px] border-black shadow-neo active:shadow-none active:translate-x-1 active:translate-y-1 transition-all h-auto text-xs"
+             >
+                <Edit3 className="mr-2 h-4 w-4" strokeWidth={3} /> Modify Identity
              </Button>
           </div>
       </div>
@@ -104,80 +100,71 @@ const ProfileForm = ({ user }: { user: any }) => {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6 animate-in fade-in duration-300">
-       <div className="space-y-4">
+    <form onSubmit={handleSubmit} className="space-y-10">
+       <div className="space-y-8">
          <div>
-           <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-1 transition-colors">Bio</label>
+           <label className="block text-xs font-black text-zinc-500 uppercase tracking-widest mb-2 transition-colors">Technical Bio</label>
            <textarea
              value={bio}
              onChange={(e) => setBio(e.target.value)}
-             className="w-full h-32 rounded-xl border border-gray-200 dark:border-white/20 bg-white dark:bg-slate-800 text-gray-900 dark:text-white px-4 py-3 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 resize-none shadow-sm transition-colors placeholder-gray-400 dark:placeholder-gray-600"
-             placeholder="Tell us a bit about yourself..."
+             className="w-full h-32 rounded-none border-[3px] border-black dark:border-white bg-white dark:bg-zinc-800 text-black dark:text-white px-4 py-3 text-sm font-bold focus:shadow-neo transition-all resize-none placeholder-zinc-400"
+             placeholder="Field of interest, tech stack, or simple greetings..."
            />
          </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-             <div className="md:col-span-2">
-               <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-1 transition-colors">PRN (Roll Number)</label>
-               <Input 
-                  value={prn} 
-                  onChange={(e) => setPrn(e.target.value)} 
-                  placeholder="Enter your PRN" 
-                  className="rounded-xl font-mono bg-white dark:bg-slate-800 border-gray-200 dark:border-white/10 text-gray-900 dark:text-white transition-colors"
-               />
-             </div>
-              <div>
-                <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-1 transition-colors">LinkedIn URL</label>
+
+         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="md:col-span-2">
+                <label className="block text-xs font-black text-zinc-500 uppercase tracking-widest mb-2 transition-colors">PRN (Student ID)</label>
                 <Input 
-                   value={linkedin} 
-                   onChange={(e) => setLinkedin(e.target.value)} 
-                   placeholder="https://linkedin.com/in/..." 
-                   className="rounded-xl bg-white dark:bg-slate-800 border-gray-200 dark:border-white/10 text-gray-900 dark:text-white transition-colors"
+                   value={prn} 
+                   onChange={(e) => setPrn(e.target.value)} 
+                   placeholder="Enter your PRN" 
+                   className="rounded-none font-mono font-bold bg-white dark:bg-zinc-800 border-[3px] border-black dark:border-white focus:shadow-neo transition-all h-12"
                 />
               </div>
-             <div>
-               <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-1 transition-colors">GitHub URL</label>
-               <Input 
-                  value={github} 
-                  onChange={(e) => setGithub(e.target.value)} 
-                  placeholder="https://github.com/..." 
-                  className="rounded-xl bg-white dark:bg-slate-800 border-gray-200 dark:border-white/10 text-gray-900 dark:text-white transition-colors"
-               />
-             </div>
-             <div className="md:col-span-2">
-               <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-1 transition-colors">Personal Website</label>
-               <Input 
-                  value={website} 
-                  onChange={(e) => setWebsite(e.target.value)} 
-                  placeholder="https://yourwebsite.com" 
-                  className="rounded-xl bg-white dark:bg-slate-800 border-gray-200 dark:border-white/10 text-gray-900 dark:text-white transition-colors"
-               />
-             </div>
-        </div>
-      </div>
+               <div>
+                 <label className="block text-xs font-black text-zinc-500 uppercase tracking-widest mb-2 transition-colors">LinkedIn Handle</label>
+                 <Input 
+                    value={linkedin} 
+                    onChange={(e) => setLinkedin(e.target.value)} 
+                    placeholder="Username or URL" 
+                    className="rounded-none font-bold bg-white dark:bg-zinc-800 border-[3px] border-black dark:border-white focus:shadow-neo transition-all h-12"
+                 />
+               </div>
+              <div>
+                <label className="block text-xs font-black text-zinc-500 uppercase tracking-widest mb-2 transition-colors">GitHub Handle</label>
+                <Input 
+                   value={github} 
+                   onChange={(e) => setGithub(e.target.value)} 
+                   placeholder="Username or URL" 
+                   className="rounded-none font-bold bg-white dark:bg-zinc-800 border-[3px] border-black dark:border-white focus:shadow-neo transition-all h-12"
+                />
+              </div>
+         </div>
+       </div>
 
-       <div className="flex items-center justify-between pt-4 border-t border-gray-50 dark:border-white/10 transition-colors">
-          <span className={`text-sm font-medium transition-colors ${message.includes('Failed') ? 'text-red-500' : 'text-green-600'}`}>
+       <div className="flex flex-col sm:flex-row items-center justify-between gap-6 pt-10 border-t-[4px] border-black dark:border-white">
+          <span className={`text-xs font-black uppercase tracking-widest ${message.includes('Failed') ? 'text-red-500' : 'text-primary dark:text-primary'}`}>
              {message}
           </span>
-         <div className="flex gap-2">
-            <Button 
-               type="button" 
-               variant="ghost"
-               onClick={() => setIsEditing(false)}
-               className="rounded-full px-6 transition-all font-bold hover:bg-gray-100"
-            >
-              Cancel
-            </Button>
+          <div className="flex gap-4 w-full sm:w-auto">
              <Button 
-                type="submit" 
-                disabled={loading}
-                className="bg-blue-600 dark:bg-blue-700 text-white hover:bg-blue-700 dark:hover:bg-blue-600 rounded-full px-8 shadow-sm transition-all font-bold"
+                type="button" 
+                onClick={() => setIsEditing(false)}
+                className="flex-1 sm:flex-none bg-white text-black border-[3px] border-black shadow-neo active:shadow-none active:translate-x-1 active:translate-y-1 transition-all font-black uppercase text-xs px-8 py-5 h-auto"
              >
-              {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Save className="mr-2 h-4 w-4" />}
-              Save Changes
-            </Button>
-         </div>
-      </div>
+               Discard
+             </Button>
+              <Button 
+                 type="submit" 
+                 disabled={loading}
+                 className="flex-1 sm:flex-none bg-black text-white border-[3px] border-black shadow-neo active:shadow-none active:translate-x-1 active:translate-y-1 transition-all font-black uppercase text-xs px-10 py-5 h-auto"
+              >
+               {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Save className="mr-2 h-4 w-4" strokeWidth={3} />}
+               Commit Changes
+             </Button>
+          </div>
+       </div>
     </form>
   );
 };

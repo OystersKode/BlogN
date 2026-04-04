@@ -24,9 +24,9 @@ export default function FollowButton({ targetUserId, initialFollowing }: { targe
       <Button 
          onClick={handleFollow} 
          disabled={isPending}
-         className={`rounded-full px-6 font-medium tracking-wide ${following ? 'bg-white text-gray-900 border border-gray-300 hover:bg-gray-50' : 'bg-green-600 text-white hover:bg-green-700 border-none'}`}
+         className={`rounded-none px-10 py-6 font-black uppercase tracking-widest border-[3px] border-black shadow-neo active:shadow-none active:translate-x-1 active:translate-y-1 transition-all h-auto text-xs ${following ? 'bg-white text-black hover:bg-zinc-100' : 'bg-primary text-black hover:bg-primary/90'}`}
       >
-         {following ? 'Following' : 'Follow'}
+         {following ? 'Following ✓' : 'Follow Writer'}
       </Button>
    );
 }

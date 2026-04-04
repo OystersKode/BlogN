@@ -5,7 +5,7 @@ import ProfileForm from '@/components/profile/ProfileForm';
 import BlogCard from '@/components/blog/BlogCard';
 import { Card } from '@/components/ui/card';
 import Image from 'next/image';
-import { Mail, CalendarDays } from 'lucide-react';
+import { Mail, CalendarDays, Shield, PenTool } from 'lucide-react';
 import { format } from 'date-fns';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
@@ -22,44 +22,44 @@ const ProfilePage = async () => {
   const blogs = await getUserBlogs();
 
   return (
-    <main className="min-h-screen bg-[#fafbfc] dark:bg-slate-950 transition-colors">
+    <main className="min-h-screen bg-[#F4F4F1] dark:bg-zinc-950 transition-colors">
       <Navbar />
-      <div className="max-w-5xl mx-auto py-12 px-4 sm:px-6 lg:px-8 space-y-12">
+      <div className="max-w-[1336px] mx-auto py-12 px-6 lg:px-8 space-y-16">
         
         {/* Profile Header & Edit Section */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-           <Card className="p-8 border-none shadow-xl bg-white dark:bg-slate-900 rounded-[2rem] lg:col-span-1 flex flex-col items-center text-center transition-colors">
-              <div className="relative w-32 h-32 mb-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+           <Card className="p-8 border-[4px] border-black dark:border-white shadow-neo bg-white dark:bg-zinc-900 rounded-none lg:col-span-1 flex flex-col items-center text-center transition-colors">
+              <div className="relative w-36 h-36 mb-8 border-[4px] border-black dark:border-white shadow-neo overflow-hidden">
                  <Image 
                     src={user.image || '/default-avatar.png'} 
                     alt={user.name} 
                     fill 
-                    className="rounded-full object-cover ring-4 ring-blue-50 dark:ring-blue-900/30 shadow-md"
+                    className="object-cover grayscale contrast-125"
                  />
-                 <div className="absolute bottom-0 right-0 bg-blue-600 text-white rounded-full p-2 ring-4 ring-white dark:ring-slate-900 shadow-sm transition-colors">
-                    {user.role === 'ADMIN' ? '🛡️' : '✍️'}
+                 <div className="absolute bottom-2 right-2 bg-primary text-black border-[2px] border-black p-2 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-colors">
+                    {user.role === 'ADMIN' ? <Shield size={20} strokeWidth={3} /> : <PenTool size={20} strokeWidth={3} />}
                  </div>
               </div>
-              <h2 className="text-2xl font-black text-gray-900 dark:text-white transition-colors">{user.name}</h2>
+              <h2 className="text-3xl font-black text-black dark:text-white uppercase tracking-tighter leading-none mb-4">{user.name}</h2>
               
-              <div className="flex items-center gap-2 text-gray-500 dark:text-gray-400 text-sm font-medium mt-3 transition-colors">
-                 <Mail size={14} /> {user.email}
+              <div className="flex items-center gap-2 text-zinc-500 font-black uppercase text-[11px] mb-2 transition-colors">
+                 <Mail size={16} strokeWidth={3} /> {user.email}
               </div>
-              <div className="flex items-center gap-2 text-gray-400 dark:text-gray-500 text-xs font-bold uppercase tracking-widest mt-2 transition-colors">
-                 <CalendarDays size={14} /> Joined {format(new Date(user.createdAt), 'MMM yyyy')}
+              <div className="flex items-center gap-2 text-zinc-400 font-bold uppercase tracking-widest text-[10px] transition-colors">
+                 <CalendarDays size={16} strokeWidth={3} /> Joined {format(new Date(user.createdAt), 'MMM yyyy')}
               </div>
 
-              <div className="flex flex-wrap gap-2 justify-center mt-8 pt-6 border-t border-gray-50 dark:border-white/5 w-full transition-colors">
-                  <div className="bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 px-4 py-2 rounded-full text-xs font-black uppercase tracking-wider transition-colors">
-                     {blogs.length} Stories
-                  </div>
+              <div className="flex flex-wrap gap-2 justify-center mt-10 pt-8 border-t-[3px] border-black/10 dark:border-white/10 w-full transition-colors">
+                   <div className="bg-secondary text-black px-4 py-2 border-[2px] border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] text-[10px] font-black uppercase tracking-wider">
+                      {blogs.length} Stories Published
+                   </div>
               </div>
            </Card>
 
-           <Card className="p-8 border-none shadow-sm bg-white dark:bg-slate-900 rounded-[2rem] lg:col-span-2 transition-colors">
-              <div className="mb-6">
-                 <h3 className="text-xl font-black text-gray-900 dark:text-white tracking-tight transition-colors">About You</h3>
-                 <p className="text-sm text-gray-500 dark:text-gray-400 font-medium transition-colors">Manage your public information and persona.</p>
+           <Card className="p-8 border-[4px] border-black dark:border-white shadow-neo bg-white dark:bg-zinc-900 rounded-none lg:col-span-2 transition-colors">
+              <div className="mb-10 bg-primary/20 p-6 border-[3px] border-black dark:border-white">
+                 <h3 className="text-2xl font-black text-black dark:text-white uppercase tracking-tight mb-2">Edit Your Profile</h3>
+                 <p className="text-xs text-zinc-500 font-bold uppercase">Manage your public information and technical persona.</p>
               </div>
               <ProfileForm user={user} />
            </Card>
@@ -67,21 +67,21 @@ const ProfilePage = async () => {
 
         {/* Existing Blogs Section */}
         <section className="pt-8 transition-colors">
-           <div className="flex items-center gap-4 mb-8">
-              <h3 className="text-3xl font-black text-gray-900 dark:text-white tracking-tight transition-colors">Your Published Stories</h3>
-              <div className="h-1 flex-grow bg-gradient-to-r from-gray-100 to-transparent dark:from-white/10 dark:to-transparent rounded-full" />
+           <div className="flex items-center gap-6 mb-12">
+              <h3 className="text-4xl font-black text-black dark:text-white uppercase tracking-tighter sm:rotate-[-1deg] bg-secondary px-4 py-2 border-[4px] border-black shadow-neo">Your Published Stories</h3>
+              <div className="h-[4px] flex-grow bg-black dark:bg-white" />
            </div>
 
            {blogs.length > 0 ? (
-             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
                {blogs.map((blog: any) => (
                  <BlogCard key={blog._id} blog={blog} />
                ))}
              </div>
            ) : (
-             <Card className="p-16 text-center border-dashed border-2 border-gray-200 dark:border-white/10 bg-transparent rounded-[2rem] transition-colors">
-                <p className="text-gray-400 dark:text-gray-500 font-medium italic transition-colors">You haven't written any stories yet.</p>
-             </Card>
+             <div className="p-24 text-center border-[4px] border-dashed border-black dark:border-white bg-white/50 dark:bg-zinc-900/50 transition-colors">
+                <p className="text-zinc-500 font-black uppercase italic text-lg transition-colors">You haven't written any stories yet.</p>
+             </div>
            )}
         </section>
       </div>
