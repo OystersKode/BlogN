@@ -10,39 +10,37 @@ const MediumRightbar = async () => {
   const suggestions = await getSuggestedUsers();
   
   return (
-    <aside className="w-80 flex-shrink-0 hidden xl:block sticky top-[80px] h-[calc(100vh-80px)] overflow-y-auto pl-8 py-8 border-l border-gray-100 dark:border-white/10 transition-colors">
+    <aside className="w-80 flex-shrink-0 hidden xl:block sticky top-[90px] h-[calc(100vh-90px)] overflow-y-auto pl-8 py-8 border-l-[4px] border-black dark:border-white transition-all">
       
       {/* Staff Picks */}
-      <div className="mb-10">
-         <h4 className="font-bold text-[15px] text-gray-900 dark:text-white mb-6 transition-colors">Staff Picks</h4>
-                  <div className="space-y-6">
+      <div className="mb-12">
+         <h4 className="font-black text-xs uppercase tracking-widest text-black dark:text-white mb-8 border-l-[4px] border-primary pl-3">Staff Picks</h4>
+         <div className="space-y-8">
             {staffPicks.length > 0 ? (
                staffPicks.map((pick: any) => (
-                  <Link href={`/blog/${pick.slug}`} key={pick._id} className="block space-y-2 group">
-                     <div className="flex items-center gap-2">
-                        <Image src={pick.author?.image || '/default-avatar.png'} width={20} height={20} className="rounded-full" alt={pick.author?.name} />
-                        <span className="text-[13px] font-medium text-gray-900 dark:text-gray-200 line-clamp-1 transition-colors">{pick.author?.name}</span>
+                  <Link href={`/blog/${pick.slug}`} key={pick._id} className="block group">
+                     <div className="flex items-center gap-3 mb-2">
+                        <Image src={pick.author?.image || '/default-avatar.png'} width={18} height={18} className="grayscale border border-black shadow-[1px_1px_0px_0px_rgba(0,0,0,1)]" alt={pick.author?.name} />
+                        <span className="text-[11px] font-black uppercase text-black dark:text-zinc-300 line-clamp-1">{pick.author?.name}</span>
                      </div>
-                     <h5 className="font-bold text-[15px] text-gray-900 dark:text-white leading-snug group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors line-clamp-2">{pick.title}</h5>
-                     <p className="text-[13px] text-gray-500 dark:text-gray-400 transition-colors">{format(new Date(pick.createdAt), 'MMM d, yyyy')}</p>
+                     <h5 className="font-black text-sm text-black dark:text-white leading-tight group-hover:bg-primary transition-colors line-clamp-2 uppercase tracking-tighter mb-2">{pick.title}</h5>
+                     <p className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">{format(new Date(pick.createdAt), 'MMM d, yyyy')}</p>
                   </Link>
                ))
             ) : (
-               <p className="text-sm text-gray-400 dark:text-gray-500 italic">No staff picks yet.</p>
+               <p className="text-[12px] font-bold text-zinc-500 italic lowercase">No staff picks yet.</p>
             )}
           </div>
          
-         <Link href="/?feed=staff" className="text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white text-[13px] mt-6 transition-colors font-medium inline-block">See the full list</Link>
+         <Link href="/?feed=staff" className="bg-black text-white px-4 py-2 text-[10px] font-black uppercase tracking-widest mt-8 transition-all hover:bg-zinc-800 inline-block border-[2px] border-black shadow-neo active:shadow-none active:translate-x-1 active:translate-y-1">See all</Link>
       </div>
 
-      {/* Who to follow - Removed as per user request (Now only visible in Expand suggestions) */}
-      
       {/* Recommended Topics */}
-      <div className="mb-10">
-         <h4 className="font-bold text-[15px] text-gray-900 dark:text-white mb-6 transition-colors">Recommended topics</h4>
+      <div className="mb-12">
+         <h4 className="font-black text-xs uppercase tracking-widest text-black dark:text-white mb-8 border-l-[4px] border-secondary pl-3">Topics</h4>
          <div className="flex flex-wrap gap-2">
             {['Programming', 'Data Science', 'Machine Learning', 'React.js', 'System Design', 'Algorithms', 'JavaScript'].map((topic) => (
-              <span key={topic} className="px-4 py-2 bg-gray-50 dark:bg-slate-900 hover:bg-gray-100 dark:hover:bg-slate-800 text-gray-800 dark:text-gray-300 text-[13px] font-medium rounded-full cursor-pointer transition-colors">
+              <span key={topic} className="px-3 py-1 bg-white dark:bg-zinc-800 text-black dark:text-white text-[10px] font-black uppercase tracking-tighter border-[2px] border-black dark:border-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] dark:shadow-[2px_2px_0px_0px_rgba(255,255,255,1)] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] cursor-pointer transition-all">
                  {topic}
               </span>
             ))}

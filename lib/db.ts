@@ -1,8 +1,9 @@
 import mongoose from 'mongoose';
 
-const MONGODB_URI = process.env.MONGODB_URI!;
+const MONGODB_URI = process.env.MONGODB_URI;
+const MOCK_MODE = process.env.MOCK_MODE === 'true';
 
-if (!MONGODB_URI) {
+if (!MONGODB_URI && !MOCK_MODE) {
   throw new Error('Please define the MONGODB_URI environment variable inside .env.local');
 }
 
@@ -23,13 +24,17 @@ async function connectDB() {
   }
 
   if (!cached.promise) {
-    const opts = {
-      bufferCommands: false,
-    };
-
-    cached.promise = mongoose.connect(MONGODB_URI, opts).then((mongoose) => {
-      return mongoose;
-    });
+    if (MOCK_MODE) {
+        // In mock mode, we skip actual DB connection
+        cached.promise = Promise.resolve(mongoose);
+    } else {
+        const opts = {
+          bufferCommands: false,
+        };
+        cached.promise = mongoose.connect(MONGODB_URI!, opts).then((mongoose) => {
+          return mongoose;
+        });
+    }
   }
 
   try {

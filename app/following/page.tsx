@@ -8,6 +8,7 @@ import { redirect } from 'next/navigation';
 import Footer from '@/components/layout/Footer';
 import Image from 'next/image';
 import Link from 'next/link';
+import { Users, UserPlus } from 'lucide-react';
 
 export default async function FollowingPage() {
   const session = await getServerSession(authOptions);
@@ -16,52 +17,51 @@ export default async function FollowingPage() {
      redirect('/login');
   }
 
-  // Get the active user's network using their session ID
   const activeUserId = (session.user as any).id;
   const network = await getPublicUserNetwork(activeUserId);
 
   return (
-    <main className="min-h-screen bg-white dark:bg-slate-950 transition-colors">
+    <main className="min-h-screen bg-[#F4F4F1] dark:bg-zinc-950 transition-colors">
       <Navbar />
-      <div className="max-w-[1336px] mx-auto flex justify-center px-4 sm:px-6">
+      <div className="max-w-[1336px] mx-auto flex justify-center px-4 md:px-6">
         <MediumSidebar />
         
-        <section className="flex-1 max-w-[700px] min-w-0 w-full lg:px-12 py-8 lg:py-12 border-x border-gray-100 dark:border-white/10 min-h-screen transition-colors">
-          <div className="mb-8">
-             <h1 className="text-[40px] font-black text-gray-900 dark:text-white tracking-tight leading-tight transition-colors">Your Network</h1>
+        <section className="flex-1 max-w-[700px] min-w-0 w-full xl:px-12 py-8 lg:py-12 min-h-screen transition-colors">
+          <div className="mb-12 bg-secondary p-8 border-[4px] border-black shadow-neo-lg rotate-[-1deg] max-w-md">
+             <h1 className="text-4xl sm:text-5xl font-black text-black tracking-tighter uppercase leading-none font-serif">Your Network</h1>
           </div>
 
-          <div className="flex gap-8 border-b border-gray-100 dark:border-white/10 mb-8 overflow-x-auto hide-scrollbar transition-colors">
-             <h1 className="text-[40px] font-black text-white dark:text-gray-900 tracking-tight leading-tight transition-colors">Your Network</h1>
-          </div>
-
-          <div className="flex gap-8 border-b border-white/10 dark:border-gray-100 mb-8 overflow-x-auto hide-scrollbar transition-colors">
-             <button className="pb-4 border-b border-white dark:border-gray-900 text-[14px] text-white dark:text-gray-900 font-medium whitespace-nowrap transition-colors">Following ({network.following.length})</button>
+          <div className="flex gap-8 border-b-[4px] border-black dark:border-white mb-10 overflow-x-auto hide-scrollbar transition-colors">
+             <button className="pb-4 border-b-[4px] border-primary text-[12px] text-black dark:text-white font-black uppercase tracking-widest whitespace-nowrap transition-colors">Following ({network.following.length})</button>
           </div>
 
           {network.following.length > 0 ? (
              <div className="space-y-6">
                  {network.following.map((u: any) => (
-                     <Link href={`/user/${u._id}`} key={u._id} className="flex items-center justify-between group transition-all">
+                     <Link href={`/user/${u._id}`} key={u._id} className="flex items-center justify-between group transition-all p-4 border-[3px] border-black dark:border-white bg-white dark:bg-zinc-900 shadow-neo hover:shadow-none hover:translate-x-1 hover:translate-y-1">
                         <div className="flex items-center gap-4">
-                           <Image src={u.image || '/default-avatar.png'} width={48} height={48} className="rounded-full" alt={u.name} />
+                           <Image src={u.image || '/default-avatar.png'} width={56} height={56} className="border-[2px] border-black dark:border-white grayscale contrast-125" alt={u.name} />
                            <div>
-                              <p className="font-bold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors uppercase tracking-tight">{u.name}</p>
-                              {u.prn && <p className="text-xs font-mono text-gray-500 dark:text-gray-400 uppercase transition-colors">PRN: {u.prn}</p>}
-                              <p className="text-sm text-gray-500 dark:text-gray-400 line-clamp-1 transition-colors">{u.bio || 'No bio available'}</p>
+                              <p className="font-black text-black dark:text-white uppercase tracking-tight group-hover:bg-primary transition-all px-1 inline-block">{u.name}</p>
+                              {u.prn && <p className="text-[10px] font-black text-zinc-500 uppercase transition-colors">PRN: {u.prn}</p>}
+                              <p className="text-xs font-bold text-zinc-600 dark:text-zinc-400 line-clamp-1 truncate max-w-[150px] sm:max-w-xs">{u.bio || 'Technical Writer @ BlogN'}</p>
                            </div>
                         </div>
-                        <button className="hidden sm:block border border-gray-300 dark:border-white/20 text-gray-900 dark:text-white text-sm font-medium rounded-full px-4 py-1.5 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors">
-                           View Profile
-                        </button>
+                        <div className="hidden sm:flex items-center justify-center p-2 bg-black text-white border-[2px] border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] group-hover:bg-primary group-hover:text-black transition-all">
+                           <UserPlus size={18} strokeWidth={3} />
+                        </div>
                      </Link>
                  ))}
              </div>
           ) : (
-              <div className="text-center py-24 space-y-4">
-                 <span className="text-4xl block mb-4">👥</span>
-                 <h3 className="text-xl font-bold text-gray-900 dark:text-white transition-colors">You aren't following anyone yet.</h3>
-                 <p className="text-gray-500 dark:text-gray-400 text-sm transition-colors">Discover writers and expand your network.</p>
+              <div className="text-center py-24 space-y-8 transition-colors">
+                 <div className="w-24 h-24 bg-white dark:bg-zinc-900 border-[4px] border-black shadow-neo flex items-center justify-center mx-auto">
+                    <Users size={48} strokeWidth={3} className="text-zinc-400" />
+                 </div>
+                 <div className="space-y-4">
+                    <h3 className="text-2xl sm:text-3xl font-black text-black dark:text-white uppercase tracking-tighter">You aren't following anyone yet.</h3>
+                    <p className="text-zinc-500 font-bold uppercase max-w-sm mx-auto">Discover writers and expand your network.</p>
+                 </div>
               </div>
           )}
         </section>

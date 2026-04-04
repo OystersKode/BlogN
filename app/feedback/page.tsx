@@ -6,9 +6,7 @@ import { useSession } from 'next-auth/react';
 import { submitFeedback } from '@/app/actions/feedback';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Star, Loader2, Zap, Layout, Monitor, Smartphone, MessageSquare } from 'lucide-react';
+import { Star, Loader2, Zap, Layout, Monitor, Smartphone, MessageSquare, CheckCircle2 } from 'lucide-react';
 
 const FeedbackPage = () => {
     const { data: session, status } = useSession();
@@ -51,22 +49,22 @@ const FeedbackPage = () => {
     };
 
     const RatingStars = ({ category, label, icon: Icon }: { category: keyof typeof ratings; label: string, icon: any }) => (
-        <div className="space-y-3">
-            <div className="flex items-center gap-2 mb-1">
-                <div className="w-8 h-8 rounded-lg bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center text-blue-600 dark:text-blue-400">
-                    <Icon size={18} />
+        <div className="bg-white dark:bg-zinc-800 p-6 border-[3px] border-black dark:border-white shadow-neo group hover:-rotate-1 transition-all">
+            <div className="flex items-center gap-3 mb-6 pb-4 border-b-[2px] border-black/10 dark:border-white/10">
+                <div className="w-10 h-10 bg-primary border-[2px] border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] flex items-center justify-center text-black">
+                    <Icon size={20} strokeWidth={3} />
                 </div>
-                <span className="text-sm font-bold text-gray-700 dark:text-gray-300">{label}</span>
+                <span className="text-xs font-black uppercase tracking-widest text-black dark:text-white">{label}</span>
             </div>
-            <div className="flex gap-2">
+            <div className="flex justify-between gap-1">
                 {[1, 2, 3, 4, 5].map((star) => (
                     <button
                         key={star}
                         type="button"
                         onClick={() => setRatings(prev => ({ ...prev, [category]: star }))}
-                        className={`p-1.5 rounded-md transition-all ${ratings[category] >= star ? 'text-yellow-400 scale-110' : 'text-gray-200 dark:text-gray-800 hover:text-yellow-200'} active:scale-95`}
+                        className={`flex-1 aspect-square flex items-center justify-center border-2 border-black transition-all ${ratings[category] >= star ? 'bg-primary shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] -translate-x-0.5 -translate-y-0.5' : 'bg-white dark:bg-zinc-900 hover:bg-zinc-100 dark:hover:bg-zinc-700'}`}
                     >
-                        <Star size={24} fill={ratings[category] >= star ? 'currentColor' : 'none'} strokeWidth={ratings[category] >= star ? 2 : 1.5} />
+                        <Star size={18} fill={ratings[category] >= star ? 'black' : 'none'} color={ratings[category] >= star ? 'black' : 'currentColor'} strokeWidth={3} />
                     </button>
                 ))}
             </div>
@@ -75,75 +73,82 @@ const FeedbackPage = () => {
 
     if (submitted) {
         return (
-            <div className="min-h-screen bg-white dark:bg-slate-950 transition-colors flex flex-col">
+            <div className="min-h-screen bg-primary transition-colors flex flex-col">
                 <Navbar />
                 <div className="flex-1 flex items-center justify-center p-6 text-center">
-                    <Card className="max-w-md w-full border-none shadow-2xl dark:bg-slate-900 overflow-hidden">
-                        <div className="h-2 bg-green-500 w-full" />
-                        <CardContent className="py-12 px-8 space-y-6">
-                            <div className="w-16 h-16 bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-400 rounded-full flex items-center justify-center mx-auto mb-4 animate-bounce">
-                                <Zap size={32} fill="currentColor" />
-                            </div>
-                            <h2 className="text-3xl font-black text-gray-900 dark:text-white">Success!</h2>
-                            <p className="text-gray-500 dark:text-gray-400">Thank you for helping us optimize B(logN). Your technical feedback will be analyzed immediately by our team.</p>
-                            <p className="text-sm text-blue-600 font-bold animate-pulse">Redirecting to feed...</p>
-                        </CardContent>
-                    </Card>
+                    <div className="max-w-xl w-full bg-white dark:bg-zinc-900 border-[5px] border-black dark:border-white shadow-neo-xl p-12 sm:p-20 relative overflow-hidden">
+                        <div className="w-24 h-24 bg-secondary border-[4px] border-black shadow-neo flex items-center justify-center mx-auto mb-10 rotate-12">
+                            <CheckCircle2 size={48} strokeWidth={3} className="text-black" />
+                        </div>
+                        <h2 className="text-4xl sm:text-5xl font-black text-black dark:text-white uppercase leading-[0.9] tracking-tighter mb-8 italic">THANK YOU.</h2>
+                        <p className="text-lg font-bold text-black dark:text-zinc-300 uppercase leading-snug tracking-tight mb-10 max-w-sm mx-auto">
+                            Technical report archived. Your performance metrics will be analyzed immediately.
+                        </p>
+                        <div className="inline-block py-2 px-6 bg-black text-white text-xs font-black uppercase tracking-[0.3em] animate-pulse">
+                           REDIRECTING TO CENTRAL FEED...
+                        </div>
+                    </div>
                 </div>
             </div>
         );
     }
 
     return (
-        <div className="min-h-screen bg-[#fafbfc] dark:bg-slate-950 transition-colors flex flex-col">
+        <div className="min-h-screen bg-[#F4F4F1] dark:bg-zinc-950 transition-colors flex flex-col">
             <Navbar />
-            <div className="flex-1 max-w-4xl mx-auto py-16 px-4 sm:px-6 w-full">
-                <div className="mb-12 text-center">
-                    <h1 className="text-4xl sm:text-5xl font-black text-gray-900 dark:text-white tracking-tight leading-tight mb-4">How are we performing?</h1>
-                    <p className="text-gray-500 dark:text-gray-400 text-lg sm:text-xl font-medium max-w-2xl mx-auto leading-relaxed">
-                        We're obsessive about speed and reliability. Share your performance reports to help us build a better academic hub.
+            <div className="flex-1 max-w-5xl mx-auto py-16 px-4 sm:px-6 w-full space-y-12">
+                <div className="text-start relative mb-20">
+                    <div className="absolute top-0 left-0 -translate-x-4 -translate-y-4 w-20 h-20 bg-accent -z-10 border-[3px] border-black"></div>
+                    <h1 className="text-5xl sm:text-7xl font-black text-black dark:text-white tracking-tighter uppercase leading-[0.85] mb-6">PERFORMANCE REPORT.</h1>
+                    <p className="text-xl font-bold text-zinc-600 dark:text-zinc-400 uppercase tracking-tight max-w-2xl">
+                        Documenting bottlenecks. Optimizing the academic grid. Share your metrics.
                     </p>
                 </div>
 
-                <form onSubmit={handleSubmit} className="space-y-8">
-                    <Card className="border-none shadow-[0_8px_30px_rgb(0,0,0,0.02)] dark:bg-slate-900 overflow-hidden">
-                        <div className="h-1.5 bg-blue-600 w-full" />
-                        <CardHeader className="pt-8 px-8 flex-row items-center justify-between border-b border-gray-50 dark:border-white/5 pb-6">
-                            <CardTitle className="text-xl font-black text-gray-900 dark:text-white">Technical Metrics</CardTitle>
-                        </CardHeader>
-                        <CardContent className="p-8 grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-12 transition-colors">
-                            <RatingStars category="speed" label="Loading Speed" icon={Zap} />
-                            <RatingStars category="editor" label="Editor Responsiveness" icon={Monitor} />
-                            <RatingStars category="upload" label="Media Upload Experience" icon={Layout} />
-                            <RatingStars category="mobile" label="Mobile Optimization" icon={Smartphone} />
-                        </CardContent>
-                    </Card>
+                <form onSubmit={handleSubmit} className="space-y-12 pb-24">
+                    <div className="space-y-8">
+                        <div className="flex items-center gap-4 bg-black text-white p-4 w-fit border-[3px] border-black shadow-neo-sm -rotate-1">
+                            <Zap size={24} fill="white" className="text-white" />
+                            <h2 className="text-sm font-black uppercase tracking-widest">Core Technical Metrics</h2>
+                        </div>
+                        
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                            <RatingStars category="speed" label="Loading Latency" icon={Zap} />
+                            <RatingStars category="editor" label="Input Response" icon={Monitor} />
+                            <RatingStars category="upload" label="Data Throughput" icon={Layout} />
+                            <RatingStars category="mobile" label="Mobile Runtime" icon={Smartphone} />
+                        </div>
+                    </div>
 
-                    <Card className="border-none shadow-[0_8px_30px_rgb(0,0,0,0.02)] dark:bg-slate-900">
-                        <CardContent className="p-8 space-y-4 transition-colors">
-                            <div className="flex items-center gap-2 mb-2">
-                                <div className="w-8 h-8 rounded-lg bg-indigo-50 dark:bg-indigo-900/20 flex items-center justify-center text-indigo-600 dark:text-indigo-400 transition-colors">
-                                    <MessageSquare size={18} />
-                                </div>
-                                <span className="text-sm font-bold text-gray-700 dark:text-gray-300 transition-colors">Technical Comments & Suggestions</span>
-                            </div>
+                    <div className="space-y-8">
+                        <div className="flex items-center gap-4 bg-secondary text-black p-4 w-fit border-[3px] border-black shadow-neo-sm rotate-1">
+                            <MessageSquare size={24} className="text-black" strokeWidth={3} />
+                            <h2 className="text-sm font-black uppercase tracking-widest text-black">Analytical Comments</h2>
+                        </div>
+                        
+                        <div className="bg-white dark:bg-zinc-900 border-[4px] border-black dark:border-white shadow-neo p-8 group">
                             <textarea
-                                className="w-full min-h-[160px] p-5 rounded-2xl bg-gray-50 dark:bg-slate-800/50 border border-transparent focus:border-blue-500/50 outline-none resize-none transition-all text-gray-800 dark:text-gray-200 placeholder:text-gray-300 dark:placeholder:text-gray-700"
-                                placeholder="Any specific performance bottlenecks or bugs you noticed?"
+                                className="w-full min-h-[160px] bg-transparent outline-none resize-none transition-all text-xl font-bold text-black dark:text-white placeholder:text-zinc-200 dark:placeholder:text-zinc-700 uppercase tracking-tight leading-tight"
+                                placeholder="IDENTIFY SPECIFIC BOTTLENECKS OR ANOMALIES..."
                                 value={comment}
                                 onChange={(e) => setComment(e.target.value)}
                             />
-                        </CardContent>
-                    </Card>
+                        </div>
+                    </div>
 
-                    <div className="flex justify-end">
-                        <Button
+                    <div className="flex justify-end pt-10">
+                        <button
                             type="submit"
                             disabled={loading}
-                            className="bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-black rounded-full h-14 px-10 text-lg hover:scale-[1.02] shadow-xl transition-all disabled:opacity-50"
+                            className="bg-primary text-black border-[4px] border-black shadow-neo-lg px-12 h-20 text-xl font-black uppercase tracking-widest hover:translate-x-1 hover:translate-y-1 hover:shadow-neo transition-all disabled:opacity-50 active:scale-95 flex items-center justify-center gap-4"
                         >
-                            {loading ? <Loader2 className="animate-spin h-5 w-5" /> : 'Submit Performance Report'}
-                        </Button>
+                            {loading ? <Loader2 className="animate-spin h-6 w-6" /> : (
+                                <>
+                                  <Zap size={24} fill="black" />
+                                  SUBMIT ANALYTICS
+                                </>
+                            )}
+                        </button>
                     </div>
                 </form>
             </div>

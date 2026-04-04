@@ -33,41 +33,41 @@ const LoginPromptModal = ({ isOpen, onClose, action = "interact" }: LoginPromptM
               initial={{ opacity: 0, scale: 0.9, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              className="bg-white dark:bg-slate-900 w-full max-w-sm rounded-[2rem] shadow-2xl border border-gray-100 dark:border-white/10 overflow-hidden pointer-events-auto transition-colors"
+              className="bg-white dark:bg-zinc-900 w-full max-w-sm border-[4px] border-black dark:border-white shadow-neo-xl overflow-hidden pointer-events-auto transition-all"
             >
-              <div className="p-8 text-center space-y-6">
+              <div className="p-10 text-center space-y-8">
                 <div className="relative inline-flex mb-2">
-                   <div className="w-16 h-16 bg-blue-50 dark:bg-blue-900/20 rounded-full flex items-center justify-center text-blue-600 dark:text-blue-400">
-                      {action === 'like' ? <Heart size={28} fill="currentColor" /> : 
-                       action === 'comment' ? <MessageSquare size={28} fill="currentColor" /> :
-                       <Bookmark size={28} fill="currentColor" />}
+                   <div className="w-20 h-20 bg-primary border-[3px] border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex items-center justify-center text-black">
+                      {action === 'like' ? <Heart size={32} strokeWidth={3} fill="currentColor" /> : 
+                       action === 'comment' ? <MessageSquare size={32} strokeWidth={3} fill="currentColor" /> :
+                       <Bookmark size={32} strokeWidth={3} fill="currentColor" />}
                    </div>
                    <button 
                      onClick={onClose}
-                     className="absolute -top-2 -right-2 bg-white dark:bg-slate-800 border border-gray-100 dark:border-white/10 p-1.5 rounded-full text-gray-400 hover:text-gray-900 dark:hover:text-white shadow-sm transition-colors"
+                     className="absolute -top-4 -right-4 bg-white dark:bg-zinc-800 border-[3px] border-black dark:border-white p-2 text-black dark:text-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] dark:shadow-[2px_2px_0px_0px_rgba(255,255,255,1)] hover:shadow-none hover:translate-x-0.5 hover:translate-y-0.5 transition-all"
                    >
-                     <X size={14} />
+                     <X size={16} strokeWidth={3} />
                    </button>
                 </div>
 
-                <div className="space-y-2">
-                  <h3 className="text-2xl font-black text-gray-900 dark:text-white tracking-tight">Join B(logN)</h3>
-                  <p className="text-[15px] text-gray-500 dark:text-gray-400 leading-relaxed">
-                    Log in to {action} this story, follow your classmates, and build your own academic library.
-                  </p>
+                <div className="space-y-4">
+                   <h3 className="text-3xl font-black text-black dark:text-white uppercase tracking-tighter leading-none">Join B(logN)</h3>
+                   <p className="text-sm font-bold text-zinc-600 dark:text-zinc-400 uppercase tracking-tight leading-tight">
+                     Log in to {action} this story, follow your classmates, and build your own academic library.
+                   </p>
                 </div>
 
-                <div className="pt-2 space-y-3">
+                <div className="pt-4 space-y-4">
                    <Button 
                      onClick={() => router.push('/login')}
-                     className="w-full bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-bold rounded-xl h-12 flex items-center justify-center gap-2 hover:scale-[1.02] shadow-lg transition-all"
+                     className="w-full bg-black dark:bg-white text-white dark:text-black font-black uppercase tracking-widest h-14 border-[3px] border-black dark:border-white shadow-neo-sm hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all"
                    >
-                     <LogIn size={18} />
-                     Sign in to continue
+                     <LogIn size={20} className="mr-2" strokeWidth={3} />
+                     Sign in
                    </Button>
                    <button 
                      onClick={onClose}
-                     className="text-sm font-bold text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors"
+                     className="text-xs font-black uppercase tracking-widest text-zinc-400 hover:text-black dark:hover:text-white transition-all underline decoration-2 underline-offset-4"
                    >
                      Maybe later
                    </button>

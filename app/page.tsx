@@ -8,6 +8,7 @@ import MediumSidebar from '@/components/layout/MediumSidebar';
 import MediumRightbar from '@/components/layout/MediumRightbar';
 import HorizontalBlogCard from '@/components/blog/HorizontalBlogCard';
 import { getBlogs } from '@/app/actions/blog';
+import { BookOpen, Users, GraduationCap, Search } from 'lucide-react';
 
 
 export default async function Home({ searchParams }: { searchParams: Promise<{ feed?: string }> }) {
@@ -20,18 +21,17 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ f
       const blogs = await getBlogs(feedType);
 
       return (
-         <main className="min-h-screen bg-white dark:bg-slate-950 transition-colors">
+         <main className="min-h-screen bg-[#F4F4F1] dark:bg-zinc-950 transition-all">
             <Navbar />
-            <div className="max-w-[1336px] mx-auto flex justify-center px-4 sm:px-6">
+            <div className="max-w-[1336px] mx-auto flex justify-center px-4 md:px-6">
                <MediumSidebar />
 
-               <section className="flex-1 max-w-[700px] min-w-0 w-full lg:px-12 py-8 lg:py-12">
+               <section className="flex-1 max-w-[700px] min-w-0 w-full xl:px-12 py-8 lg:py-12">
 
                   {/* Feed Tabs */}
-                  <div className="flex gap-8 border-b border-gray-100 dark:border-white/10 mb-8 overflow-x-auto hide-scrollbar transition-colors">
-                     <Link href="/" className={`pb-4 text-[14px] font-medium whitespace-nowrap transition-colors ${feedType === 'all' ? 'border-b border-gray-900 dark:border-white text-gray-900 dark:text-white' : 'text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white'}`}>For you</Link>
-                     <Link href="/?feed=following" className={`pb-4 text-[14px] font-medium whitespace-nowrap transition-colors ${feedType === 'following' ? 'border-b border-gray-900 dark:border-white text-gray-900 dark:text-white' : 'text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white'}`}>Following</Link>
-
+                  <div className="flex gap-8 border-b-[4px] border-black dark:border-white mb-10 overflow-x-auto hide-scrollbar transition-all px-4 sm:px-0">
+                     <Link href="/" className={`pb-4 text-[10px] sm:text-xs font-black uppercase tracking-widest transition-all whitespace-nowrap ${feedType === 'all' ? 'border-b-[4px] border-primary text-black dark:text-white' : 'text-zinc-500 hover:text-black dark:hover:text-white'}`}>For you</Link>
+                     <Link href="/?feed=following" className={`pb-4 text-[10px] sm:text-xs font-black uppercase tracking-widest transition-all whitespace-nowrap ${feedType === 'following' ? 'border-b-[4px] border-primary text-black dark:text-white' : 'text-zinc-500 hover:text-black dark:hover:text-white'}`}>Following</Link>
                   </div>
 
                   {blogs.length > 0 ? (
@@ -42,9 +42,11 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ f
                      </div>
                   ) : (
                      <div className="text-center py-24 space-y-4">
-                        <span className="text-4xl block mb-4">🤷‍♂️</span>
-                        <h3 className="text-xl font-bold text-gray-900 dark:text-white transition-colors">Your feed is empty.</h3>
-                        <p className="text-gray-500 dark:text-gray-400 text-sm transition-colors">Follow some TY CSE classmates or publish the first article!</p>
+                        <div className="w-20 h-20 bg-white border-[3px] border-black shadow-neo flex items-center justify-center mx-auto mb-6">
+                           <Search size={32} strokeWidth={3} className="text-zinc-400" />
+                        </div>
+                        <h3 className="text-xl font-black uppercase tracking-tighter text-black dark:text-white transition-colors">Your feed is empty.</h3>
+                        <p className="text-zinc-500 dark:text-zinc-400 text-sm font-bold transition-colors">Follow some TY CSE classmates or publish the first article!</p>
                      </div>
                   )}
                </section>
@@ -56,77 +58,82 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ f
       );
    }
 
-   // ---- LOGGED OUT STATE: Minimalist TY CSE Landing Page ----
+   // ---- LOGGED OUT STATE: Neo-Brutalist Landing Page ----
    return (
-      <main className="min-h-screen bg-[#f8fafc] dark:bg-slate-950 selection:bg-blue-100 selection:text-slate-900 flex flex-col transition-colors">
+      <main className="min-h-screen bg-[#F4F4F1] dark:bg-zinc-950 flex flex-col transition-all">
          <Navbar />
 
          {/* Hero Section */}
-         <section className="flex-1 flex border-b border-slate-200 dark:border-white/10 pb-20 relative overflow-hidden transition-colors">
+         <section className="flex-1 flex border-b-[5px] border-black dark:border-white pb-24 relative overflow-hidden transition-all bg-[radial-gradient(#000_1px,transparent_1px)] [background-size:20px_20px] dark:bg-[radial-gradient(#fff_1px,transparent_1px)]">
             <NetworkBackground />
-            <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-24 flex flex-col lg:flex-row items-center justify-between gap-12 z-10 pointer-events-none">
-               <div className="max-w-2xl relative z-10 space-y-8 pointer-events-auto">
-                  <h1 className="text-[60px] md:text-[85px] font-normal leading-[0.95] tracking-tight text-slate-900 dark:text-white font-serif transition-colors">
-                     The Central Hub for <br className="hidden md:block" /> Engineering Insights
+            <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-16 md:mt-24 flex flex-col lg:flex-row items-center justify-between gap-12 z-10">
+               <div className="max-w-4xl relative z-10 space-y-8 sm:space-y-10 bg-primary p-6 sm:p-10 md:p-14 border-[5px] border-black shadow-neo-xl mx-4 sm:mx-0">
+                  <h1 className="text-2xl sm:text-4xl md:text-6xl lg:text-6xl xl:text-7xl font-black leading-[0.9] tracking-tighter text-black font-serif uppercase">
+                     ENGINEERING <br className="hidden sm:block" /> INSIGHTS.
                   </h1>
-                  <p className="text-xl md:text-2xl text-slate-700 dark:text-slate-300 font-sans leading-relaxed transition-colors">
-                     A dedicated platform built by and for Third Year Computer Science students. Document your technical journeys and build a collective academic archive.
+                  <p className="text-lg md:text-2xl text-black font-bold leading-tight uppercase tracking-tight max-w-xl">
+                     A dedicated platform built by and for Third Year Computer Science students. Document your technical journeys.
                   </p>
-                  <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-4">
+                  <div className="flex flex-col sm:flex-row gap-6 pt-4">
                      <Link
                         href="/api/auth/signin"
-                        className="w-full sm:w-auto text-center bg-slate-900 dark:bg-white text-white dark:text-slate-900 text-base sm:text-lg rounded-full px-8 py-3 hover:bg-slate-800 dark:hover:bg-gray-200 hover:shadow-lg transition-all"
+                        className="w-full sm:w-auto text-center bg-black text-white text-lg sm:text-xl font-black uppercase tracking-widest px-10 py-5 border-[4px] border-black shadow-neo hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all"
                      >
                         Start writing
                      </Link>
                      <Link
                         href="/explore"
-                        className="w-full sm:w-auto text-center bg-white dark:bg-slate-900 text-slate-900 dark:text-white border border-slate-300 dark:border-white/20 text-base sm:text-lg rounded-full px-8 py-3 hover:bg-slate-50 dark:hover:bg-slate-800 hover:border-slate-400 transition-colors"
+                        className="w-full sm:w-auto text-center bg-white text-black text-lg sm:text-xl font-black uppercase tracking-widest px-10 py-5 border-[4px] border-black shadow-symbols shadow-neo hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all"
                      >
-                        Explore Public Feed
+                        Explore Feed
                      </Link>
                   </div>
                </div>
             </div>
          </section>
 
-         {/* Purpose / Element Boxes Section (Minimalist Redesign) */}
-         <section className="py-24 bg-white dark:bg-slate-950 border-b border-slate-200 dark:border-white/10 transition-colors">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-               <div className="max-w-3xl mb-16">
-                  <h2 className="text-4xl md:text-5xl font-normal text-slate-900 dark:text-white font-serif tracking-tight mb-4 transition-colors">Why we built this platform.</h2>
-                  <p className="text-xl text-slate-600 dark:text-slate-400 font-sans transition-colors">Solving the fragmentation of student knowledge.</p>
+         {/* Purpose Section */}
+         <section className="py-24 sm:py-32 bg-white dark:bg-zinc-900 border-b-[5px] border-black dark:border-white transition-all">
+            <div className="max-w-7xl mx-auto px-6 lg:px-8">
+               <div className="max-w-4xl mb-16 sm:mb-20 bg-secondary p-8 border-[4px] border-black shadow-neo-lg sm:rotate-[-1deg]">
+                  <h2 className="text-4xl sm:text-7xl font-black text-black font-serif uppercase tracking-tighter mb-4 leading-none">Why we built this.</h2>
+                  <p className="text-xl sm:text-2xl text-black font-bold uppercase">Solving the fragmentation of knowledge.</p>
                </div>
 
-               <div className="grid grid-cols-1 md:grid-cols-3 gap-x-12 gap-y-12">
-                  <div className="border-t border-slate-300 dark:border-white/10 pt-6 transition-colors">
-                     <div className="text-xl mb-6 w-10 h-10 flex items-center justify-center bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-lg">📚</div>
-                     <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-4 tracking-tight transition-colors">Preserving Knowledge</h3>
-                     <p className="text-slate-600 dark:text-slate-400 leading-relaxed transition-colors">
-                        Every semester, brilliant project documentation and research are lost. This platform ensures your technical writings are permanently archived and easily accessible to future batches.
+               <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+                  <div className="bg-[#C7FFD8] p-8 border-[4px] border-black shadow-neo hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all group">
+                     <div className="mb-8 w-16 h-16 flex items-center justify-center bg-white border-[3px] border-black shadow-neo group-hover:rotate-12 transition-transform">
+                        <BookOpen size={32} strokeWidth={3} className="text-black" />
+                     </div>
+                     <h3 className="text-lg sm:text-xl md:text-lg lg:text-2xl font-black text-black mb-6 uppercase tracking-tight leading-[0.9] break-words">Preserving Knowledge</h3>
+                     <p className="text-black font-bold leading-snug">
+                        Every semester, brilliant project documentation and research are lost. This platform ensures your technical writings are permanently archived.
                      </p>
                   </div>
 
-                  <div className="border-t border-slate-300 dark:border-white/10 pt-6 transition-colors">
-                     <div className="text-xl mb-6 w-10 h-10 flex items-center justify-center bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 rounded-lg">🤝</div>
-                     <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-4 tracking-tight transition-colors">Peer Collaboration</h3>
-                     <p className="text-slate-600 dark:text-slate-400 leading-relaxed transition-colors">
-                        Stuck on a tricky algorithm or setting up a complex tech stack? Search the platform to see how your classmates solved the exact same problems in their own projects.
+                  <div className="bg-[#FFD166] p-8 border-[4px] border-black shadow-neo hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all group sm:rotate-[1deg]">
+                     <div className="mb-8 w-16 h-16 flex items-center justify-center bg-white border-[3px] border-black shadow-neo group-hover:-rotate-12 transition-transform">
+                        <Users size={32} strokeWidth={3} className="text-black" />
+                     </div>
+                     <h3 className="text-lg sm:text-xl md:text-lg lg:text-2xl font-black text-black mb-6 uppercase tracking-tight leading-[0.9] break-words">Peer Collaboration</h3>
+                     <p className="text-black font-bold leading-snug">
+                        Stuck on a tricky algorithm? Search the platform to see how your classmates solved the exact same problems in their own projects.
                      </p>
                   </div>
 
-                  <div className="border-t border-slate-300 dark:border-white/10 pt-6 transition-colors">
-                     <div className="text-xl mb-6 w-10 h-10 flex items-center justify-center bg-purple-50 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 rounded-lg">👨‍🏫</div>
-                     <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-4 tracking-tight transition-colors">Academic Visibility</h3>
-                     <p className="text-slate-600 dark:text-slate-400 leading-relaxed transition-colors">
-                        Teachers can easily browse through the compiled writings of the entire class to gauge understanding, providing a centralized place for assignment submissions and project tracking.
+                  <div className="bg-[#EF476F] text-white p-8 border-[4px] border-black shadow-neo hover:shadow-none hover:translate-x-1 hover:translate-y-1 transition-all group">
+                     <div className="mb-8 w-16 h-16 flex items-center justify-center bg-white border-[3px] border-black shadow-neo group-hover:rotate-6 transition-transform">
+                        <GraduationCap size={32} strokeWidth={3} className="text-black" />
+                     </div>
+                     <h3 className="text-lg sm:text-xl md:text-lg lg:text-2xl font-black text-white mb-6 uppercase tracking-tight leading-[0.9] break-words">Academic Visibility</h3>
+                     <p className="text-white font-bold leading-snug">
+                        Teachers can easily browse through the compiled writings of the entire class to gauge understanding and project tracking.
                      </p>
                   </div>
                </div>
             </div>
          </section>
 
-         {/* Footer */}
          <Footer />
       </main>
    );

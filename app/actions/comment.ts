@@ -8,10 +8,27 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { revalidatePath } from 'next/cache';
 
+const MOCK_MODE = process.env.MOCK_MODE === 'true';
+
 export async function addComment(blogId: string, content: string, slug: string) {
    const session = await getServerSession(authOptions);
    if (!session) throw new Error("Unauthorized");
    
+   if (MOCK_MODE) {
+      const newComment = {
+         _id: `mock-comment-${Math.random().toString(36).substr(2, 5)}`,
+         blog: blogId,
+         author: {
+            _id: (session.user as any).id,
+            name: session.user?.name || 'Anonymous',
+            image: session.user?.image || '/default-avatar.png'
+         },
+         content,
+         createdAt: new Date().toISOString()
+      };
+      return JSON.parse(JSON.stringify(newComment));
+   }
+
    await connectDB();
    const newComment = new Comment({
       blog: blogId,
@@ -41,6 +58,9 @@ export async function addComment(blogId: string, content: string, slug: string) 
 }
 
 export async function getComments(blogId: string) {
+   if (MOCK_MODE) {
+      return []; // Return empty for mock mode
+   }
    await connectDB();
    const comments = await Comment.find({ blog: blogId })
        .populate('author', 'name image')

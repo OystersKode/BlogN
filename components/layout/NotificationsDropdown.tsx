@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { Bell } from 'lucide-react';
+import { Bell, BellOff } from 'lucide-react';
 import { getUserNotifications, markNotificationsAsRead } from '@/app/actions/notification';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -29,24 +29,24 @@ const NotificationItem = ({ notif, closeMenu }: { notif: any, closeMenu: () => v
       <Link 
         href={href} 
         onClick={closeMenu}
-        className={`flex items-start gap-3 p-4 hover:bg-gray-50 dark:hover:bg-slate-800 transition-colors ${!notif.isRead ? 'bg-blue-50/50 dark:bg-blue-900/10' : ''}`}
+        className={`flex items-start gap-4 p-4 border-b-[3px] border-black dark:border-white transition-all ${!notif.isRead ? 'bg-primary/20' : 'bg-white dark:bg-zinc-900'} hover:bg-primary/40`}
       >
           <Image 
              src={notif.sender?.image || '/default-avatar.png'} 
              alt="Avatar" 
-             width={36} 
-             height={36} 
-             className="rounded-full mt-1 object-cover aspect-square" 
+             width={40} 
+             height={40} 
+             className="border-[2px] border-black dark:border-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] object-cover aspect-square grayscale contrast-125" 
           />
           <div className="flex-1 min-w-0 transition-colors">
-              <p className="text-[14px] text-gray-800 dark:text-gray-200 leading-snug">
-                 <span className="font-bold">{notif.sender?.name}</span> {title} {notif.blog && (
-                   <span className="font-medium text-gray-900 dark:text-white border-b border-gray-200 dark:border-white/10">"{notif.blog.title}"</span>
+              <p className="text-[13px] text-black dark:text-white leading-snug font-bold uppercase tracking-tight">
+                 <span className="font-black text-black dark:text-white">{notif.sender?.name}</span> {title} {notif.blog && (
+                   <span className="font-black text-black dark:text-white bg-secondary px-1 border-[1px] border-black">"{notif.blog.title}"</span>
                  )}
               </p>
-              <p className="text-[12px] text-gray-400 dark:text-gray-500 mt-1">{formatDistanceToNow(new Date(notif.createdAt), { addSuffix: true })}</p>
+              <p className="text-[10px] text-zinc-500 font-black uppercase mt-1">{formatDistanceToNow(new Date(notif.createdAt), { addSuffix: true })}</p>
           </div>
-          {!notif.isRead && <div className="w-2 h-2 rounded-full bg-blue-600 mt-2 flex-shrink-0" />}
+          {!notif.isRead && <div className="w-3 h-3 bg-primary border-[2px] border-black mt-2 flex-shrink-0" />}
       </Link>
   );
 };
@@ -71,10 +71,7 @@ export default function NotificationsDropdown() {
          }
      };
      
-     // Initial fetch
      fetchNotifs();
-     
-     // Poll every 30 seconds for new notifications!
      const interval = setInterval(fetchNotifs, 30000);
      return () => {
          mounted = false;
@@ -82,56 +79,59 @@ export default function NotificationsDropdown() {
      };
   }, []);
 
-  // Close on outside click
   useEffect(() => {
-      const handleClickOutside = (event: MouseEvent) => {
-          if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-              setIsOpen(false);
-          }
-      };
-      if (isOpen) document.addEventListener('mousedown', handleClickOutside);
-      return () => document.removeEventListener('mousedown', handleClickOutside);
+       const handleClickOutside = (event: MouseEvent) => {
+           if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+               setIsOpen(false);
+           }
+       };
+       if (isOpen) document.addEventListener('mousedown', handleClickOutside);
+       return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [isOpen]);
 
   const toggleOpen = async () => {
-       const newIsOpen = !isOpen;
-       setIsOpen(newIsOpen);
-       if (newIsOpen && unreadCount > 0) {
-            setUnreadCount(0);
-            await markNotificationsAsRead();
-            setNotifications(prev => prev.map((n: any) => ({ ...n, isRead: true })));
-       }
+        const newIsOpen = !isOpen;
+        setIsOpen(newIsOpen);
+        if (newIsOpen && unreadCount > 0) {
+             setUnreadCount(0);
+             await markNotificationsAsRead();
+             setNotifications(prev => prev.map((n: any) => ({ ...n, isRead: true })));
+        }
   };
 
   return (
       <div className="relative" ref={dropdownRef}>
           <button 
              onClick={toggleOpen}
-             className={`relative transition-colors flex items-center justify-center p-2 rounded-full hidden sm:flex ${isOpen ? 'bg-gray-100 dark:bg-slate-800 text-gray-900 dark:text-white' : 'text-gray-400 dark:text-gray-500 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-slate-800'}`}
+             className={`relative transition-all flex items-center justify-center p-2 border-[3px] border-black dark:border-white shadow-neo active:shadow-none active:translate-x-1 active:translate-y-1 ${isOpen ? 'bg-primary' : 'bg-white dark:bg-zinc-900 text-black dark:text-white'}`}
           >
-             <Bell size={22} strokeWidth={1.5} />
+             <Bell size={22} strokeWidth={3} />
              {unreadCount > 0 && (
-                 <span className="absolute top-1 right-1.5 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white dark:border-slate-900 transition-colors" />
+                 <span className="absolute -top-1.5 -right-1.5 min-w-[20px] h-5 bg-secondary text-black text-[10px] font-black flex items-center justify-center px-1 border-[2px] border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+                    {unreadCount}
+                 </span>
              )}
           </button>
 
           {isOpen && (
-             <div className="absolute right-0 mt-3 w-80 sm:w-96 bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-gray-100 dark:border-white/10 z-50 overflow-hidden transform origin-top-right transition-all">
-                <div className="p-4 border-b border-gray-50 dark:border-white/5 flex justify-between items-center bg-gray-50/50 dark:bg-slate-800/50 transition-colors">
-                    <h3 className="font-bold text-gray-900 dark:text-white text-[15px]">Notifications</h3>
+             <div className="absolute right-0 mt-4 w-80 sm:w-96 bg-white dark:bg-zinc-900 border-[5px] border-black dark:border-white shadow-neo-lg z-50 overflow-hidden transform origin-top-right transition-all">
+                <div className="p-4 border-b-[4px] border-black dark:border-white flex justify-between items-center bg-secondary transition-colors">
+                    <h3 className="font-black text-black text-[14px] uppercase tracking-widest">Notifications</h3>
                 </div>
                 <div className="max-h-[400px] overflow-y-auto overscroll-contain transition-colors">
                     {notifications.length > 0 ? (
-                        <div className="flex flex-col divide-y divide-gray-50 dark:divide-white/5 transition-colors">
+                        <div className="flex flex-col transition-colors">
                             {notifications.map((notif: any) => (
                                 <NotificationItem key={notif._id} notif={notif} closeMenu={() => setIsOpen(false)} />
                             ))}
                         </div>
                     ) : (
-                        <div className="py-12 text-center px-4 transition-colors">
-                            <span className="text-3xl block mb-3">🔔</span>
-                            <p className="text-gray-900 dark:text-white font-bold text-sm">You're all caught up</p>
-                            <p className="text-gray-500 dark:text-gray-400 text-xs mt-1">Check back later for new interactions.</p>
+                        <div className="py-16 text-center px-6 transition-colors">
+                            <div className="w-16 h-16 bg-white border-[3px] border-black shadow-neo flex items-center justify-center mx-auto mb-6">
+                               <BellOff size={32} strokeWidth={3} className="text-zinc-400" />
+                            </div>
+                            <p className="text-black dark:text-white font-black uppercase text-sm tracking-tight">You're all caught up</p>
+                            <p className="text-zinc-500 font-bold text-[10px] uppercase mt-2">Check back later for new interactions.</p>
                         </div>
                     )}
                 </div>
