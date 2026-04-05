@@ -55,27 +55,43 @@ const BlogDetailPage = async ({ params }: { params: Promise<{ slug: string }> })
             {blog.title}
           </h1>
 
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-             <Link href={`/user/${blog.author?._id}`} className="flex items-center gap-3 group">
-                <Image
-                  src={blog.author?.image || '/default-avatar.png'}
-                  alt={blog.author?.name || 'Author'}
-                  width={48}
-                  height={48}
-                  className="rounded-full ring-2 ring-gray-50 dark:ring-white/10 object-cover"
-                />
-                <div>
-                  <p className="font-bold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors text-[15px]">{blog.author?.name || 'Deleted User'}</p>
-                  <p className="text-[13px] text-gray-500 dark:text-gray-400 transition-colors">{format(new Date(blog.createdAt), 'MMM dd, yyyy')}</p>
+             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+                <div className="space-y-4">
+                  <Link href={`/user/${blog.author?._id}`} className="flex items-center gap-3 group">
+                     <Image
+                       src={blog.author?.image || '/default-avatar.png'}
+                       alt={blog.author?.name || 'Author'}
+                       width={48}
+                       height={48}
+                       className="rounded-full ring-2 ring-gray-50 dark:ring-white/10 object-cover"
+                     />
+                     <div>
+                       <p className="font-bold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors text-[15px]">{blog.author?.name || 'Deleted User'}</p>
+                       <p className="text-[13px] text-gray-500 dark:text-gray-400 transition-colors">{format(new Date(blog.createdAt), 'MMM dd, yyyy')}</p>
+                     </div>
+                  </Link>
+
+                  {blog.coAuthors && blog.coAuthors.length > 0 && (
+                    <div className="flex flex-wrap items-center gap-2 pl-12">
+                      <span className="text-[11px] font-black uppercase tracking-widest text-slate-400 dark:text-gray-500">With:</span>
+                      {blog.coAuthors.map((ca: any) => (
+                        <Link key={ca._id} href={`/user/${ca._id}`} className="flex items-center gap-1.5 bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-white/5 px-2 py-1 rounded-full hover:border-blue-200 dark:hover:border-blue-900 transition-colors group/ca">
+                           <div className="relative w-4 h-4 rounded-full overflow-hidden">
+                             <Image src={ca.image || '/default-avatar.png'} alt={ca.name} fill className="object-cover" />
+                           </div>
+                           <span className="text-xs font-bold text-slate-600 dark:text-gray-400 group-hover/ca:text-blue-600 dark:group-hover/ca:text-blue-400 transition-colors">{ca.name}</span>
+                        </Link>
+                      ))}
+                    </div>
+                  )}
                 </div>
-             </Link>
             
-            {session && (session.user as any).id !== blog.author?._id && (
-               <div>
-                  <FollowButton targetUserId={blog.author?._id} initialFollowing={blog.isFollowingAuthor} />
-               </div>
-            )}
-          </div>
+                {session && (session.user as any).id !== blog.author?._id && (
+                   <div>
+                      <FollowButton targetUserId={blog.author?._id} initialFollowing={blog.isFollowingAuthor} />
+                   </div>
+                )}
+             </div>
         </header>
 
         <ReaderInteractionBar blog={blog} />

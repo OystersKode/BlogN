@@ -12,6 +12,7 @@ const BlogSchema = new Schema({
   seoTitle: { type: String },
   seoDescription: { type: String },
   likes: [{ type: Schema.Types.ObjectId, ref: 'User' }],
+  coAuthors: [{ type: Schema.Types.ObjectId, ref: 'User' }],
   isStaffPick: { type: Boolean, default: false },
 }, { timestamps: true });
 

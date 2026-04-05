@@ -32,7 +32,10 @@ export default async function PublicProfilePage({
 
   if (tab === 'stories') {
      let allBlogs = await getBlogs();
-     userBlogs = allBlogs.filter((b: any) => b.author?._id === user._id);
+     userBlogs = allBlogs.filter((b: any) => 
+        b.author?._id === user._id || 
+        (b.coAuthors || []).some((ca: any) => ca._id === user._id)
+     );
   } else {
      network = await getPublicUserNetwork(resolvedParams.id);
   }

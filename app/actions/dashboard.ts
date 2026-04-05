@@ -11,7 +11,14 @@ export async function getUserBlogs() {
   if (!session) throw new Error('Unauthorized');
 
   await connectDB();
-  const blogs = await Blog.find({ author: (session.user as any).id }).populate('author', 'name image').sort({ createdAt: -1 }).lean();
+  const userId = (session.user as any).id;
+  const blogs = await Blog.find({
+    $or: [{ author: userId }, { coAuthors: userId }]
+  })
+    .populate('author', 'name image')
+    .populate({ path: 'coAuthors', select: 'name image prn', options: { strictPopulate: false } })
+    .sort({ createdAt: -1 })
+    .lean();
   return JSON.parse(JSON.stringify(blogs));
 }
 

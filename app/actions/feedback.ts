@@ -37,3 +37,13 @@ export async function getAllFeedback() {
     
   return JSON.parse(JSON.stringify(feedbacks));
 }
+
+export async function deleteFeedback(id: string) {
+  const session = await getServerSession(authOptions);
+  if (!session || (session.user as any).role !== 'ADMIN') throw new Error('Unauthorized');
+
+  await connectDB();
+  await Feedback.findByIdAndDelete(id);
+  revalidatePath('/admin');
+  return { success: true };
+}

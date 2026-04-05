@@ -100,7 +100,6 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ f
 
                <div className="grid grid-cols-1 md:grid-cols-3 gap-x-12 gap-y-12">
                   <div className="border-t border-slate-300 dark:border-white/10 pt-6 transition-colors">
-                     <div className="text-xl mb-6 w-10 h-10 flex items-center justify-center bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-lg">📚</div>
                      <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-4 tracking-tight transition-colors">Preserving Knowledge</h3>
                      <p className="text-slate-600 dark:text-slate-400 leading-relaxed transition-colors">
                         Every semester, brilliant project documentation and research are lost. This platform ensures your technical writings are permanently archived and easily accessible to future batches.
@@ -108,7 +107,6 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ f
                   </div>
 
                   <div className="border-t border-slate-300 dark:border-white/10 pt-6 transition-colors">
-                     <div className="text-xl mb-6 w-10 h-10 flex items-center justify-center bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 rounded-lg">🤝</div>
                      <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-4 tracking-tight transition-colors">Peer Collaboration</h3>
                      <p className="text-slate-600 dark:text-slate-400 leading-relaxed transition-colors">
                         Stuck on a tricky algorithm or setting up a complex tech stack? Search the platform to see how your classmates solved the exact same problems in their own projects.
@@ -116,7 +114,6 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ f
                   </div>
 
                   <div className="border-t border-slate-300 dark:border-white/10 pt-6 transition-colors">
-                     <div className="text-xl mb-6 w-10 h-10 flex items-center justify-center bg-purple-50 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 rounded-lg">👨‍🏫</div>
                      <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-4 tracking-tight transition-colors">Academic Visibility</h3>
                      <p className="text-slate-600 dark:text-slate-400 leading-relaxed transition-colors">
                         Teachers can easily browse through the compiled writings of the entire class to gauge understanding, providing a centralized place for assignment submissions and project tracking.

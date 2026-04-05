@@ -21,9 +21,16 @@ export async function createBlog(formData: any) {
 
   // De-proxy the input data from React 19's client reference system
   const data = JSON.parse(JSON.stringify(formData));
-  const { title, content, coverImage, status } = data;
+  const { title, content, coverImage, status, coAuthors } = data;
   const slug = `${slugify(title)}-${Math.random().toString(36).substr(2, 5)}`;
   const readingTime = estimateReadingTime(content);
+
+  // Validate co-authors exist and cap at 3
+  const validCoAuthors: string[] = [];
+  if (Array.isArray(coAuthors) && coAuthors.length > 0) {
+    const found = await User.find({ _id: { $in: coAuthors.slice(0, 3) } }).select('_id').lean();
+    found.forEach((u: any) => validCoAuthors.push(String(u._id)));
+  }
 
   const newBlog = await Blog.create({
     title,
@@ -33,6 +40,7 @@ export async function createBlog(formData: any) {
     author: String((session.user as any).id),
     status,
     readingTime,
+    coAuthors: validCoAuthors,
   });
 
   // Notification engine hook: alert followers of new post
@@ -70,7 +78,11 @@ export async function getBlogs(feedType = 'all') {
      matchQuery.isStaffPick = true;
   }
 
-  const blogs = await Blog.find(matchQuery).populate('author', 'name image').sort({ createdAt: -1 }).lean();
+  const blogs = await Blog.find(matchQuery)
+    .populate('author', 'name image')
+    .populate({ path: 'coAuthors', select: 'name image prn', options: { strictPopulate: false } })
+    .sort({ createdAt: -1 })
+    .lean();
   
   // Aggregate comment counts for the fetched blogs globally
   const blogIds = blogs.map((b: any) => b._id);
@@ -104,7 +116,10 @@ export async function getBlogs(feedType = 'all') {
 
 export async function getBlogBySlug(slug: string) {
   await connectDB();
-  const blog = await Blog.findOne({ slug }).populate('author', 'name image bio socials').lean();
+  const blog = await Blog.findOne({ slug })
+    .populate('author', 'name image bio socials')
+    .populate({ path: 'coAuthors', select: 'name image prn', options: { strictPopulate: false } })
+    .lean();
   if (!blog) return null;
 
   // Guard: if the author user was deleted, treat the blog as not found
@@ -224,8 +239,73 @@ export async function getStaffPicks() {
   await connectDB();
   const blogs = await Blog.find({ isStaffPick: true, status: 'PUBLISHED' })
     .populate('author', 'name image')
+    .populate({ path: 'coAuthors', select: 'name image prn', options: { strictPopulate: false } })
     .sort({ updatedAt: -1 })
     .limit(5)
     .lean();
   return JSON.parse(JSON.stringify(blogs));
 }
+
+export async function getBlogById(id: string) {
+  const session = await getServerSession(authOptions);
+  if (!session) throw new Error('Not authenticated');
+
+  await connectDB();
+  const blog = await Blog.findById(id)
+    .populate('author', 'name image bio socials')
+    .populate({ path: 'coAuthors', select: 'name image prn', options: { strictPopulate: false } })
+    .lean();
+
+  if (!blog) return null;
+
+  // Security check: Only author or co-authors can edit
+  const userId = (session.user as any).id;
+  const isAuthor = blog.author._id.toString() === userId.toString();
+  const isCoAuthor = (blog.coAuthors || []).some((ca: any) => String(ca._id) === String(userId));
+
+  if (!isAuthor && !isCoAuthor) {
+    throw new Error('Not authorized to edit this blog');
+  }
+
+  return JSON.parse(JSON.stringify(blog));
+}
+
+export async function updateBlog(id: string, data: any) {
+  const session = await getServerSession(authOptions);
+  if (!session) throw new Error('Not authenticated');
+
+  await connectDB();
+  const blog = await Blog.findById(id);
+  if (!blog) throw new Error('Blog not found');
+
+  // Security check: Only primary author can update meta/status/co-authors
+  const userId = (session.user as any).id;
+  if (blog.author.toString() !== userId.toString()) {
+     throw new Error('Only the primary author can update the blog metadata');
+  }
+
+  const { title, content, coverImage, status, coAuthors } = data;
+  const readingTime = estimateReadingTime(content);
+
+  // Validate co-authors exist and cap at 3
+  const validCoAuthors: string[] = [];
+  if (Array.isArray(coAuthors) && coAuthors.length > 0) {
+    const found = await User.find({ _id: { $in: coAuthors.slice(0, 3) } }).select('_id').lean();
+    found.forEach((u: any) => validCoAuthors.push(String(u._id)));
+  }
+
+  blog.title = title;
+  blog.content = content;
+  blog.coverImage = coverImage;
+  blog.status = status;
+  blog.readingTime = readingTime;
+  blog.coAuthors = validCoAuthors;
+
+  await blog.save();
+  revalidatePath('/');
+  revalidatePath(`/blog/${blog.slug}`);
+  revalidatePath('/dashboard');
+  
+  return { slug: String(blog.slug) };
+}
+

@@ -21,7 +21,11 @@ export async function getAllBlogs() {
   if (!session || (session.user as any).role !== 'ADMIN') throw new Error('Unauthorized');
 
   await connectDB();
-  const blogs = await Blog.find({}).populate('author', 'name email').sort({ createdAt: -1 }).lean();
+  const blogs = await Blog.find({})
+    .populate('author', 'name email prn')
+    .populate({ path: 'coAuthors', select: 'name email prn', options: { strictPopulate: false } })
+    .sort({ createdAt: -1 })
+    .lean();
   return JSON.parse(JSON.stringify(blogs));
 }
 
@@ -63,16 +67,40 @@ export async function getExportableBlogs() {
     await connectDB();
     const blogs = await Blog.find({ status: 'PUBLISHED' })
         .populate('author', 'name prn email')
+        .populate({ path: 'coAuthors', select: 'name prn email', options: { strictPopulate: false } })
         .sort({ createdAt: -1 })
         .lean();
 
     const baseUrl = process.env.NEXTAUTH_URL || 'http://localhost:3000';
-    
-    return JSON.parse(JSON.stringify(blogs.map((b: any) => ({
-        prn: b.author?.prn || 'N/A',
-        name: b.author?.name || 'Unknown',
-        title: b.title,
-        link: `${baseUrl}/blog/${b.slug}`,
-        submittedAt: b.createdAt
-    }))));
+
+    const rows: any[] = [];
+
+    blogs.forEach((b: any) => {
+        const blogMeta = {
+            title: b.title,
+            link: `${baseUrl}/blog/${b.slug}`,
+            submittedAt: b.createdAt
+        };
+
+        // Leader row
+        rows.push({
+            prn: b.author?.prn || 'N/A',
+            name: b.author?.name || 'Unknown',
+            role: 'Leader',
+            ...blogMeta
+        });
+
+        // Co-author rows
+        (b.coAuthors || []).forEach((ca: any) => {
+            rows.push({
+                prn: ca?.prn || 'N/A',
+                name: ca?.name || 'Unknown',
+                role: 'Member',
+                ...blogMeta
+            });
+        });
+    });
+
+    return JSON.parse(JSON.stringify(rows));
 }
+
