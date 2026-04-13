@@ -8,5 +8,8 @@ const NotificationSchema = new Schema({
   isRead: { type: Boolean, default: false },
 }, { timestamps: true });
 
+NotificationSchema.index({ recipient: 1, createdAt: -1 });
+NotificationSchema.index({ sender: 1 });
+
 const Notification = mongoose.models.Notification || mongoose.model('Notification', NotificationSchema);
 export default Notification;

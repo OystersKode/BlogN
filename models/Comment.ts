@@ -6,6 +6,9 @@ const CommentSchema = new Schema({
   content: { type: String, required: true },
 }, { timestamps: true });
 
+CommentSchema.index({ blog: 1, createdAt: -1 });
+CommentSchema.index({ author: 1 });
+
 const Comment = models.Comment || model('Comment', CommentSchema);
 
 export default Comment;

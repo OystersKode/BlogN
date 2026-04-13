@@ -3,6 +3,8 @@
 import connectDB from '@/lib/db';
 import User from '@/models/User';
 import Blog from '@/models/Blog';
+import Comment from '@/models/Comment';
+import Notification from '@/models/Notification';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { revalidatePath } from 'next/cache';
@@ -43,7 +45,15 @@ export async function deleteUser(userId: string) {
     if (!session || (session.user as any).role !== 'ADMIN') throw new Error('Unauthorized');
   
     await connectDB();
-    await User.findByIdAndDelete(userId);
+    
+    // Cascading Delete: Remove all user-related data to prevent orphan record crashes
+    await Promise.all([
+        Blog.deleteMany({ author: userId }),
+        Comment.deleteMany({ author: userId }),
+        Notification.deleteMany({ $or: [{ recipient: userId }, { sender: userId }] }),
+        User.findByIdAndDelete(userId)
+    ]);
+
     revalidatePath('/admin');
 }
 export async function toggleStaffPick(blogId: string) {

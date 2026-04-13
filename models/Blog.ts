@@ -16,6 +16,13 @@ const BlogSchema = new Schema({
   isStaffPick: { type: Boolean, default: false },
 }, { timestamps: true });
 
+// Indexes for performance optimization
+BlogSchema.index({ status: 1, createdAt: -1 });
+BlogSchema.index({ author: 1 });
+BlogSchema.index({ isStaffPick: 1 });
+BlogSchema.index({ category: 1 });
+BlogSchema.index({ slug: 1 }, { unique: true });
+
 
 const Blog = mongoose.models.Blog || model('Blog', BlogSchema);
 export default Blog;

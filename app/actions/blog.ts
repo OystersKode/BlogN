@@ -82,6 +82,7 @@ export async function getBlogs(feedType = 'all') {
     .populate('author', 'name image')
     .populate({ path: 'coAuthors', select: 'name image prn', options: { strictPopulate: false } })
     .sort({ createdAt: -1 })
+    .select('-content')
     .lean();
   
   // Aggregate comment counts for the fetched blogs globally

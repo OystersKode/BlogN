@@ -302,7 +302,7 @@ const AdminDashboard = () => {
                  <Card key={b._id} className="p-4 flex items-center justify-between border-none shadow-sm dark:shadow-none bg-white dark:bg-slate-900 hover:shadow-md transition-all">
                    <div className="flex flex-col min-w-0">
                      <p className="font-bold text-sm truncate max-w-[180px] sm:max-w-[250px] text-gray-900 dark:text-white transition-colors">{b.title}</p>
-                     <p className="text-xs text-gray-500 dark:text-gray-400 italic transition-colors truncate">by {b.author.name}</p>
+                     <p className="text-xs text-gray-500 dark:text-gray-400 italic transition-colors truncate">by {b.author?.name || "Deleted User"}</p>
                    </div>
                    <div className="flex items-center gap-1.5 sm:gap-2 transition-colors">
                      <span className={`hidden md:inline-block px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-tight transition-colors ${b.status === 'PUBLISHED' ? 'bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400' : 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-600 dark:text-yellow-400'}`}>

@@ -8,6 +8,16 @@ import BlogContent from '@/components/blog/BlogContent';
 import Comments from '@/components/blog/Comments';
 import Footer from '@/components/layout/Footer';
 import Link from 'next/link';
+import { getBlogs } from '@/app/actions/blog';
+
+export const revalidate = 3600; // 1 hour
+
+export async function generateStaticParams() {
+   const blogs = await getBlogs();
+   return blogs.map((blog: any) => ({
+      slug: blog.slug,
+   }));
+}
 import FollowButton from '@/components/profile/FollowButton';
 import ReaderInteractionBar from '@/components/blog/ReaderInteractionBar';
 import { getServerSession } from 'next-auth';
