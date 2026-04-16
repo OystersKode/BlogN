@@ -2,7 +2,7 @@
 
 import connectDB from '@/lib/db';
 import User from '@/models/User';
-import Notification from '@/models/Notification';
+import NotificationModel from '@/models/Notification';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { revalidatePath } from 'next/cache';
@@ -84,7 +84,7 @@ export async function toggleFollow(targetUserId: string) {
     // Notification engine hook: alert target user of new follower
     try {
         if (targetUserId.toString() !== activeUserId.toString()) {
-            const newNotif = new Notification({
+            const newNotif = new NotificationModel({
                 recipient: targetUserId,
                 sender: activeUserId,
                 type: 'FOLLOW'

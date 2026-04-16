@@ -65,9 +65,12 @@ export async function createBlog(formData: any) {
   return { slug: String(newBlog.slug) };
 }
 
-export async function getBlogs(feedType = 'all') {
+export async function getBlogs(feedType = 'all', skipSession = false) {
   await connectDB();
-  const session = await getServerSession(authOptions);
+  let session = null;
+  if (!skipSession) {
+    session = await getServerSession(authOptions);
+  }
   
   let matchQuery: any = { status: 'PUBLISHED' };
 
@@ -115,7 +118,7 @@ export async function getBlogs(feedType = 'all') {
   return JSON.parse(JSON.stringify(blogs));
 }
 
-export async function getBlogBySlug(slug: string) {
+export async function getBlogBySlug(slug: string, skipSession = false) {
   await connectDB();
   const blog = await Blog.findOne({ slug })
     .populate('author', 'name image bio socials')
@@ -127,7 +130,10 @@ export async function getBlogBySlug(slug: string) {
   // to prevent crashes when accessing blog.author.name / blog.author._id
   if (!blog.author || !(blog.author as any)._id) return null;
   
-  const session = await getServerSession(authOptions);
+  let session = null;
+  if (!skipSession) {
+    session = await getServerSession(authOptions);
+  }
   if (session) {
       const user = await User.findById((session.user as any).id).select('bookmarks following').lean();
       blog.isBookmarkedByMe = (user?.bookmarks || []).map((b: any) => b.toString()).includes(blog._id.toString());

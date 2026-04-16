@@ -1,9 +1,9 @@
 'use server';
 
 import connectDB from '@/lib/db';
-import Comment from '@/models/Comment';
+import CommentModel from '@/models/Comment';
 import Blog from '@/models/Blog';
-import Notification from '@/models/Notification';
+import NotificationModel from '@/models/Notification';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { revalidatePath } from 'next/cache';
@@ -13,7 +13,7 @@ export async function addComment(blogId: string, content: string, slug: string) 
    if (!session) throw new Error("Unauthorized");
    
    await connectDB();
-   const newComment = new Comment({
+   const newComment = new CommentModel({
       blog: blogId,
       author: (session.user as any).id,
       content,
@@ -24,7 +24,7 @@ export async function addComment(blogId: string, content: string, slug: string) 
    try {
       const blog = await Blog.findById(blogId).select('author');
       if (blog && blog.author.toString() !== (session.user as any).id.toString()) {
-         const newNotif = new Notification({
+         const newNotif = new NotificationModel({
             recipient: blog.author,
             sender: (session.user as any).id,
             type: 'COMMENT',
@@ -42,7 +42,7 @@ export async function addComment(blogId: string, content: string, slug: string) 
 
 export async function getComments(blogId: string) {
    await connectDB();
-   const comments = await Comment.find({ blog: blogId })
+   const comments = await CommentModel.find({ blog: blogId })
        .populate('author', 'name image')
        .sort({ createdAt: -1 })
        .lean();

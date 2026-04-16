@@ -13,7 +13,7 @@ import { getBlogs } from '@/app/actions/blog';
 export const revalidate = 3600; // 1 hour
 
 export async function generateStaticParams() {
-   const blogs = await getBlogs();
+   const blogs = await getBlogs('all', true); // Pass true to skip personalization/session check
    return blogs.map((blog: any) => ({
       slug: blog.slug,
    }));
@@ -25,7 +25,7 @@ import { authOptions } from '@/lib/auth';
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const resolvedParams = await params;
-  const blog = await getBlogBySlug(resolvedParams.slug);
+  const blog = await getBlogBySlug(resolvedParams.slug, true); // Pass true to skip session check during metadata generation
   if (!blog) return {};
 
   return {
