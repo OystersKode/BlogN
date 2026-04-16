@@ -2,6 +2,9 @@
 
 import connectDB from '@/lib/db';
 import Blog from '@/models/Blog';
+import User from '@/models/User';
+import CommentModel from '@/models/Comment';
+import NotificationModel from '@/models/Notification';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { revalidatePath } from 'next/cache';
@@ -35,8 +38,8 @@ export async function deleteUserBlog(id: string) {
 
     await Promise.all([
         Blog.deleteOne({ _id: id }),
-        Comment.deleteMany({ blog: id }),
-        Notification.deleteMany({ blog: id }),
+        CommentModel.deleteMany({ blog: id }),
+        NotificationModel.deleteMany({ blog: id }),
         User.updateMany({}, { $pull: { bookmarks: id } })
     ]);
 

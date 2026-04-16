@@ -3,8 +3,8 @@
 import connectDB from '@/lib/db';
 import User from '@/models/User';
 import Blog from '@/models/Blog';
-import Comment from '@/models/Comment';
-import Notification from '@/models/Notification';
+import CommentModel from '@/models/Comment';
+import NotificationModel from '@/models/Notification';
 import Feedback from '@/models/Feedback';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
@@ -63,11 +63,11 @@ export async function deleteUser(userId: string) {
         // Cleanup co-author and likes references on all blogs
         Blog.updateMany({}, { $pull: { coAuthors: userId, likes: userId } }),
         // Delete user's comments
-        Comment.deleteMany({ author: userId }),
+        CommentModel.deleteMany({ author: userId }),
         // Delete all comments on the user's blogs
-        Comment.deleteMany({ blog: { $in: blogIds } }),
+        CommentModel.deleteMany({ blog: { $in: blogIds } }),
         // Delete notifications involving the user OR their blogs
-        Notification.deleteMany({ 
+        NotificationModel.deleteMany({ 
             $or: [
                 { recipient: userId }, 
                 { sender: userId },

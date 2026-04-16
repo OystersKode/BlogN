@@ -3,8 +3,8 @@
 import connectDB from '@/lib/db';
 import Blog from '@/models/Blog';
 import User from '@/models/User';
-import Notification from '@/models/Notification';
-import Comment from '@/models/Comment';
+import NotificationModel from '@/models/Notification';
+import CommentModel from '@/models/Comment';
 import { slugify, estimateReadingTime } from '@/lib/utils';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
@@ -55,7 +55,7 @@ export async function createBlog(formData: any) {
             type: 'NEW_POST',
             blog: blogIdStr,
          }));
-         await Notification.insertMany(notifications);
+         await NotificationModel.insertMany(notifications);
       }
   } catch (err) {
       console.error('Failed to dispatch notifications', err);
@@ -87,7 +87,7 @@ export async function getBlogs(feedType = 'all') {
   
   // Aggregate comment counts for the fetched blogs globally
   const blogIds = blogs.map((b: any) => b._id);
-  const commentCounts = await Comment.aggregate([
+  const commentCounts = await CommentModel.aggregate([
      { $match: { blog: { $in: blogIds } } },
      { $group: { _id: '$blog', count: { $sum: 1 } } }
   ]);
@@ -155,9 +155,9 @@ export async function deleteBlog(id: string) {
     // 1. Delete the blog itself
     Blog.findByIdAndDelete(id),
     // 2. Delete all comments on this blog
-    Comment.deleteMany({ blog: id }),
+    CommentModel.deleteMany({ blog: id }),
     // 3. Delete all notifications related to this blog
-    Notification.deleteMany({ blog: id }),
+    NotificationModel.deleteMany({ blog: id }),
     // 4. Remove this blog from all users' bookmarks
     User.updateMany({}, { $pull: { bookmarks: id } })
   ]);
@@ -229,7 +229,7 @@ export async function toggleLike(blogId: string) {
     // Notification engine hook: alert author of like
     try {
        if (blog.author.toString() !== userId.toString()) {
-          const newNotif = new Notification({
+          const newNotif = new NotificationModel({
              recipient: blog.author,
              sender: userId,
              type: 'LIKE',
