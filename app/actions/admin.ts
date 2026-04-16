@@ -5,6 +5,7 @@ import User from '@/models/User';
 import Blog from '@/models/Blog';
 import Comment from '@/models/Comment';
 import Notification from '@/models/Notification';
+import Feedback from '@/models/Feedback';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { revalidatePath } from 'next/cache';
@@ -46,15 +47,43 @@ export async function deleteUser(userId: string) {
   
     await connectDB();
     
-    // Cascading Delete: Remove all user-related data to prevent orphan record crashes
+    // Prevent self-deletion
+    if (userId === (session.user as any).id) {
+        throw new Error('You cannot delete your own account while logged in. Please have another admin perform this action.');
+    }
+    
+    // 1. Get all blogs by this user to clean up their comments later
+    const userBlogs = await Blog.find({ author: userId }).select('_id');
+    const blogIds = userBlogs.map(b => b._id);
+
+    // 2. Comprehensive Cascading Delete & Cleanup
     await Promise.all([
+        // Delete user's primary blogs
         Blog.deleteMany({ author: userId }),
+        // Cleanup co-author and likes references on all blogs
+        Blog.updateMany({}, { $pull: { coAuthors: userId, likes: userId } }),
+        // Delete user's comments
         Comment.deleteMany({ author: userId }),
-        Notification.deleteMany({ $or: [{ recipient: userId }, { sender: userId }] }),
+        // Delete all comments on the user's blogs
+        Comment.deleteMany({ blog: { $in: blogIds } }),
+        // Delete notifications involving the user OR their blogs
+        Notification.deleteMany({ 
+            $or: [
+                { recipient: userId }, 
+                { sender: userId },
+                { blog: { $in: blogIds } }
+            ] 
+        }),
+        // Scrub the user from all other users' followers/following lists
+        User.updateMany({}, { $pull: { followers: userId, following: userId } }),
+        // Delete user's feedback/reports
+        Feedback.deleteMany({ user: userId }),
+        // Finally, delete the user itself
         User.findByIdAndDelete(userId)
     ]);
 
     revalidatePath('/admin');
+    revalidatePath('/');
 }
 export async function toggleStaffPick(blogId: string) {
     const session = await getServerSession(authOptions);

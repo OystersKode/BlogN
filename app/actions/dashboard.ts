@@ -27,6 +27,19 @@ export async function deleteUserBlog(id: string) {
     if (!session) throw new Error('Unauthorized');
   
     await connectDB();
-    await Blog.deleteOne({ _id: id, author: (session.user as any).id });
+    const userId = (session.user as any).id;
+
+    // Verify ownership and perform cleanup
+    const blog = await Blog.findOne({ _id: id, author: userId });
+    if (!blog) throw new Error('Blog not found or unauthorized');
+
+    await Promise.all([
+        Blog.deleteOne({ _id: id }),
+        Comment.deleteMany({ blog: id }),
+        Notification.deleteMany({ blog: id }),
+        User.updateMany({}, { $pull: { bookmarks: id } })
+    ]);
+
     revalidatePath('/dashboard');
+    revalidatePath('/');
 }

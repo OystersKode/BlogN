@@ -262,8 +262,12 @@ const AdminDashboard = () => {
                         onClick={async () => {
                             const newRole = u.role === 'ADMIN' ? 'USER' : 'ADMIN';
                             if(confirm(`Change ${u.name}'s role to ${newRole}?`)) {
-                                await updateUserRole(u._id, newRole);
-                                fetchData();
+                                try {
+                                    await updateUserRole(u._id, newRole);
+                                    fetchData();
+                                } catch (error: any) {
+                                    alert(error.message || 'Failed to update role');
+                                }
                             }
                         }}
                      >
@@ -275,11 +279,16 @@ const AdminDashboard = () => {
                      <Button 
                          variant="ghost" 
                          size="icon" 
-                         className="text-red-500 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
+                         disabled={u._id === (session?.user as any)?.id}
+                         className={`${u._id === (session?.user as any)?.id ? 'opacity-20 cursor-not-allowed' : 'text-red-500 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20'} transition-colors`}
                          onClick={async () => {
                              if(confirm('Delete user?')) {
-                                 await deleteUser(u._id);
-                                 fetchData();
+                                 try {
+                                     await deleteUser(u._id);
+                                     fetchData();
+                                 } catch (error: any) {
+                                     alert(error.message || 'Failed to delete user');
+                                 }
                              }
                          }}
                      >
@@ -347,88 +356,88 @@ const AdminDashboard = () => {
                ))}
              </div>
            </section>
-        </div>
+         </div>
 
-        {/* Performance Feedback Reports */}
-        <section className="space-y-8 mt-12 pt-12 border-t border-gray-100 dark:border-white/10 transition-colors">
-           <div className="flex items-center justify-between">
-             <div className="flex items-center gap-2 text-xl font-bold text-gray-800 dark:text-gray-200 transition-colors">
-                 <MessageSquare size={24} className="text-indigo-500 dark:text-indigo-400" />
-                 Performance Reports ({feedback.length})
-             </div>
-             
-             <div className="flex gap-4 sm:gap-8 overflow-x-auto pb-2 transition-colors">
-                 {[
-                   { label: 'Speed', val: calculateAverage('speed'), icon: Zap, color: 'text-yellow-500' },
-                   { label: 'Editor', val: calculateAverage('editor'), icon: Monitor, color: 'text-blue-500' },
-                   { label: 'Upload', val: calculateAverage('upload'), icon: Layout, color: 'text-green-500' },
-                   { label: 'Mobile', val: calculateAverage('mobile'), icon: Smartphone, color: 'text-purple-500' },
-                 ].map((stat) => (
-                   <div key={stat.label} className="bg-white dark:bg-slate-900 px-4 py-2 rounded-xl flex items-center gap-3 shadow-sm transition-colors min-w-fit">
-                      <stat.icon size={16} className={stat.color} />
-                      <span className="text-[10px] uppercase font-black tracking-widest text-gray-400 dark:text-gray-500">{stat.label}</span>
-                      <span className="text-sm font-black text-gray-900 dark:text-white">{stat.val}</span>
-                   </div>
-                 ))}
-             </div>
-           </div>
+         {/* Performance Feedback Reports */}
+         <section className="space-y-8 mt-12 pt-12 border-t border-gray-100 dark:border-white/10 transition-colors">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2 text-xl font-bold text-gray-800 dark:text-gray-200 transition-colors">
+                  <MessageSquare size={24} className="text-indigo-500 dark:text-indigo-400" />
+                  Performance Reports ({feedback.length})
+              </div>
+              
+              <div className="flex gap-4 sm:gap-8 overflow-x-auto pb-2 transition-colors">
+                  {[
+                    { label: 'Speed', val: calculateAverage('speed'), icon: Zap, color: 'text-yellow-500' },
+                    { label: 'Editor', val: calculateAverage('editor'), icon: Monitor, color: 'text-blue-500' },
+                    { label: 'Upload', val: calculateAverage('upload'), icon: Layout, color: 'text-green-500' },
+                    { label: 'Mobile', val: calculateAverage('mobile'), icon: Smartphone, color: 'text-purple-500' },
+                  ].map((stat) => (
+                    <div key={stat.label} className="bg-white dark:bg-slate-900 px-4 py-2 rounded-xl flex items-center gap-3 shadow-sm transition-colors min-w-fit">
+                       <stat.icon size={16} className={stat.color} />
+                       <span className="text-[10px] uppercase font-black tracking-widest text-gray-400 dark:text-gray-500">{stat.label}</span>
+                       <span className="text-sm font-black text-gray-900 dark:text-white">{stat.val}</span>
+                    </div>
+                  ))}
+              </div>
+            </div>
 
-           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 transition-colors">
-               {feedback.length > 0 ? feedback.map((f: any) => (
-                 <Card key={f._id} className="border-none shadow-sm dark:shadow-none bg-white dark:bg-slate-900 hover:shadow-md transition-all">
-                    <CardHeader className="p-4 flex flex-row items-center gap-4 border-b border-gray-50 dark:border-white/5 transition-colors">
-                        <div className="relative h-10 w-10 flex-shrink-0">
-                           <Image 
-                             src={f.user?.image || '/default-avatar.png'} 
-                             alt={f.user?.name || 'User'} 
-                             fill 
-                             className="rounded-full object-cover border-2 border-gray-100 dark:border-white/10" 
-                           />
-                        </div>
-                        <div className="min-w-0 flex-1">
-                           <p className="font-bold text-[14px] text-gray-900 dark:text-white truncate transition-colors">{f.user?.name}</p>
-                           <p className="text-[11px] text-gray-500 dark:text-gray-400 font-bold uppercase tracking-tight transition-colors">PRN: {f.user?.prn || 'N/A'}</p>
-                        </div>
-                        <Button
-                           variant="ghost"
-                           size="icon"
-                           className="text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors h-8 w-8"
-                           onClick={() => handleDeleteFeedback(f._id)}
-                           title="Delete Feedback"
-                        >
-                           <Trash2 size={14} />
-                        </Button>
-                    </CardHeader>
-                   <CardContent className="p-4 space-y-4 transition-colors">
-                       <div className="grid grid-cols-2 gap-2 transition-colors">
-                          {Object.entries(f.ratings).map(([key, val]: [any, any]) => (
-                            <div key={key} className="flex items-center justify-between bg-gray-50 dark:bg-slate-800/50 px-2.5 py-1.5 rounded-lg transition-colors">
-                               <span className="text-[10px] uppercase font-bold text-gray-400 dark:text-gray-500">{key}</span>
-                               <div className="flex gap-0.5">
-                                  {[1,2,3,4,5].map(s => (
-                                    <div key={s} className={`w-1 h-3 rounded-full ${val >= s ? 'bg-blue-500' : 'bg-gray-200 dark:bg-gray-700'}`} />
-                                  ))}
-                               </div>
-                            </div>
-                          ))}
-                       </div>
-                       {f.comment && (
-                         <div className="pt-3 border-t border-gray-50 dark:border-white/5 transition-colors">
-                            <p className="text-[13px] text-gray-600 dark:text-gray-400 italic transition-colors leading-relaxed">"{f.comment}"</p>
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 transition-colors">
+                {feedback.length > 0 ? feedback.map((f: any) => (
+                  <Card key={f._id} className="border-none shadow-sm dark:shadow-none bg-white dark:bg-slate-900 hover:shadow-md transition-all">
+                     <CardHeader className="p-4 flex flex-row items-center gap-4 border-b border-gray-50 dark:border-white/5 transition-colors">
+                         <div className="relative h-10 w-10 flex-shrink-0">
+                            <Image 
+                              src={f.user?.image || '/default-avatar.png'} 
+                              alt={f.user?.name || 'User'} 
+                              fill 
+                              className="rounded-full object-cover border-2 border-gray-100 dark:border-white/10" 
+                            />
                          </div>
-                       )}
-                       <p className="text-[10px] text-gray-400 dark:text-gray-500 font-medium pt-2 transition-colors">
-                         Submitted: {new Date(f.createdAt).toLocaleDateString()}
-                       </p>
-                   </CardContent>
-                 </Card>
-               )) : (
-                 <div className="col-span-full py-12 text-center text-gray-400 dark:text-gray-500 italic transition-colors">
-                   No performance reports submitted yet.
-                 </div>
-               )}
-           </div>
-        </section>
+                         <div className="min-w-0 flex-1">
+                            <p className="font-bold text-[14px] text-gray-900 dark:text-white truncate transition-colors">{f.user?.name}</p>
+                            <p className="text-[11px] text-gray-500 dark:text-gray-400 font-bold uppercase tracking-tight transition-colors">PRN: {f.user?.prn || 'N/A'}</p>
+                         </div>
+                         <Button
+                            variant="ghost"
+                            size="icon"
+                            className="text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors h-8 w-8"
+                            onClick={() => handleDeleteFeedback(f._id)}
+                            title="Delete Feedback"
+                         >
+                            <Trash2 size={14} />
+                         </Button>
+                     </CardHeader>
+                    <CardContent className="p-4 space-y-4 transition-colors">
+                        <div className="grid grid-cols-2 gap-2 transition-colors">
+                           {Object.entries(f.ratings).map(([key, val]: [any, any]) => (
+                             <div key={key} className="flex items-center justify-between bg-gray-50 dark:bg-slate-800/50 px-2.5 py-1.5 rounded-lg transition-colors">
+                                <span className="text-[10px] uppercase font-bold text-gray-400 dark:text-gray-500">{key}</span>
+                                <div className="flex gap-0.5">
+                                   {[1,2,3,4,5].map(s => (
+                                     <div key={s} className={`w-1 h-3 rounded-full ${val >= s ? 'bg-blue-500' : 'bg-gray-200 dark:bg-gray-700'}`} />
+                                   ))}
+                                </div>
+                             </div>
+                           ))}
+                        </div>
+                        {f.comment && (
+                          <div className="pt-3 border-t border-gray-50 dark:border-white/5 transition-colors">
+                             <p className="text-[13px] text-gray-600 dark:text-gray-400 italic transition-colors leading-relaxed">"{f.comment}"</p>
+                          </div>
+                        )}
+                        <p className="text-[10px] text-gray-400 dark:text-gray-500 font-medium pt-2 transition-colors">
+                          Submitted: {new Date(f.createdAt).toLocaleDateString()}
+                        </p>
+                    </CardContent>
+                  </Card>
+                )) : (
+                  <div className="col-span-full py-12 text-center text-gray-400 dark:text-gray-500 italic transition-colors">
+                    No performance reports submitted yet.
+                  </div>
+                )}
+            </div>
+         </section>
       </div>
     </div>
   );

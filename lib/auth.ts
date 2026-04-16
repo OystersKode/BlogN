@@ -10,9 +10,22 @@ export const authOptions: NextAuthOptions = {
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
     }),
   ],
+  secret: process.env.NEXTAUTH_SECRET,
   callbacks: {
-    async session({ session, token }) {
+    async session({ session, token }: any) {
       if (session.user) {
+        await connectDB();
+        const userExists = await User.findById(token.id).select("_id");
+
+        if (!userExists) {
+          // If user was deleted from DB, invalidate the session
+          return {
+            ...session,
+            user: null,
+            expires: new Date(0).toISOString(),
+          };
+        }
+
         // @ts-ignore
         session.user.id = token.id;
         // @ts-ignore

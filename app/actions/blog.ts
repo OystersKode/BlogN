@@ -149,7 +149,19 @@ export async function deleteBlog(id: string) {
   }
 
   await connectDB();
-  await Blog.findByIdAndDelete(id);
+
+  // Comprehensive Cleanup for Blog Deletion
+  await Promise.all([
+    // 1. Delete the blog itself
+    Blog.findByIdAndDelete(id),
+    // 2. Delete all comments on this blog
+    Comment.deleteMany({ blog: id }),
+    // 3. Delete all notifications related to this blog
+    Notification.deleteMany({ blog: id }),
+    // 4. Remove this blog from all users' bookmarks
+    User.updateMany({}, { $pull: { bookmarks: id } })
+  ]);
+
   revalidatePath('/');
 }
 
