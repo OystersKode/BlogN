@@ -11,8 +11,14 @@ import { authOptions } from '@/lib/auth';
 import { revalidatePath } from 'next/cache';
 
 export async function createBlog(formData: any) {
-  const session = await getServerSession(authOptions);
-  
+  let session;
+  try {
+    session = await getServerSession(authOptions);
+  } catch (e) {
+    console.error('Session lookup failed during blog creation:', e);
+    throw new Error('Authentication service unavailable. Please try again later.');
+  }
+
   if (!session) {
     throw new Error('Not authenticated');
   }
@@ -69,7 +75,11 @@ export async function getBlogs(feedType = 'all', skipSession = false) {
   await connectDB();
   let session = null;
   if (!skipSession) {
-    session = await getServerSession(authOptions);
+    try {
+      session = await getServerSession(authOptions);
+    } catch (e) {
+      console.error('Session lookup failed:', e);
+    }
   }
   
   let matchQuery: any = { status: 'PUBLISHED' };
@@ -132,7 +142,11 @@ export async function getBlogBySlug(slug: string, skipSession = false) {
   
   let session = null;
   if (!skipSession) {
-    session = await getServerSession(authOptions);
+    try {
+      session = await getServerSession(authOptions);
+    } catch (e) {
+      console.error('Session lookup failed:', e);
+    }
   }
   if (session) {
       const user = await User.findById((session.user as any).id).select('bookmarks following').lean();
